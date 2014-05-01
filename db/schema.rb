@@ -11,11 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140501172403) do
+ActiveRecord::Schema.define(version: 20140501172449) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+
+  create_table "assignments", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "oranization_id"
+    t.string   "role"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "assignments", ["oranization_id"], name: "index_assignments_on_oranization_id", using: :btree
+  add_index "assignments", ["user_id"], name: "index_assignments_on_user_id", using: :btree
 
   create_table "orders", force: true do |t|
     t.string   "name"
