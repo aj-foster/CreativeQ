@@ -1,5 +1,6 @@
 class Order < ActiveRecord::Base
-  belongs_to :owner
-  belongs_to :organization
-  belongs_to :creative
+
+	belongs_to :owner, class_name: 'User'
+	belongs_to :creative, class_name: 'User'
+	belongs_to :organization
 end
