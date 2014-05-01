@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  due: 2014-05-01 13:19:53
+  description: MyText
+  event: 
+  needs: 
+  status: MyString
+  owner_id: 
+  organization_id: 
+  creative_id: 
+
+two:
+  name: MyString
+  due: 2014-05-01 13:19:53
+  description: MyText
+  event: 
+  needs: 
+  status: MyString
+  owner_id: 
+  organization_id: 
+  creative_id: 
