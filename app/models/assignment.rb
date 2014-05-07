@@ -1,5 +1,5 @@
 class Assignment < ActiveRecord::Base
 	
 	belongs_to :user
-	belongs_to :oranization
+	belongs_to :organization
 end
