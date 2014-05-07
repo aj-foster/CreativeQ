@@ -2,6 +2,7 @@ class UsersController < ApplicationController
 
 	before_filter :authenticate_user!
 
+
 	def index
 		unless can? :index, User
 			return redirect_to current_user, alert: "You aren't allowed to list users."
@@ -25,6 +26,14 @@ class UsersController < ApplicationController
 
 		unless can? :view, @user
 			return redirect_to root_url, alert: "You aren't allowed to view this profile."
+		end
+
+		@organizations = @user.organizations
+
+		if @user.role == "Creative"
+			@orders = Order.where(creative_id: @user.id).limit(5)
+		else
+			@orders = Order.where(owner_id: @user.id).limit(5)
 		end
 	end
 
@@ -50,6 +59,19 @@ class UsersController < ApplicationController
 			params[:user].delete(:password_confirmation)
 
 			if @user.update_attributes(user_params)
+				redirect_to @user, notice: "Profile updated successfully."
+			else
+				render :edit
+			end
+
+		else
+			if @user.update_attributes(user_params)
+				sign_in(current_user, :bypass => true) if current_user.id == @user.id
+				redirect_to @user, notice: "Password updated."
+			else
+				render :edit
+			end
+		end
 	end
 
 

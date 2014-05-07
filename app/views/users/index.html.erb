@@ -1,0 +1,11 @@
+<% if @unapproved.any? %>
+	<% @unapproved.each do |user| %>
+		<p>Unapproved User: <%= user.name %></p>
+	<% end %>
+<% end %>
+
+<% if @users.any? %>
+	<% @users.each do |user| %>
+		<p>User: <%= user.name %></p>
+	<% end %>
+<% end %>

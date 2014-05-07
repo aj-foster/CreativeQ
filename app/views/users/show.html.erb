@@ -1,0 +1,26 @@
+<p>Profile: <%= @user.name %></p>
+
+<ul>
+	<li>Email: <%= @user.email %></li>
+	<li>Phone: <%= @user.phone %></li>
+	<li>Role: <%= @user.role %></li>
+</ul>
+
+<p>Organizations:</p>
+<% if @organizations.present? %>
+	<ul>
+	<% @organizations.each do |org| %>
+		<li><%= org.name %></li>
+	<% end %>
+	</ul>
+<% end %>
+
+
+<p>Orders:</p>
+<% if @orders.present? %>
+	<ul>
+	<% @orders.each do |order| %>
+		<li><%= order.name %></li>
+	<% end %>
+	</ul>
+<% end %>
