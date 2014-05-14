@@ -1,3 +1,23 @@
+		<div class="actions">
+			<p>
+<% if can? :index, User %>
+				<%= link_to "Back to Users", users_path, :class => "button button-okay" %>
+<% else %>
+				<%= link_to "Back to Home", root_url, :class => "button button-okay" %>
+<% end %>
+<% if can? :edit, @user %>
+	<% if @user == current_user %>
+				<%= link_to "Edit Profile", edit_user_path(@user), :class => "button button-neutral" %>
+	<% else %>
+				<%= link_to	"Edit User", edit_user_path(@user), :class => "button button-neutral" %>
+	<% end %>
+<% end %>
+<% if can? :destroy, @user %>
+				<%= link_to "Remove User", user_path(@user), :method => :delete, :class => "button button-alert", confirm: "Are you sure you want to delete #{@user.name}?" %>
+<% end %>
+			</p>
+		</div>
+		
 <p>Profile: <%= @user.name %></p>
 
 <ul>
