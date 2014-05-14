@@ -1,0 +1,17 @@
+<% @superset.each do |order| %>
+	<p>Order: <%= order.name %></p>
+<% end %>
+
+<% if @unapproved.any? %>
+<h2>Unapproved</h2>
+	<% @unapproved.each do |order| %>
+<p>Order: <%= order.name %></p>
+	<% end %>
+<% end %>
+
+<% if @orders.any? %>
+<h2>Orders</h2>
+	<% @orders.each do |order| %>
+<p>Order: <%= order.name %></p>
+	<% end %>
+<% end %>

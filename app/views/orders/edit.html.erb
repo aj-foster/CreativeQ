@@ -1,0 +1,12 @@
+		<div class="actions">
+			<p>
+				<%= link_to "Back to Order", @order, :class => "button button-okay" %>
+			</p>
+		</div>
+
+		<section>
+			<h2>Editting: <%= @order.name %></h2>
+			<article class="form">
+<%= render 'form' %>
+			</article>
+		</section>

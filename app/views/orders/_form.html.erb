@@ -1,0 +1,9 @@
+				<%= form_for @order do |f| %>
+<% if @order.errors.any? %>
+	<% @order.errors.full_messages.each do |msg| %>
+					<p class="flash alert"><%= msg %></p>
+	<% end %>
+<% end %>
+					<fieldset>
+						
+					</fieldset>
