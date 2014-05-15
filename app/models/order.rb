@@ -10,14 +10,11 @@ class Order < ActiveRecord::Base
 
 
 	validates :name, :due, :description, :needs, presence: true
-	validate :two_weeks_until_deadline
 
 
-	def two_weeks_until_deadline
-		return if can? :manage, Order
-
-		if !due.present? || due > DateTime.now + 2.weeks
-			errors.add :due, "Orders require at least two weeks notice."
+	def validate_due_date
+		unless due.present? && due >= Date.today + 2.weeks
+			errors.add :due, "date must be at least two weeks away."
 		end
 	end
 
@@ -25,5 +22,7 @@ class Order < ActiveRecord::Base
 	private
 		def setup_order
 			self.status ||= STATUSES[0]
+			self.event ||= {}
+			self.needs ||= {}
 		end
 end

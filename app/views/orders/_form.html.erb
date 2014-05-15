@@ -5,5 +5,29 @@
 	<% end %>
 <% end %>
 					<fieldset>
-						
+						<p>
+							<%= f.label :name %><br>
+							<%= f.text_field :name, autofocus: true, required: true %>
+						</p>
+						<p>
+							<%= f.label :due %><br>
+							<%= f.text_field :due, required: true, value: @order.due.present? ? @order.due.strftime("%d-%m-%Y") : "", :class => "datepicker" %>
+						</p>
+						<p>
+							<%= f.label :description %><br>
+							<%= f.text_area :description, required: true %>
+						</p>
 					</fieldset>
+
+					<fieldset>
+						<h3>Needs</h3>
+						<%= f.fields_for :needs do |n| %>
+							<p>
+								<%= n.label :handbill %><br>
+								<%= n.text_field :handbill, value: @order.needs["handbill"] %>
+							</p>
+						<% end %>
+					</fieldset>
+
+					<p class="submit"><%= f.submit "Submit" %></p>
+				<% end %>

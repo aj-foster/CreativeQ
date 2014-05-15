@@ -66,7 +66,9 @@ class OrdersController < ApplicationController
 			return redirect_to @order, alert: "You aren't allowed to edit this order."
 		end
 
-		if @order.update(order_params)
+		@order.validate_due_date unless (can? :manage, @order)
+
+		if @order.save
 			redirect_to @order, notice: "Order updated successfully."
 		else
 			render 'edit'

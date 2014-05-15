@@ -1,0 +1,13 @@
+		<div class="actions">
+			<p>
+				<%= link_to "Back to Orders", orders_path, :class => "button button-okay" %>
+<% if can? :edit, @order %>
+				<%= link_to "Edit Order", edit_order_path(@order), :class => "button button-neutral" %>
+<% end %>
+			</p>
+		</div>
+
+<h1>Order: <%= @order.name %></h1>
+<p>Due: <%= @order.due %></p>
+<p>Desc: <%= @order.description %></p>
+<p>Needs: <%= @order.needs.inspect %></p>
