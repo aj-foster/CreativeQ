@@ -45,6 +45,7 @@ class OrdersController < ApplicationController
 		end
 
 		@order = Order.new(order_params)
+		@order.validate_due_date unless (can? :manage, @order)
 
 		if @order.save
 			redirect_to @order, notice: "Order created successfully."
