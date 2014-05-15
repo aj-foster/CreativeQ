@@ -3,7 +3,7 @@ class CreateOrders < ActiveRecord::Migration
     execute 'create extension hstore'
     create_table :orders do |t|
       t.string :name
-      t.datetime :due
+      t.date :due
       t.text :description
       t.hstore :event
       t.hstore :needs
