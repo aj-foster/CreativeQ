@@ -20,6 +20,25 @@
 					</fieldset>
 
 					<fieldset>
+						<h3>Event Information</h3>
+						<%= f.fields_for :event do |e| %>
+							<p>
+								<%= e.label :name, "Event Name" %><br>
+								<%= e.text_field :name, value: @order.event["name"] %>
+							</p>
+							<p>
+								<%= e.label :time, "Event Time" %><br>
+								<%= e.text_field :time, value: @order.event["time"] %>
+							</p>
+
+							<p>
+								<%= e.label :location, "Event Location" %><br>
+								<%= e.text_field :location, value: @order.event["location"] %>
+							</p>
+						<% end %>
+					</fieldset>
+
+					<fieldset>
 						<h3>Needs</h3>
 						<%= f.fields_for :needs do |n| %>
 							<p>

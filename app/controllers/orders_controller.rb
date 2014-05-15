@@ -67,6 +67,8 @@ class OrdersController < ApplicationController
 			return redirect_to @order, alert: "You aren't allowed to edit this order."
 		end
 
+		@order.assign_attributes(order_params)
+		@order.setup_order
 		@order.validate_due_date unless (can? :manage, @order)
 
 		if @order.save

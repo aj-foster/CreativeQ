@@ -19,10 +19,9 @@ class Order < ActiveRecord::Base
 	end
 
 
-	private
-		def setup_order
-			self.status ||= STATUSES[0]
-			self.event ||= {}
-			self.needs ||= {}
-		end
+	def setup_order
+		self.status ||= STATUSES[0]
+		self.event ||= {}
+		self.needs ||= {}
+	end
 end
