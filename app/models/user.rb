@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
 
 	devise :database_authenticatable, :registerable,
 		:recoverable, :rememberable, :trackable, :validatable
-	ROLES = %w[Unapproved Basic Creative Admin Superadmin]
+	ROLES = %w[Unapproved Basic Creative Admin]
 	after_initialize :setup_user
 
 	has_many :assignments

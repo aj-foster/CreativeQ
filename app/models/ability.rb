@@ -5,6 +5,6 @@ class Ability
 
 		user ||= User.new
 
-		can :manage, :all if user.role == "Superadmin"
+		can :manage, :all if user.role == "Admin"
 	end
 end
