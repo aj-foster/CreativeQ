@@ -1,5 +1,7 @@
 class OrganizationsController < ApplicationController
 
+	before_filter :authenticate_user!
+
 	def index
 		unless can? :index, Organization
 			return redirect_to root_url, alert: "You aren't allowed to list organizations."
