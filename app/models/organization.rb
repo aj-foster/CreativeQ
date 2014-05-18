@@ -10,7 +10,7 @@ class Organization < ActiveRecord::Base
 
 
 	def unlink_orders
-		@orders = Order.where(organization_id: id).each do |order|
+		Order.where(organization_id: id).each do |order|
 			order.organization = nil
 		end
 	end
