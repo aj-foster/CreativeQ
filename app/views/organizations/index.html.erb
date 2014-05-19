@@ -1,0 +1,19 @@
+<h1>Index of Organizations</h1>
+
+<% if @organizations.any? %>
+
+	<% @organizations.each do |org| %>
+		<p>Org: <%= org.name %>, <%= link_to "Remove", org, remote: true, method: :delete %></p>
+	<% end %>
+	
+<% end %>
+
+<%= form_for Organization.new, remote: true do |f| %>
+	<p>
+		<%= f.label :name %><br>
+		<%= f.text_field :name, required: true %>
+	</p>
+	<p>
+		<%= f.submit "Create" %>
+	</p>
+<% end %>
