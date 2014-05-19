@@ -112,11 +112,52 @@ class OrdersController < ApplicationController
 
 	def claim
 		@order = Order.find(params[:id])
+
+		unless can? :claim, @order
+			return redirect_to orders_path, alert: "You can't claim this order."
+		end
+
+		@order.status = "Claimed"
+		@order.creative = current_user
+
+		if @order.save
+			redirect_to @order, notice: "Order claimed successfully. Please begin by e-mailing its owner."
+		else
+			redirect_to @order, alert: "Error: Could not claim this order."
+		end
 	end
 
 
 	def unclaim
 		@order = Order.find(params[:id])
+
+		unless can? :unclaim, @order
+			return redirect_to @order, alert: "You can't unclaim this order."
+		end
+
+		@order.status = "Unclaimed"
+		@order.creative = nil
+		
+		if @order.save
+			redirect_to orders_path, notice: "Order unclaimed successfully."
+		else
+			redirect_to @order, alert: "Error: Could not unclaim this order."
+		end
+	end
+
+
+	def change_status
+		@order = Order.find(params[:id])
+
+		unless can? :change_status, @order
+			return redirect_to @order, alert: "You aren't allowed to change this order's status."
+		end
+
+		@order.update_attribute(:status, params[:status])
+
+		respond_to do |format|
+			format.js
+		end
 	end
 
 

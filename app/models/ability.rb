@@ -9,9 +9,11 @@ class Ability
 
 		can :index, Order
 		can :create, Order unless user.role == "Unapproved"
-		can :approve, Order if user.assignments.where(organization_id: Order.organization.id).where(status: "Advisor").any?
-		can [:claim, :unclaim], Order if user.role == "Creative"
-		can [:change_status, :complete], Order, :creative_id => user.id
+		can :approve, Order do |order|
+			user.assignments.where(organization_id: order.organization_id).where(role: "Advisor").any?
+		end
+		can :claim, Order, :status => "Unclaimed" if user.role == "Creative"
+		can [:unclaim, :change_status, :complete], Order, :creative_id => user.id
 
 		can [:read, :update], User, :id => user.id
 	end
