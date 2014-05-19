@@ -4,8 +4,9 @@ class User < ActiveRecord::Base
 		:recoverable, :rememberable, :trackable, :validatable
 	ROLES = %w[Unapproved Basic Creative Admin]
 	after_initialize :setup_user
+	before_destroy :unlink_orders
 
-	has_many :assignments
+	has_many :assignments, dependent: :destroy
 	has_many :organizations, through: :assignments
 
 	has_many :orders, inverse_of: :owner, foreign_key: 'owner_id'
@@ -17,6 +18,13 @@ class User < ActiveRecord::Base
 
 	def name
 		first_name + " " + last_name
+	end
+
+
+	def unlink_orders
+		Order.where(owner_id: id).each do |order|
+			order.owner = nil
+		end
 	end
 
 

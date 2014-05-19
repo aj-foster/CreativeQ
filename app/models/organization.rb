@@ -3,7 +3,7 @@ class Organization < ActiveRecord::Base
 	before_destroy :unlink_orders
 
 
-	has_many :assignments
+	has_many :assignments, dependent: :destroy
 	has_many :users, through: :assignments
 
 	has_many :orders
