@@ -12,5 +12,7 @@ class Ability
 		can :approve, Order if user.assignments.where(organization_id: Order.organization.id).where(status: "Advisor").any?
 		can [:claim, :unclaim], Order if user.role == "Creative"
 		can [:change_status, :complete], Order, :creative_id => user.id
+
+		can [:read, :update], User, :id => user.id
 	end
 end

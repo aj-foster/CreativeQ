@@ -24,7 +24,7 @@ class UsersController < ApplicationController
 	def show
 		@user = User.find(params[:id])
 
-		unless can? :view, @user
+		unless can? :read, @user
 			return redirect_to root_url, alert: "You aren't allowed to view this profile."
 		end
 
@@ -41,7 +41,7 @@ class UsersController < ApplicationController
 	def edit
 		@user = User.find(params[:id])
 
-		unless can? :edit, @user
+		unless can? :update, @user
 			return redirect_to @user, alert: "You aren't allowed to edit this profile."
 		end
 	end
@@ -50,7 +50,7 @@ class UsersController < ApplicationController
 	def update
 		@user = User.find(params[:id])
 
-		unless can? :edit, @user
+		unless can? :update, @user
 			return redirect_to @user, alert: "You aren't allowed to edit this profile."
 		end
 
