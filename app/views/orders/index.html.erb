@@ -1,3 +1,61 @@
+			<div class="actions">
+				<p>
+<% if can? :create, Order %>
+					<%= link_to "Create Order", new_order_path, :class => "button button-okay" %>
+<% end %>
+					<%= link_to "See Completed Orders", completed_orders_path, :class => "button button-neutral" %>
+				</p>
+			</div>
+
+			<section>
+<% if @unapproved.any? %>
+				<h2>Orders Awaiting Approval</h2>
+				<table>
+					<tr>
+						<th>Name</th>
+						<th>Due Date</th>
+						<th>Requested By</th>
+						<th></th>
+					</tr>
+	<% @unapproved.each do |order| %>
+					<tr>
+						<th><%= order.name %></th>
+						<td><%= order.due.strftime("%A, %B #{order.due.day.ordinalize}") %></td>
+						<td><%= order.owner.name unless order.owner.nil? %></td>
+						<td>
+		<% if can? :approve, order %>
+							<%= link_to "Approve", approve_order_path(order), remote: true, method: :put, :id => "approve-#{order.id}", :class => "button button-okay" %>
+		<% end %>
+							<%= link_to "See Details", order, :class => "button button-neutral" %>
+		<% if can? :destroy, order %>
+							<%= link_to "Remove", order, remote: true, method: :delete, :id => "destroy-#{order.id}", :class => "button button-alert" %>
+		<% end %>
+						</td>
+					</tr>
+	<% end %>
+				</table>
+<% end %>
+
+<% if @orders.any? %>
+				<h2>Orders</h2>
+				<table>
+					<tr>
+						<th></th>
+						<th>Name</th>
+						<th>Due Date</th>
+						<th>Requested by</th>
+						<th></th>
+					</tr>
+	<% @orders.each do |order| %>
+					<tr>
+						
+					</tr>
+	<% end %>
+				</table>
+<% end %>
+			</section>
+
+
 <% @superset.each do |order| %>
 	<p>Order: <%= order.name %></p>
 <% end %>

@@ -13,5 +13,8 @@ Rails.application.routes.draw do
 			put 'unclaim'
 			put 'change_status'
 		end
+		collection do
+			get 'completed'
+		end
 	end
 end

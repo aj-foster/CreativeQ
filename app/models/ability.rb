@@ -8,10 +8,18 @@ class Ability
 		can :manage, :all if user.role == "Admin"
 
 		can :index, Order
+
+		can :read, Order, :owner_id => user.id
+		can :read, Order, :creative_id => [user.id, nil] if user.role == "Creative"
+		can :read, Order, :organization_id => user.assignments.advised.pluck(:organization_id)
+
 		can :create, Order unless user.role == "Unapproved"
-		can :approve, Order do |order|
-			user.assignments.where(organization_id: order.organization_id).where(role: "Advisor").any?
-		end
+
+		can :approve, Order, :organization_id => user.assignments.advised.pluck(:organization_id)
+		# can :approve, Order do |order|
+		# 	user.assignments.where(organization_id: order.organization_id).where(role: "Advisor").any?
+		# end
+
 		can :claim, Order, :status => "Unclaimed" if user.role == "Creative"
 		can [:unclaim, :change_status, :complete], Order, :creative_id => user.id
 
