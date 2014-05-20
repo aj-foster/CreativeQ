@@ -3,15 +3,18 @@ class OrdersController < ApplicationController
 	before_filter :authenticate_user!
 
 	def index
-		@superset = Order.where.not(status: "Complete")
-		@orders, @unapproved = [], []
+		@superset = Order.where.not(status: "Complete").order(due: :asc)
+		@unapproved, @unclaimed, @orders = [], [], []
 
 		@superset.each do |order|
-			
-			if order.status == "Unapproved" && can?(:approve, order)
-				@unapproved << order
-			elsif can? :read, order
-				@orders << order
+			if can? :read, order
+				if order.status == "Unapproved" && can?(:approve, order)
+					@unapproved << order
+				elsif order.status == "Unclaimed" && can?(:claim, order)
+					@unclaimed << order
+				else
+					@orders << order
+				end
 			end
 		end
 	end

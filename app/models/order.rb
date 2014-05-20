@@ -19,6 +19,15 @@ class Order < ActiveRecord::Base
 	end
 
 
+	def hsl
+		hue = [[(due.to_i - Date.today.to_time.to_i) / 2.weeks.to_i * 100, 100].min, 0].max
+		saturation = "100%"
+		lightness = "50%"
+
+		return "hsl(" + hue.to_s + ", " + saturation + ", " + lightness + ")"
+	end
+
+
 	def setup_order
 		self.status ||= STATUSES[0]
 		self.event ||= {}

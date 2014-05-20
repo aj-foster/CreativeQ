@@ -3,7 +3,7 @@
 <% if can? :create, Order %>
 					<%= link_to "Create Order", new_order_path, :class => "button button-okay" %>
 <% end %>
-					<%= link_to "See Completed Orders", completed_orders_path, :class => "button button-neutral" %>
+					<%= link_to "See Completed", completed_orders_path, :class => "button button-neutral" %>
 				</p>
 			</div>
 
@@ -36,6 +36,31 @@
 				</table>
 <% end %>
 
+<% if @unclaimed.any? %>
+				<h2>Unclaimed Orders</h2>
+				<table>
+					<tr>
+						<th>Name</th>
+						<th>Due Date</th>
+						<th>Requested By</th>
+						<th></th>
+					</tr>
+	<% @unclaimed.each do |order| %>
+					<tr>
+						<th><%= order.name %></th>
+						<td><%= order.due.strftime("%A, %B #{order.due.day.ordinalize}") %></td>
+						<td><%= order.owner.name unless order.owner.nil? %></td>
+						<td>
+		<% if can? :claim, order %>
+							<%= link_to "Claim", claim_order_path(order), remote: true, method: :put, :id => "claim-#{order.id}", :class => "button button-okay" %>
+		<% end %>
+							<%= link_to "See Details", order, :class => "button button-neutral" %>
+						</td>
+					</tr>
+	<% end %>
+				</table>
+<% end %>
+
 <% if @orders.any? %>
 				<h2>Orders</h2>
 				<table>
@@ -48,28 +73,18 @@
 					</tr>
 	<% @orders.each do |order| %>
 					<tr>
-						
+						<td><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
+						<td><%= order.name %></td>
+						<td><%= order.due.strftime("%A, %B #{order.due.day.ordinalize}") %></td>
+						<td><%= order.owner.name unless order.owner.nil? %></td>
+						<td>
+							<%= link_to "See Details", order, :class => "button button-okay" %>
+		<% if can? :update, order %>
+							<%= link_to "Edit Order", edit_order_path(order), :class => "button button-neutral" %>
+		<% end %>
+						</td>
 					</tr>
 	<% end %>
 				</table>
 <% end %>
 			</section>
-
-
-<% @superset.each do |order| %>
-	<p>Order: <%= order.name %></p>
-<% end %>
-
-<% if @unapproved.any? %>
-<h2>Unapproved</h2>
-	<% @unapproved.each do |order| %>
-<p>Order: <%= order.name %></p>
-	<% end %>
-<% end %>
-
-<% if @orders.any? %>
-<h2>Orders</h2>
-	<% @orders.each do |order| %>
-<p>Order: <%= order.name %></p>
-	<% end %>
-<% end %>
