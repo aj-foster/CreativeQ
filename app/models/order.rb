@@ -19,6 +19,11 @@ class Order < ActiveRecord::Base
 	end
 
 
+	def due_date
+		return due.strftime("%A, %B #{due.day.ordinalize}")
+	end
+
+
 	def hsl
 		hue = [[(due.to_f - Date.today.to_time.to_f) / 2.weeks.to_f * 100, 100].min, 0].max
 		saturation = "100%"
