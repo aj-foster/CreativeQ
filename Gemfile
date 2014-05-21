@@ -32,3 +32,6 @@ gem 'cancan'
 
 # Index pagination
 gem 'will_paginate'
+
+# UI Stuff
+gem 'fancybox2-rails'
