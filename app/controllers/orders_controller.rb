@@ -167,7 +167,7 @@ class OrdersController < ApplicationController
 
 	private
 		def order_params
-			params.require(:order).permit(:name, :due, :description, :flavor).tap do |whitelisted|
+			params.require(:order).permit(:name, :due, :description, :flavor, :organization_id).tap do |whitelisted|
 				whitelisted[:needs] = params[:order][:needs]
 				whitelisted[:event] = params[:order][:event]
 			end

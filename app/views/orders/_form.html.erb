@@ -15,6 +15,12 @@
 							<%= f.text_field :due, required: true, value: @order.due.present? ? @order.due.strftime("%d-%m-%Y") : "", :class => "datepicker" %>
 						</p>
 						<p>
+<% if current_user.organizations.count > 1 %>
+							<%= f.label :organization_id %> <span>*</span><br>
+							<%= f.select :organization_id, current_user.organizations.collect {|o| [o.name, o.id]}, include_blank: "Select Organization" %>
+<% end %>
+						</p>
+						<p>
 							<%= f.label :flavor, "Type of Order" %> <span>*</span><br>
 							<%= f.radio_button :flavor, "Graphics" %> <%= f.label :flavor_graphics, "Graphics" %>
 							<%= f.radio_button :flavor, "Web" %> <%= f.label :flavor_web, "Web" %>
