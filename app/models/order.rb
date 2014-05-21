@@ -20,9 +20,9 @@ class Order < ActiveRecord::Base
 
 
 	def hsl
-		hue = [[(due.to_i - Date.today.to_time.to_i) / 2.weeks.to_i * 100, 100].min, 0].max
+		hue = [[(due.to_f - Date.today.to_time.to_f) / 2.weeks.to_f * 100, 100].min, 0].max
 		saturation = "100%"
-		lightness = "50%"
+		lightness = "40%"
 
 		return "hsl(" + hue.to_s + ", " + saturation + ", " + lightness + ")"
 	end

@@ -1,5 +1,6 @@
 		<header>
-			This is a header.
+			<div class="constraint">
+				<h1>CreativeQ</h1>
 				<nav>
 					<%= link_to "Orders", orders_path %>
 <% if can? :index, User %>
@@ -16,4 +17,5 @@
 					<%= link_to "Sign In", root_url, :class => "signin", :title => "Sign In" %>
 <% end %>
 				</nav>
+			</div>
 		</header>

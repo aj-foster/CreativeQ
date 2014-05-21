@@ -48,6 +48,7 @@ class OrdersController < ApplicationController
 		end
 
 		@order = Order.new(order_params)
+		@order.owner = current_user
 		@order.validate_due_date unless (can? :manage, @order)
 
 		if @order.save

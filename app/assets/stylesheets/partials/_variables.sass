@@ -1,0 +1,51 @@
+// Colors
+
+$background: #eeeeee
+$foreground: #ffffff
+
+$main: #4B9FC0
+
+$success: #5EB160
+$alert: #e2757a
+
+$btn-color-default: $main
+$btn-color-red: #EE5E3D
+$btn-color-green: $success
+
+
+// Typography
+
+$typeface: "calluna-sans"
+
+
+// Layout
+
+$maxWidth: 1200px
+
+
+// Mixins
+
+%clearfix
+	zoom: 1
+	&:before, &:after
+		content: ""
+		display: table 
+	&:after
+		clear: both
+
+
+@mixin button-color($color)
+
+	background-attachment: scroll
+	background-color: transparent
+	background-image: linear-gradient(to bottom, lighten($color, 10%), darken($color, 10%))
+	background-repeat: repeat
+	border: 1px solid darken($color, 10%)
+	text-shadow: 0 -1px 0 darken($color, 20%)
+	text-decoration: none
+
+	&:active, &:focus, &:hover
+
+		background-color: darken($color, 5%)
+		background-image: none
+		color: $foreground

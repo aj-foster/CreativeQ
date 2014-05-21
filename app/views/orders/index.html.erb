@@ -9,9 +9,10 @@
 
 			<section>
 <% if @unapproved.any? %>
-				<h2>Orders Awaiting Approval</h2>
 				<table>
+					<caption>Orders Awaiting Approval</caption>
 					<tr>
+						<th></th>
 						<th>Name</th>
 						<th>Due Date</th>
 						<th>Requested By</th>
@@ -19,9 +20,10 @@
 					</tr>
 	<% @unapproved.each do |order| %>
 					<tr>
+						<td><span class="status" style="color: <%= order.hsl %>">&#x25CF;</span></td>
 						<th><%= order.name %></th>
 						<td><%= order.due.strftime("%A, %B #{order.due.day.ordinalize}") %></td>
-						<td><%= order.owner.name unless order.owner.nil? %></td>
+						<td><%= order.organization.name unless order.organization.nil? %> - <%= order.owner.name unless order.owner.nil? %></td>
 						<td>
 		<% if can? :approve, order %>
 							<%= link_to "Approve", approve_order_path(order), remote: true, method: :put, :id => "approve-#{order.id}", :class => "button button-okay" %>
@@ -37,9 +39,10 @@
 <% end %>
 
 <% if @unclaimed.any? %>
-				<h2>Unclaimed Orders</h2>
 				<table>
+					<caption>Unclaimed Orders</caption>
 					<tr>
+						<th></th>
 						<th>Name</th>
 						<th>Due Date</th>
 						<th>Requested By</th>
@@ -47,9 +50,10 @@
 					</tr>
 	<% @unclaimed.each do |order| %>
 					<tr>
+						<td><span class="status" style="color: <%= order.hsl %>">&#x25CF;</span></td>
 						<th><%= order.name %></th>
 						<td><%= order.due.strftime("%A, %B #{order.due.day.ordinalize}") %></td>
-						<td><%= order.owner.name unless order.owner.nil? %></td>
+						<td><%= order.organization.name unless order.organization.nil? %> - <%= order.owner.name unless order.owner.nil? %></td>
 						<td>
 		<% if can? :claim, order %>
 							<%= link_to "Claim", claim_order_path(order), remote: true, method: :put, :id => "claim-#{order.id}", :class => "button button-okay" %>
@@ -62,8 +66,8 @@
 <% end %>
 
 <% if @orders.any? %>
-				<h2>Orders</h2>
 				<table>
+					<caption>Orders</caption>
 					<tr>
 						<th></th>
 						<th>Name</th>
@@ -73,10 +77,10 @@
 					</tr>
 	<% @orders.each do |order| %>
 					<tr>
-						<td><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
-						<td><%= order.name %></td>
+						<td><span class="status" style="color: <%= order.hsl %>">&#x25CF;</span></td>
+						<th><%= order.name %></th>
 						<td><%= order.due.strftime("%A, %B #{order.due.day.ordinalize}") %></td>
-						<td><%= order.owner.name unless order.owner.nil? %></td>
+						<td><%= order.organization.name unless order.organization.nil? %> - <%= order.owner.name unless order.owner.nil? %></td>
 						<td>
 							<%= link_to "See Details", order, :class => "button button-okay" %>
 		<% if can? :update, order %>
