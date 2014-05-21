@@ -73,9 +73,9 @@ class OrdersController < ApplicationController
 
 		@order.assign_attributes(order_params)
 		@order.setup_order
-		@order.validate_due_date unless (can? :manage, @order)
+		@valid_date = can?(:manage, @order) ? true : @order.validate_due_date
 
-		if @order.save
+		if @valid_date && @order.save
 			redirect_to @order, notice: "Order updated successfully."
 		else
 			render 'edit'

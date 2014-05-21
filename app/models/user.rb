@@ -14,10 +14,18 @@ class User < ActiveRecord::Base
 
 
 	validates :first_name, :last_name, presence: true
+	validate :validate_creative_flavor
 
 
 	def name
 		first_name + " " + last_name
+	end
+
+
+	def validate_creative_flavor
+		if self.role == "Creative" && self.flavor.nil?
+			errors.add :flavor, "must be given for Creatives (Graphics, Web, or Video)."
+		end
 	end
 
 

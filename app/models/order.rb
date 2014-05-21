@@ -13,9 +13,19 @@ class Order < ActiveRecord::Base
 
 
 	def validate_due_date
+		return_value = true
+
 		unless due.present? && due >= Date.today + 2.weeks
 			errors.add :due, "date must be at least two weeks away."
+			return_value = false
 		end
+
+		if due.saturday? || due.sunday?
+			errors.add :due, "date shouldn't be on a weekend."
+			return_value = false
+		end
+
+		return return_value
 	end
 
 
@@ -25,7 +35,7 @@ class Order < ActiveRecord::Base
 
 
 	def hsl
-		hue = [[(due.to_f - Date.today.to_time.to_f) / 2.weeks.to_f * 100, 100].min, 0].max
+		hue = [[(due - Date.today).to_f / 14.0 * 100, 100].min, 0].max
 		saturation = "100%"
 		lightness = "40%"
 
