@@ -81,12 +81,21 @@ section, aside
 		margin-bottom: 0 
 		padding: 0.25em
 		text-align: center
+
+
+
+article
+
+	background-color: $foreground
+	border: 1px solid $border
+	padding: 1em
+	margin-bottom: 2em 
 		
 
 table
 	
 	background-color: $foreground 
-	border: 1px solid #dddddd
+	border: 1px solid $border
 	margin: 0 auto 4em
 	padding: 1em
 	
@@ -103,9 +112,16 @@ table
 	
 	th, td
 
-		border-top: 1px solid #dddddd
+		border-top: 1px solid $border
 		text-align: left
 		padding: 0.5em 2em
+		
+		-moz-font-feature-settings: "lnum" 1
+		-moz-font-feature-settings: "lnum=1"
+		-ms-font-feature-settings: "lnum" 1
+		-o-font-feature-settings: "lnum" 1
+		-webkit-font-feature-settings: "lnum" 1
+		font-feature-settings: "lnum" 1
 	
 
 .flash
@@ -173,3 +189,9 @@ a
 	-ms-transition: color 0.5s
 	-o-transition: color 0.5s
 	transition: color 0.5s
+	
+
+form span
+
+	color: #ae0004
+	font-weight: normal

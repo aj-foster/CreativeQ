@@ -48,3 +48,31 @@
 		
 			display: table-cell
 			vertical-align: top
+			
+
+.orders.new, .orders.edit, .orders.update
+
+	form
+
+		@extend %clearfix
+		
+
+	fieldset
+		
+		border: 0px none
+		float: left
+		margin: 0
+		padding: 1em
+		width: 50%
+		
+
+	input[type="text"], input[type="email"]
+
+		width: 100%
+		
+
+	textarea
+
+		max-width: 100%
+		min-height: 100px
+		width: 100%

@@ -34,7 +34,6 @@
 		<% end %>
 						</td>
 					</tr>
-
 					<tr class="preview">
 						<td colspan="5">
 							<article><%= simple_format(order.description) %></article>
@@ -56,16 +55,22 @@
 						<th></th>
 					</tr>
 	<% @unclaimed.each do |order| %>
-					<tr>
-						<td><span class="status" style="color: <%= order.hsl %>">&#x25CF;</span></td>
-						<th><%= order.name %></th>
+					<tr class="order">
+						<td class="status"><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
+						<td class="name"><%= order.name %></td>
 						<td><%= order.due_date %></td>
 						<td><%= order.organization.name unless order.organization.nil? %> - <%= order.owner.name unless order.owner.nil? %></td>
-						<td>
+						<td class="action">
 		<% if can? :claim, order %>
 							<%= link_to "Claim", claim_order_path(order), remote: true, method: :put, :id => "claim-#{order.id}", :class => "button button-okay" %>
 		<% end %>
 							<%= link_to "See Details", order, :class => "button button-neutral" %>
+						</td>
+					</tr>
+					<tr class="preview">
+						<td colspan="5">
+							<article><%= simple_format(order.description) %></article>
+							<aside></aside>
 						</td>
 					</tr>
 	<% end %>
@@ -84,17 +89,23 @@
 						<th></th>
 					</tr>
 	<% @orders.each do |order| %>
-					<tr>
-						<td><span class="status" style="color: <%= order.hsl %>">&#x25CF;</span></td>
-						<th><%= order.name %></th>
+					<tr class="order">
+						<td class="status"><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
+						<td class="name"><%= order.name %></td>
 						<td><%= order.due_date %></td>
 						<td><%= order.organization.name unless order.organization.nil? %> - <%= order.owner.name unless order.owner.nil? %></td>
 						<td><%= order.status %><%= " (" + order.creative.name + ")" unless order.creative.nil? %></td>
-						<td>
+						<td class="action">
 							<%= link_to "Details", order, :class => "button button-okay" %>
 		<% if can? :update, order %>
 							<%= link_to "Edit", edit_order_path(order), :class => "button button-neutral" %>
 		<% end %>
+						</td>
+					</tr>
+					<tr class="preview">
+						<td colspan="5">
+							<article><%= simple_format(order.description) %></article>
+							<aside></aside>
 						</td>
 					</tr>
 	<% end %>

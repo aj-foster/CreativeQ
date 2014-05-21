@@ -5,17 +5,20 @@
 	<% end %>
 <% end %>
 					<fieldset>
+						<h3>General Information</h3>
 						<p>
-							<%= f.label :name %><br>
+							<%= f.label :name, "Order Name" %> <span>*</span><br>
 							<%= f.text_field :name, autofocus: true, required: true %>
 						</p>
 						<p>
-							<%= f.label :due %><br>
+							<%= f.label :due, "Due Date (dd-mm-yyyy)" %> <span>*</span><br>
 							<%= f.text_field :due, required: true, value: @order.due.present? ? @order.due.strftime("%d-%m-%Y") : "", :class => "datepicker" %>
 						</p>
 						<p>
-							<%= f.label :description %><br>
-							<%= f.text_area :description, required: true %>
+							<%= f.label :flavor, "Type of Order" %> <span>*</span><br>
+							<%= f.radio_button :flavor, "Graphics" %> <%= f.label :flavor_graphics, "Graphics" %>
+							<%= f.radio_button :flavor, "Web" %> <%= f.label :flavor_web, "Web" %>
+							<%= f.radio_button :flavor, "Video" %> <%= f.label :flavor_video, "Video" %>
 						</p>
 					</fieldset>
 
@@ -27,7 +30,7 @@
 								<%= e.text_field :name, value: @order.event["name"] %>
 							</p>
 							<p>
-								<%= e.label :time, "Event Time" %><br>
+								<%= e.label :time, "Event Date / Time" %><br>
 								<%= e.text_field :time, value: @order.event["time"] %>
 							</p>
 
@@ -39,13 +42,20 @@
 					</fieldset>
 
 					<fieldset>
-						<h3>Needs</h3>
+						<h3>Needs <span>*</span></h3>
 						<%= f.fields_for :needs do |n| %>
 							<p>
 								<%= n.label :handbill %><br>
 								<%= n.text_field :handbill, value: @order.needs["handbill"] %>
 							</p>
 						<% end %>
+					</fieldset>
+
+					<fieldset>
+						<p>
+							<%= f.label :description %> <span>*</span><br>
+							<%= f.text_area :description, required: true %>
+						</p>
 					</fieldset>
 
 					<p class="submit"><%= f.submit "Submit" %></p>

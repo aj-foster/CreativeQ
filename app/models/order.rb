@@ -37,5 +37,6 @@ class Order < ActiveRecord::Base
 		self.status ||= STATUSES[0]
 		self.event ||= {}
 		self.needs ||= {}
+		self.flavor ||= "Graphics"
 	end
 end

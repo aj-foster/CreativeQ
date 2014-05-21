@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20140514040832) do
 
   create_table "orders", force: true do |t|
     t.string   "name"
-    t.datetime "due"
+    t.date     "due"
     t.text     "description"
     t.hstore   "event"
     t.hstore   "needs"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20140514040832) do
     t.integer  "creative_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "type"
+    t.string   "flavor"
   end
 
   add_index "orders", ["creative_id"], name: "index_orders_on_creative_id", using: :btree
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 20140514040832) do
     t.string   "last_name"
     t.string   "role"
     t.string   "phone"
+    t.string   "flavor"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "email",                  default: "", null: false
