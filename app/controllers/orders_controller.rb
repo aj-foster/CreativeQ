@@ -49,7 +49,7 @@ class OrdersController < ApplicationController
 
 		@order = Order.new(order_params)
 		@order.owner = current_user
-		@order.validate_due_date unless (can? :manage, @order)
+		@order.validate_due_date unless can?(:manage, @order)
 
 		if @order.save
 			redirect_to @order, notice: "Order created successfully."

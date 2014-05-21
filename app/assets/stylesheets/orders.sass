@@ -1,5 +1,50 @@
 .orders.index
 
+	table
+
+		width: 100%
+		
+
+	.order
+
+		cursor: pointer
+
+		&:active, &:focus, &:hover
+		
+			background-color: lighten($main, 40%)
+		
+		-webkit-transition: background-color 0.5s
+		-moz-transition: background-color 0.5s
+		-ms-transition: background-color 0.5s
+		-o-transition: background-color 0.5s
+		transition: background-color 0.5s 
+
+
 	.status
 
 		font-size: 1.25em
+		text-align: center
+		
+
+	.name
+
+		font-weight: bold
+		
+
+	.action
+
+		text-align: right
+		
+
+	.preview
+
+		display: none
+		
+		td
+
+			padding: 0
+			
+		article, aside
+		
+			display: table-cell
+			vertical-align: top

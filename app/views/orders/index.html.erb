@@ -19,12 +19,12 @@
 						<th></th>
 					</tr>
 	<% @unapproved.each do |order| %>
-					<tr>
-						<td><span class="status" style="color: <%= order.hsl %>">&#x25CF;</span></td>
-						<th><%= order.name %></th>
+					<tr class="order">
+						<td class="status"><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
+						<td class="name"><%= order.name %></td>
 						<td><%= order.due_date %></td>
 						<td><%= order.organization.name unless order.organization.nil? %> - <%= order.owner.name unless order.owner.nil? %></td>
-						<td>
+						<td class="action">
 		<% if can? :approve, order %>
 							<%= link_to "Approve", approve_order_path(order), remote: true, method: :put, :id => "approve-#{order.id}", :class => "button button-okay" %>
 		<% end %>
@@ -32,6 +32,13 @@
 		<% if can? :destroy, order %>
 							<%= link_to "Remove", order, remote: true, method: :delete, :id => "destroy-#{order.id}", :class => "button button-alert" %>
 		<% end %>
+						</td>
+					</tr>
+
+					<tr class="preview">
+						<td colspan="5">
+							<article><%= simple_format(order.description) %></article>
+							<aside></aside>
 						</td>
 					</tr>
 	<% end %>
@@ -73,6 +80,7 @@
 						<th>Name</th>
 						<th>Due Date</th>
 						<th>Requested by</th>
+						<th>Status</th>
 						<th></th>
 					</tr>
 	<% @orders.each do |order| %>
@@ -81,10 +89,11 @@
 						<th><%= order.name %></th>
 						<td><%= order.due_date %></td>
 						<td><%= order.organization.name unless order.organization.nil? %> - <%= order.owner.name unless order.owner.nil? %></td>
+						<td><%= order.status %><%= " (" + order.creative.name + ")" unless order.creative.nil? %></td>
 						<td>
-							<%= link_to "See Details", order, :class => "button button-okay" %>
+							<%= link_to "Details", order, :class => "button button-okay" %>
 		<% if can? :update, order %>
-							<%= link_to "Edit Order", edit_order_path(order), :class => "button button-neutral" %>
+							<%= link_to "Edit", edit_order_path(order), :class => "button button-neutral" %>
 		<% end %>
 						</td>
 					</tr>
