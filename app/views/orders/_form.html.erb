@@ -53,13 +53,18 @@
 					</fieldset>
 
 					<fieldset class="needs">
-						<h3>Needs <span>*</span></h3>
-						<%= f.fields_for :needs do |n| %>
-							<p>
-								<%= n.label :handbill %><br>
-								<%= n.text_field :handbill, value: @order.needs["handbill"] %>
-							</p>
-						<% end %>
+						<div class="graphics">
+							<%= f.fields_for :needs do |n| %>
+								<p>
+									<input type="checkbox"> <%= n.label :handbill %><br>
+									<%= n.text_field :handbill, value: @order.needs["handbill"] %>
+								</p>
+								<p>
+									<input type="checkbox"> <%= n.label :poster %><br>
+									<%= n.text_field :poster, value: @order.needs["poster"] %>
+								</p>
+							<% end %>
+						</div>
 					</fieldset>
 
 					<fieldset class="description">

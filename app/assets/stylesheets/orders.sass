@@ -65,6 +65,8 @@
 		padding: 1em
 		width: 50%
 		
+		@extend %clearfix
+		
 		&:nth-of-type(2n+1)
 
 			clear: left
@@ -93,7 +95,7 @@
 		
 		font-size: 1.5em 
 		margin: 0
-		padding: 0 1em
+		padding: 0 1rem
 		
 		h3
 			
@@ -138,6 +140,12 @@
 			background-color: lighten($main, 30%)
 		
 
-	.needs p
+	.needs
+
+		h3
+
+			margin: 0 
+
+		p
 		
-		float: left
+			float: left
