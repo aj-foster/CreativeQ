@@ -8,3 +8,7 @@ $ ->
 
 			# Use fancybox to open the preview immediately after the order
 			$.fancybox.open($(@).next("tr.preview"), {maxWidth: 1200})
+
+
+	# Use a datepicker to make due dates easier
+	$(".datepicker").datepicker({ dateFormat: "mm/dd/yy", minDate: "+14d" })

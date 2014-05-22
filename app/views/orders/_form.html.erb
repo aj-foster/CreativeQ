@@ -11,8 +11,8 @@
 							<%= f.text_field :name, autofocus: true, required: true %>
 						</p>
 						<p>
-							<%= f.label :due, "Due Date (dd-mm-yyyy)" %> <span>*</span><br>
-							<%= f.text_field :due, required: true, value: @order.due.present? ? @order.due.strftime("%d-%m-%Y") : "", :class => "datepicker" %>
+							<%= f.label :due, "Due Date (mm/dd/yyyy)" %> <span>*</span><br>
+							<%= f.text_field :due, required: true, value: @order.due.present? ? @order.due.strftime("%m/%d/%Y") : "", :class => "datepicker" %>
 						</p>
 						<p>
 <% if current_user.organizations.count > 1 %>
@@ -47,7 +47,7 @@
 						<% end %>
 					</fieldset>
 
-					<fieldset>
+					<fieldset class="needs">
 						<h3>Needs <span>*</span></h3>
 						<%= f.fields_for :needs do |n| %>
 							<p>
@@ -57,12 +57,12 @@
 						<% end %>
 					</fieldset>
 
-					<fieldset>
+					<fieldset class="description">
 						<p>
 							<%= f.label :description %> <span>*</span><br>
 							<%= f.text_area :description, required: true %>
 						</p>
 					</fieldset>
 
-					<p class="submit"><%= f.submit "Submit" %></p>
+					<p class="submit"><%= f.submit "Submit", :class => "button button-okay" %></p>
 				<% end %>

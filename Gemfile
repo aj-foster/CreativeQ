@@ -35,3 +35,5 @@ gem 'will_paginate'
 
 # UI Stuff
 gem 'fancybox2-rails'
+gem 'jquery-ui-rails'
+gem 'american_date'
