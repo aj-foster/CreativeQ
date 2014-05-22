@@ -12,6 +12,21 @@ class Order < ActiveRecord::Base
 	validates :name, :due, :description, :needs, presence: true
 
 
+	def self.graphics_needs
+		["Handbill", "Poster", "A-Frame", "Banner", "Newspaper", "T-Shirt",
+		 "Logo", "Brochure", "Program", "FB Event Photo",
+		 "FB Cover Photo", "FB Profile Photo",
+		 "KnightConnect", "Business Card", "Union TV"]
+	end
+
+
+	def self.web_needs
+		["New Event Site", "New Org Site", "Re-Brand", "Change Text",
+		 "Change Media", "Change Layout", "Change Design", "Re-Brand",
+		 "New Feature", "Other"]
+	end
+
+
 	def validate_due_date
 		return_value = true
 
@@ -47,6 +62,6 @@ class Order < ActiveRecord::Base
 		self.status ||= STATUSES[0]
 		self.event ||= {}
 		self.needs ||= {}
-		self.flavor ||= "Graphics"
+		# self.flavor ||= "Graphics"
 	end
 end

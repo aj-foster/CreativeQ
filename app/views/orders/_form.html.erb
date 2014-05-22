@@ -43,36 +43,48 @@
 						<% end %>
 					</fieldset>
 
+<% if @order.flavor.nil? %>
 					<fieldset class="flavor">
 						<h3>Flavor of Order</h3>
 						<ul>
-							<li><%= f.radio_button :flavor, "Graphics" %> <%= f.label :flavor_graphics, "Graphics" %></li>
-							<li><%= f.radio_button :flavor, "Web" %> <%= f.label :flavor_web, "Web" %></li>
-							<li><%= f.radio_button :flavor, "Video" %> <%= f.label :flavor_video, "Video" %></li>
+							<li><%= f.radio_button :flavor, "Graphics", checked: true, :data => {:flavor => "graphics"} %> <%= f.label :flavor_graphics, "Graphics" %></li>
+							<li><%= f.radio_button :flavor, "Web", :data => {:flavor => "web"} %> <%= f.label :flavor_web, "Web" %></li>
+							<li><%= f.radio_button :flavor, "Video", :data => {:flavor => "video"} %> <%= f.label :flavor_video, "Video" %></li>
 						</ul>
 					</fieldset>
 
 					<fieldset class="needs">
-						<div class="graphics">
-							<%= f.fields_for :needs do |n| %>
-								<p>
-									<input type="checkbox"> <%= n.label :handbill %><br>
-									<%= n.text_field :handbill, value: @order.needs["handbill"] %>
-								</p>
-								<p>
-									<input type="checkbox"> <%= n.label :poster %><br>
-									<%= n.text_field :poster, value: @order.needs["poster"] %>
-								</p>
-							<% end %>
-						</div>
+						<h3>Needs <span>*</span></h3>
+						
+<%= render partial: "orders/form/graphics", locals: {f: f} %>
+
+<%= render partial: "orders/form/web", locals: {f: f} %>
+
+<%= render partial: "orders/form/video", locals: {f: f} %>
+
 					</fieldset>
+<% else %>
+					<fieldset class="needs">
+						<h3>Needs <span>*</span></h3>
+	<% case @order.flavor %>
+	<% when "Graphics" %>
+<%= render partial: "orders/form/graphics", locals: {f: f} %>
+	<% when "Web" %>
+<%= render partial: "orders/form/web", locals: {f: f} %>
+	<% when "Video" %>
+<%= render partial: "orders/form/video", locals: {f: f} %>
+	<% end %>
+					</fieldset>
+<% end %>
 
 					<fieldset class="description">
+						<h3>Description <span>*</span></h3>
 						<p>
-							<%= f.label :description %> <span>*</span><br>
 							<%= f.text_area :description, required: true %>
 						</p>
 					</fieldset>
 
 					<p class="submit"><%= f.submit "Submit", :class => "button button-okay" %></p>
 				<% end %>
+
+<%= render "modals" %>

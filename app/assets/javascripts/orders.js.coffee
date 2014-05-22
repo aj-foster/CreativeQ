@@ -12,3 +12,16 @@ $(document).on 'ready page:load', ->
 
 	# Use a datepicker to make entering due dates easier
 	$(".datepicker").datepicker({ dateFormat: "mm/dd/yy", minDate: "+14d" })
+
+
+	# Offer more information about the various "needs" in a modal
+	$(".needs .fancybox").fancybox({maxWidth: 500})
+
+
+	# Use the label of each order need to enable / disable the field
+	$(".need-label").on 'click', (evt) ->
+
+		evt.preventDefault()
+
+		$(@).siblings("input").each ->
+			this.disabled = !this.disabled
