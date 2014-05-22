@@ -39,6 +39,7 @@ class OrdersController < ApplicationController
 
 	def new
 		@order = Order.new
+		@can_edit_organization = true
 	end
 
 
@@ -61,11 +62,13 @@ class OrdersController < ApplicationController
 
 	def edit
 		@order = Order.find(params[:id])
+		@can_edit_organization = current_user.organizations.pluck(:id).include?(@order.organization_id)
 	end
 
 
 	def update
 		@order = Order.find(params[:id])
+		@can_edit_organization = current_user.organizations.pluck(:id).include?(@order.organization_id)
 
 		unless can? :update, @order
 			return redirect_to @order, alert: "You aren't allowed to edit this order."

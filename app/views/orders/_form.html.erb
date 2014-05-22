@@ -15,16 +15,12 @@
 							<%= f.text_field :due, required: true, value: @order.due.present? ? @order.due.strftime("%m/%d/%Y") : "", :class => "datepicker" %>
 						</p>
 						<p>
-<% if current_user.organizations.count > 1 %>
+<% if current_user.organizations.count > 1 && @can_edit_organization %>
 							<%= f.label :organization_id %> <span>*</span><br>
-							<%= f.select :organization_id, current_user.organizations.collect {|o| [o.name, o.id]}, include_blank: "Select Organization" %>
+							<%= f.select :organization_id, current_user.organizations.collect {|o| [o.name, o.id]} %>
+<% else %>
+							<%= f.hidden_field :organization_id, :value => (@order.organization_id || current_user.organizations.first.id) %>
 <% end %>
-						</p>
-						<p>
-							<%= f.label :flavor, "Type of Order" %> <span>*</span><br>
-							<%= f.radio_button :flavor, "Graphics" %> <%= f.label :flavor_graphics, "Graphics" %>
-							<%= f.radio_button :flavor, "Web" %> <%= f.label :flavor_web, "Web" %>
-							<%= f.radio_button :flavor, "Video" %> <%= f.label :flavor_video, "Video" %>
 						</p>
 					</fieldset>
 
@@ -45,6 +41,15 @@
 								<%= e.text_field :location, value: @order.event["location"] %>
 							</p>
 						<% end %>
+					</fieldset>
+
+					<fieldset class="flavor">
+						<h3>Flavor of Order</h3>
+						<ul>
+							<li><%= f.radio_button :flavor, "Graphics" %> <%= f.label :flavor_graphics, "Graphics" %></li>
+							<li><%= f.radio_button :flavor, "Web" %> <%= f.label :flavor_web, "Web" %></li>
+							<li><%= f.radio_button :flavor, "Video" %> <%= f.label :flavor_video, "Video" %></li>
+						</ul>
 					</fieldset>
 
 					<fieldset class="needs">

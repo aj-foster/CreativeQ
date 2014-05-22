@@ -82,23 +82,62 @@
 		width: 100%
 		
 
-	.needs
+	.flavor, .needs, .description, .submit
 
 		clear: both
-		width: 100%
-		
-		p
-			float: left
-		
-
-	.description
-
-		clear: both
+		padding: 1em 
 		width: 100%
 		
 
-	.submit
+	.flavor
+		
+		font-size: 1.5em 
+		margin: 0
+		padding: 0 1em
+		
+		h3
+			
+			font-weight: normal
+			margin-bottom: 0.25em
+			text-align: center
+		
+		label
+			
+			cursor: pointer
+			display: block
+			
+			-webkit-transition: background-color 0.5s
+			-moz-transition: background-color 0.5s
+			-ms-transition: background-color 0.5s
+			-o-transition: background-color 0.5s
+			transition: background-color 0.5s
+		
+		ul
+			
+			border: 2px solid $main
+			-webkit-border-radius: 4px
+			border-radius: 4px
+			@include flexbox
+			justify-content: space-around
+			list-style: none
+			padding: 0
+			margin: 0 
+			
+		li
+			
+			border: 1px solid $main
+			@include flex (1 1)
+			text-align: center
+			
+		input
 
-		clear: both
-		padding: 1em
-		width: 100% 
+			display: none
+			
+		input:checked ~ label
+		
+			background-color: lighten($main, 30%)
+		
+
+	.needs p
+		
+		float: left
