@@ -1,4 +1,4 @@
-$ ->
+$(document).on 'ready page:load', ->
 
 	# Allow users to see order descriptions by clicking on the orders
 	$("tr.order").on 'click', (evt) ->
@@ -10,5 +10,5 @@ $ ->
 			$.fancybox.open($(@).next("tr.preview"), {maxWidth: 1200})
 
 
-	# Use a datepicker to make due dates easier
+	# Use a datepicker to make entering due dates easier
 	$(".datepicker").datepicker({ dateFormat: "mm/dd/yy", minDate: "+14d" })
