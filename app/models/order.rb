@@ -11,19 +11,26 @@ class Order < ActiveRecord::Base
 
 	validates :name, :due, :description, :needs, presence: true
 
+	class << self
+		def graphics_needs
+			["Handbill", "Poster", "A-Frame", "Banner", "Newspaper", "T-Shirt",
+			 "Logo", "Brochure", "Program", "FB Event Photo",
+			 "FB Cover Photo", "FB Profile Photo",
+			 "KnightConnect", "Business Card", "Union TV"]
+		end
 
-	def self.graphics_needs
-		["Handbill", "Poster", "A-Frame", "Banner", "Newspaper", "T-Shirt",
-		 "Logo", "Brochure", "Program", "FB Event Photo",
-		 "FB Cover Photo", "FB Profile Photo",
-		 "KnightConnect", "Business Card", "Union TV"]
-	end
+
+		def web_needs
+			["New Event Site", "New Org Site", "Re-Brand", "Change Text",
+			 "Change Media", "Change Layout", "Change Design", "New Feature",
+			 "Other"]
+		end
 
 
-	def self.web_needs
-		["New Event Site", "New Org Site", "Re-Brand", "Change Text",
-		 "Change Media", "Change Layout", "Change Design", "Re-Brand",
-		 "New Feature", "Other"]
+		def video_needs
+			["Pre-Event Promo", "Post-Event Promo", "Day of Event",
+			 "Live Event", "Other"]
+		end
 	end
 
 

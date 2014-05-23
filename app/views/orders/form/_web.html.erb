@@ -1,13 +1,14 @@
-						<p>Please check the fields that most accurately describe the order, and provide details in the Description section below.</p>
-						<div class="web">
+						<div class="web need-wrap">
+							<p>Please check the fields that most accurately describe the order, and provide details in the Description section below.</p>
+							<div class="need-elements">
 							<%= f.fields_for :needs do |n| %>
 		<% Order.web_needs.each do |need| %>
 			<% need_param = need.parameterize.underscore %>
-								<p>
-									<a href="#" class="need-label">&#x25B8; <%= need %></a>
-									<a href="#<%= need_param %>_modal" class="fancybox">(?)</a><br>
+								<p class="need">
 									<%= n.hidden_field need_param.to_sym %>
+									<a href="#" class="need-label"><%= need %></a><br>
 								</p>
 		<% end %>
 							<% end %>
+							</div>
 						</div>

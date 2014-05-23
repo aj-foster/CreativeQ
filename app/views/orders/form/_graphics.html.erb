@@ -1,13 +1,15 @@
-						<p>Please choose the graphic formats that would be most effective for your organization or event.</p>
-						<div class="graphics">
+						<div class="graphics need-wrap">
+							<p>Please choose the graphic formats that would be most effective for your organization or event.</p>
+							<div class="need-elements">
 							<%= f.fields_for :needs do |n| %>
 		<% Order.graphics_needs.each do |need| %>
 			<% need_param = need.parameterize.underscore %>
-								<p>
+								<p class="need">
 									<a href="#" class="need-label">&#x25B8; <%= need %></a>
 									<a href="#<%= need_param %>_modal" class="fancybox">(?)</a><br>
 									<%= n.text_field need_param.to_sym, value: @order.needs[need_param], placeholder: "Size / Other Info", disabled: @order.needs[need_param].nil? %>
 								</p>
 		<% end %>
 							<% end %>
+							</div>
 						</div>

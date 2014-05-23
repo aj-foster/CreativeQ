@@ -148,13 +148,17 @@
 
 	.needs
 
-		div
+		p
+
+			margin-top: 0 
+
+		.need-elements
 	
 			@include flexbox
 			flex-flow: row wrap
 			align-content: flex-start
 			
-		p
+		.need
 
 			@include flex(1 1 150px)
 			margin-right: 1em
@@ -176,8 +180,21 @@
 			transition: opacity 0.5s
 			
 		input:disabled
-
+			
 			opacity: 0
+			
+		input:enabled ~ .need-label
+			
+			&:before
+				color: $success
+				content: "\2713"
+				margin-right: 3px 
+			
+		input:disabled ~ .need-label
+			
+			&:before
+				content: "\25B8"
+				margin-right: 3px 
 			
 
 
