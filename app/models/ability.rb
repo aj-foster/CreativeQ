@@ -22,7 +22,7 @@ class Ability
 		# 	user.assignments.where(organization_id: order.organization_id).where(role: "Advisor").any?
 		# end
 
-		can :claim, Order, :status => "Unclaimed" if user.role == "Creative"
+		can [:read, :claim], Order, :status => "Unclaimed", :flavor => user.flavor if user.role == "Creative"
 		can [:unclaim, :change_status, :complete], Order, :creative_id => user.id
 
 		can [:read, :update], User, :id => user.id

@@ -32,10 +32,10 @@ $(document).on 'ready page:load', ->
 				$(this).find("input").each ->
 					if $(this).prop('disabled')
 						$(this).attr('data-disabled', 'true')
+					$(this).attr('disabled', 'true')
 
 
 	# Show the relevant form for each flavor of order
-	showNeeds($(".flavor input[type='radio']"))
 	$(".flavor input[type='radio']").on 'change', -> showNeeds(@)
 
 
