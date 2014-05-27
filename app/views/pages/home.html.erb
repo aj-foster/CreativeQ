@@ -1,0 +1,17 @@
+			<section>
+				<h2>Welcome to CreativeQ</h2>
+				<article class="intro">
+					<p>CreativeQ is a work order management system for all of OSI's Creative Services.  Members of OSI Agencies can submit requests for Graphics, Web, and Video work using this system. If you do not yet have an account, you can apply for one using the link below. Once an administrator approves your account, you'll be able to create and manage your work orders.</p>
+					<p>Feel free to contact your advisor with any questions.</p>
+					<p><%= link_to "Apply for an Account", new_registration_path(resource_name), :class => "button button-neutral" %></p>
+				</article>
+			</section>
+
+			<aside>
+<% if user_signed_in? %>
+				<h2>Quick Look</h2>
+<% else %>
+				<h2>Sign In</h2>
+<%= render "devise/sessions/form" %>
+<% end %>
+			</aside>

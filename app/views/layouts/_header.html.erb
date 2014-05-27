@@ -1,15 +1,16 @@
 		<header>
 			<div class="constraint">
-				<h1>CreativeQ</h1>
+				<h1><%= link_to "CreativeQ", root_url %></h1>
 				<nav>
-					<%= link_to "Orders", orders_path %>
-<% if can? :index, User %>
-					<%= link_to "Users", users_path %>
-<% end %>
-<% if can? :index, Organization %>
-					<%= link_to "Organizations", organizations_path %>
-<% end %>
+
 <% if user_signed_in? %>
+					<%= link_to "Orders", orders_path %>
+	<% if can? :index, User %>
+					<%= link_to "Users", users_path %>
+	<% end %>
+	<% if can? :index, Organization %>
+					<%= link_to "Organizations", organizations_path %>
+	<% end %>
 					<%= link_to "Profile", user_path(current_user), :class => "profile", :title => "Profile" %>
 					<%= link_to "Log Out", destroy_user_session_path, :method => :delete, :class => "logout", :title => "Log Out" %>
 <% else %>
