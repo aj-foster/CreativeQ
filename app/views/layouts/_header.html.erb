@@ -5,7 +5,7 @@
 
 <% if user_signed_in? %>
 					<%= link_to "Orders", orders_path %>
-	<% if can? :index, User %>
+	<% if can? :manage, User %>
 					<%= link_to "Users", users_path %>
 	<% end %>
 	<% if can? :index, Organization %>

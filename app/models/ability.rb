@@ -4,7 +4,7 @@ class Ability
 	def initialize(user)
 
 		user ||= User.new
-		alias_action :create, :read, :update, :destroy, :to => :crud
+		alias_action :read, :update, :destroy, :to => :rud
 
 		can :manage, :all if user.role == "Admin"
 
@@ -12,8 +12,8 @@ class Ability
 
 		can :read, Order, :creative_id => [user.id, nil] if user.role == "Creative"
 		
-		can :crud, Order, :owner_id => user.id
-		can :crud, Order, :organization_id => user.assignments.advised.pluck(:organization_id)
+		can :rud, Order, :owner_id => user.id
+		can :rud, Order, :organization_id => user.assignments.advised.pluck(:organization_id)
 
 		can :create, Order unless user.role == "Unapproved"
 
