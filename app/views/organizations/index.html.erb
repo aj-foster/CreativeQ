@@ -3,32 +3,23 @@
 					<caption>Organizations</caption>
 					<tr>
 						<th>Name</th>
+						<th>Unapproved</th>
 						<th>Last 4 Months</th>
 					</tr>
 <% if @organizations.any? %>
 	<% @organizations.each do |org| %>
-					<tr>
-						<th><%= org.name %></th>
-						<td><%= Order.where(organization: org, status: "Unapproved").count %> Orders</td>
-						<td><%= Order.where(organization: org).where("created_at > ?", Date.today - 120).count %> Orders</td>
-						<td>
-<% if can? :destroy, org %>
-							<%= link_to "Remove", org, remote: true, method: :delete, :class => "button button-alert" %>
-<% end %>
-						</td>
-					</tr>
+<%= render "listing", org: org %>
 	<% end %>
 <% end %>
-					<tr>
-						<td colspan="2">
+					<tr class="create">
+						<td colspan="4">
 							<h3>Create new:</h3>
 							<%= form_for Organization.new, remote: true do |f| %>
 								<p>
-									<%= f.label :name %><br>
 									<%= f.text_field :name, required: true %>
+									<%= f.submit "Create", :class => "button button-okay" %>
 								</p>
 								<p>
-									<%= f.submit "Create", :class => "button button-okay" %>
 								</p>
 							<% end %>
 						</td>

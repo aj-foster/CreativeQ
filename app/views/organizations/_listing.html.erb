@@ -1,0 +1,10 @@
+					<tr>
+						<th><%= org.name %></th>
+						<td class="count"><%= Order.where(organization: org, status: "Unapproved").count %></td>
+						<td class="count"><%= Order.where(organization: org).where("created_at > ?", Date.today - 120).count %></td>
+						<td>
+<% if can? :destroy, org %>
+							<%= link_to "Remove", org, remote: true, method: :delete, :class => "button button-alert", :id => "destroy-#{org.id}" %>
+<% end %>
+						</td>
+					</tr>
