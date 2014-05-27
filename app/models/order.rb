@@ -2,7 +2,7 @@ class Order < ActiveRecord::Base
 
 	STATUSES = %w[Unapproved Unclaimed Claimed Started Proofing Revising Complete]
 	TYPES = %w[Graphic Web Video]
-	self.per_page = 2
+	self.per_page = 20
 
 	after_initialize :setup_order
 
