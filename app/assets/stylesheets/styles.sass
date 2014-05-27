@@ -68,6 +68,7 @@ header
 section, aside
 
 	display: table-cell
+	margin: auto
 	padding: 1em
 	
 	h2
@@ -89,7 +90,6 @@ article
 	background-color: $foreground
 	border: 1px solid $border
 	padding: 1em
-	margin-bottom: 2em 
 		
 
 table
@@ -199,4 +199,25 @@ form span
 
 h3
 
-	margin-top: 0 
+	margin-top: 0
+	
+
+em
+
+	font-style: normal
+	font-weight: bold 
+	
+
+.pagination
+	
+	margin-bottom: 2em 
+	text-align: center
+	
+	a, em
+
+		font-weight: normal
+		padding: 0.25em
+		
+	.disabled
+
+		color: darken($background, 40%)

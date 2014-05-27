@@ -7,8 +7,67 @@
 			</p>
 		</div>
 
-<h1>Order: <%= @order.name %></h1>
-<p>Due: <%= @order.due %></p>
-<p>Desc: <%= @order.description %></p>
-<p>Needs: <%= @order.needs.inspect %></p>
-<p><%= @order.inspect %></p>
+		<section>
+			<h2>Order: <%= @order.name %></h2>
+			<article>
+				<p>
+					<em>Status:</em> <%= @order.status %><%= " (" + @order.creative.name + ")" unless @order.creative.nil? %><br>
+					<em>Due date:</em> <%= @order.due_date %><br>
+					<em>Requested by:</em> <%= @order.organization.name unless @order.organization.nil? %> - <%= @order.owner.name unless @order.owner.nil? %>
+				</p>
+
+				<h3>Description</h3>
+				<%= simple_format(@order.description) %>
+			</article>
+		</section>
+
+		<aside>
+			<h2>More Info</h2>
+
+			<article class="needs">
+				<h3>Needs</h3>
+				<ul>
+<% @needs.each do |need| %>
+	<% need_param = need.parameterize.underscore %>
+	<% unless @order.needs[need_param].nil? %>
+					<li>
+						<em><%= need %></em> <%= @order.needs[need_param] %>
+					</li>
+	<% end %>
+<% end %>
+				</ul>
+			</article>
+
+			<article>
+				<h3>About the Requester</h3>
+				<p>
+					<%= @owner.name %><br>
+					Member of <%= @organization.name %><br>
+					<a href="mailto:<%= @owner.email %>"><%= @owner.email %></a><br>
+					<%= @owner.phone %>
+				</p>
+			</article>
+
+<% if @creative == current_user %>
+			<article>
+				<h3>Change Status</h3>
+				<%= form_for @order, url: change_status_order_path(@order), method: :put, remote: true do |f| %>
+					<%= f.select :status, Order.statuses, include_blank: "Select Status" %>
+					<%= f.submit "Update", :class => "button button-neutral", :id => "status-#{@order.id}" %>
+				<% end %>
+	<% if can? :unclaim, @order %>
+				<p><%= link_to "Unclaim", unclaim_order_path(@order), method: :put, :class => "button button-alert" %></p>
+	<% end %>
+			</article>
+<% end %>
+
+<% if @order.status == "Unclaimed" && can?(:claim, @order) %>
+			<article class="claim">
+				<p><%= link_to "Claim", claim_order_path(@order), method: :put, :id => "claim-#{@order.id}", :class => "button button-okay" %></p>
+			</article>
+<% end %>
+
+			<article>
+				<p>Last activity: <%= @order.updated_at.strftime("%-m/%-d/%Y") %>.</p>
+			</article>
+		</aside>

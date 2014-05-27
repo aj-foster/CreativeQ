@@ -21,7 +21,7 @@
 	<% @unapproved.each do |order| %>
 					<tr class="order">
 						<td class="status"><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
-						<td class="name"><%= order.name %></td>
+						<td class="name"><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></td>
 						<td><%= order.due_date %></td>
 						<td><%= order.organization.name unless order.organization.nil? %> - <%= order.owner.name unless order.owner.nil? %></td>
 						<td class="action">
@@ -57,12 +57,12 @@
 	<% @unclaimed.each do |order| %>
 					<tr class="order">
 						<td class="status"><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
-						<td class="name"><%= order.name %></td>
+						<td class="name"><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></td>
 						<td><%= order.due_date %></td>
 						<td><%= order.organization.name unless order.organization.nil? %> - <%= order.owner.name unless order.owner.nil? %></td>
 						<td class="action">
 		<% if can? :claim, order %>
-							<%= link_to "Claim", claim_order_path(order), remote: true, method: :put, :id => "claim-#{order.id}", :class => "button button-okay" %>
+							<%= link_to "Claim", claim_order_path(order), method: :put, :id => "claim-#{order.id}", :class => "button button-okay" %>
 		<% end %>
 							<%= link_to "See Details", order, :class => "button button-neutral" %>
 						</td>
@@ -91,7 +91,7 @@
 	<% @orders.each do |order| %>
 					<tr class="order">
 						<td class="status"><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
-						<td class="name"><%= order.name %></td>
+						<td class="name"><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></td>
 						<td><%= order.due_date %></td>
 						<td><%= order.organization.name unless order.organization.nil? %> - <%= order.owner.name unless order.owner.nil? %></td>
 						<td><%= order.status %><%= " (" + order.creative.name + ")" unless order.creative.nil? %></td>
@@ -104,8 +104,33 @@
 					</tr>
 					<tr class="preview">
 						<td colspan="5">
-							<article><%= simple_format(order.description) %></article>
-							<aside></aside>
+							<article>
+								<h3>Description</h3>
+								<%= simple_format(order.description) %>
+							</article>
+							<article class="needs">
+								<h3>Needs</h3>
+								<ul>
+<%
+		case order.flavor
+		when "Graphics"
+			needs = Order.graphics_needs
+		when "Web"
+			needs = Order.web_needs
+		when "Video"
+			needs = Order.video_needs
+		end
+%>
+		<% needs.each do |need| %>
+			<% need_param = need.parameterize.underscore %>
+			<% unless order.needs[need_param].nil? %>
+									<li>
+										<em><%= need %></em> <%= order.needs[need_param] %>
+									</li>
+			<% end %>
+		<% end %>
+								</ul>
+							</article>
 						</td>
 					</tr>
 	<% end %>

@@ -56,11 +56,11 @@
 					<fieldset class="needs">
 						<h3>Needs <span>*</span></h3>
 						
-<%= render partial: "orders/form/graphics", locals: {f: f} %>
+<%= render partial: "orders/form/graphics", locals: {f: f, display: "block"} %>
 
-<%= render partial: "orders/form/web", locals: {f: f} %>
+<%= render partial: "orders/form/web", locals: {f: f, display: "none"} %>
 
-<%= render partial: "orders/form/video", locals: {f: f} %>
+<%= render partial: "orders/form/video", locals: {f: f, display: "none"} %>
 
 					</fieldset>
 <% else %>
@@ -68,11 +68,11 @@
 						<h3>Needs <span>*</span></h3>
 	<% case @order.flavor %>
 	<% when "Graphics" %>
-<%= render partial: "orders/form/graphics", locals: {f: f} %>
+<%= render partial: "orders/form/graphics", locals: {f: f, display: "block"} %>
 	<% when "Web" %>
-<%= render partial: "orders/form/web", locals: {f: f} %>
+<%= render partial: "orders/form/web", locals: {f: f, display: "block"} %>
 	<% when "Video" %>
-<%= render partial: "orders/form/video", locals: {f: f} %>
+<%= render partial: "orders/form/video", locals: {f: f, display: "block"} %>
 	<% end %>
 					</fieldset>
 <% end %>

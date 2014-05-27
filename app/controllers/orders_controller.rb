@@ -21,7 +21,7 @@ class OrdersController < ApplicationController
 
 
 	def completed
-		@orders = Order.where(status: "Complete")
+		@orders = Order.where(status: "Complete").paginate(:page => params[:page]).order(due: :desc)
 	end
 
 
@@ -32,8 +32,18 @@ class OrdersController < ApplicationController
 			return redirect_to orders_path, alert: "You aren't allowed to view that order."
 		end
 
+		case @order.flavor
+		when "Graphics"
+			@needs = Order.graphics_needs
+		when "Web"
+			@needs = Order.web_needs
+		when "Video"
+			@needs = Order.video_needs
+		end
+		
 		@organization = @order.organization
 		@owner = @order.owner
+		@creative = @order.creative
 	end
 
 
@@ -160,7 +170,7 @@ class OrdersController < ApplicationController
 			return redirect_to @order, alert: "You aren't allowed to change this order's status."
 		end
 
-		@order.update_attribute(:status, params[:status])
+		@order.update_attribute(:status, params[:order][:status])
 
 		respond_to do |format|
 			format.js

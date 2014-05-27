@@ -1,0 +1,41 @@
+			<div class="actions">
+				<p>
+<% if can? :create, Order %>
+					<%= link_to "Create Order", new_order_path, :class => "button button-okay" %>
+<% end %>
+					<%= link_to "See Current", orders_path, :class => "button button-neutral" %>
+				</p>
+			</div>
+
+			<section>
+<% if @orders.any? %>
+				<%= will_paginate @orders %>
+				<table>
+					<caption>Completed Orders</caption>
+					<tr>
+						<th>Name</th>
+						<th>Due Date</th>
+						<th>Requested By</th>
+						<th></th>
+					</tr>
+	<% @orders.each do |order| %>
+					<tr>
+						<th><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></th>
+						<td><%= order.due_date %></td>
+						<td><%= order.organization.name unless order.organization.nil? %> - <%= order.owner.name unless order.owner.nil? %></td>
+						<td class="action">
+							<%= link_to "See Details", order, :class => "button button-neutral" %>
+		<% if can? :destroy, order %>
+							<%= link_to "Remove", order, remote: true, method: :delete, :id => "destroy-#{order.id}", :class => "button button-alert" %>
+		<% end %>
+						</td>
+					</tr>
+	<% end %>
+				</table>
+				<%= will_paginate @orders %>
+<% else %>
+				<article>
+					You don't have any completed orders to display, yet.
+				</article>
+<% end %>
+			</section>

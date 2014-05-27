@@ -2,6 +2,8 @@ class Order < ActiveRecord::Base
 
 	STATUSES = %w[Unapproved Unclaimed Claimed Started Proofing Revising Complete]
 	TYPES = %w[Graphic Web Video]
+	self.per_page = 2
+
 	after_initialize :setup_order
 
 	belongs_to :owner, class_name: 'User'
@@ -30,6 +32,11 @@ class Order < ActiveRecord::Base
 		def video_needs
 			["Pre-Event Promo", "Post-Event Promo", "Day of Event",
 			 "Live Event", "Other"]
+		end
+
+
+		def statuses
+			STATUSES[3..6]
 		end
 	end
 
