@@ -1,11 +1,50 @@
+			<section>
 <% if @unapproved.any? %>
+				<table>
+					<caption>Unapproved Users</caption>
+					<tr>
+						<th>Name</th>
+						<th>E-Mail</th>
+						<th></th>
+					</tr>
 	<% @unapproved.each do |user| %>
-		<p>Unapproved User: <%= user.name %></p>
+					<tr>
+						<th><%= user.name %></th>
+						<td><a href="<%= user.email %>"><%= user.email %></a></td>
+						<td>
+<% if can? :read, user %>
+							<%= link_to "See Profile", user, :class => "button button-neutral" %>
+<% end %>
+<% if can? :destroy, user %>
+							<%= link_to "Remove", user, method: :delete, :class => "button button-alert" %>
+<% end %>
+						</td>
+					</tr>
 	<% end %>
+				</table>
 <% end %>
 
-<% if @users.any? %>
-	<% @users.each do |user| %>
-		<p>User: <%= user.name %></p>
-	<% end %>
+				<table>
+					<caption>Users</caption>
+					<tr>
+						<th>Name</th>
+						<th>E-Mail</th>
+						<th>Organizations</th>
+						<th>Role</th>
+						<th></th>
+					</tr>
+<% @users.each do |user| %>
+					<tr>
+						<th><%= user.name %></th>
+						<td><a href="<%= user.email %>"><%= user.email %></a></td>
+						<td><%= user.organizations.order(name: :asc).map(&:name).join(', ') %></td>
+						<td><%= user.role %></td>
+						<td>
+<% if can? :read, user %>
+							<%= link_to "See Profile", user, :class => "button button-neutral" %>
 <% end %>
+						</td>
+					</tr>
+<% end %>
+				</table>
+			</section>
