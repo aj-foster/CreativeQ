@@ -28,7 +28,15 @@ class UsersController < ApplicationController
 			return redirect_to root_url, alert: "You aren't allowed to view this profile."
 		end
 
-		@organizations = @user.organizations
+		@assignments = @user.assignments.joins(:organization).order("organizations.name ASC")
+		@orgs, @otherOrgs = [], []
+		Organization.all.each do |org|
+			if @user.organizations.include?(org)
+				@orgs << org
+			else
+				@otherOrgs << org
+			end
+		end
 
 		if @user.role == "Creative"
 			@orders = Order.where(creative_id: @user.id).limit(5)

@@ -17,4 +17,5 @@ Rails.application.routes.draw do
 			get 'completed'
 		end
 	end
+	resources :assignments
 end

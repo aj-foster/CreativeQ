@@ -1,46 +1,70 @@
-		<div class="actions">
-			<p>
+			<div class="actions">
+				<p>
 <% if can? :index, User %>
-				<%= link_to "Back to Users", users_path, :class => "button button-okay" %>
+					<%= link_to "Back to Users", users_path, :class => "button button-okay" %>
 <% else %>
-				<%= link_to "Back to Home", root_url, :class => "button button-okay" %>
+					<%= link_to "Back to Home", root_url, :class => "button button-okay" %>
 <% end %>
 <% if can? :edit, @user %>
 	<% if @user == current_user %>
-				<%= link_to "Edit Profile", edit_user_path(@user), :class => "button button-neutral" %>
+					<%= link_to "Edit Profile", edit_user_path(@user), :class => "button button-neutral" %>
 	<% else %>
-				<%= link_to	"Edit User", edit_user_path(@user), :class => "button button-neutral" %>
+					<%= link_to	"Edit User", edit_user_path(@user), :class => "button button-neutral" %>
 	<% end %>
 <% end %>
 <% if can? :destroy, @user %>
-				<%= link_to "Remove User", user_path(@user), :method => :delete, :class => "button button-alert", confirm: "Are you sure you want to delete #{@user.name}?" %>
+					<%= link_to "Remove User", @user, :method => :delete, :class => "button button-alert", confirm: "Are you sure you want to delete #{@user.name}?" %>
 <% end %>
-			</p>
-		</div>
-		
-<p>Profile: <%= @user.name %></p>
+				</p>
+			</div>
 
-<ul>
-	<li>Email: <%= @user.email %></li>
-	<li>Phone: <%= @user.phone %></li>
-	<li>Role: <%= @user.role %></li>
-</ul>
-
-<p>Organizations:</p>
-<% if @organizations.present? %>
-	<ul>
-	<% @organizations.each do |org| %>
-		<li><%= org.name %></li>
+			<section>
+				<h2>Profile: <%= @user.name %></h2>
+				<article>
+					<table class="organizations">
+						<tr>
+							<th>Organization</th>
+							<th>Role</th>
+						</tr>
+<% @assignments.each do |assignment| %>
+						<tr>
+							<th><%= assignment.organization.name %></th>
+							<td>
+	<% if can? :manage, @user %>
+								<%= form_for assignment, remote: true do |f| %>
+									<%= f.select :role, ["Member", "Advisor"] %>
+									<%= f.submit "Update", :class => "button button-neutral" %>
+								<% end %>
+								<%= link_to "Remove", assignment, remote: true, method: :delete, :class => "button button-alert", :id => "remove-#{assignment.id}" %>
+	<% else %>
+								<%= assignment.role %>
 	<% end %>
-	</ul>
+							</td>
+						</tr>
 <% end %>
+						<tr class="create">
+							<td colspan="2">
+								<%= form_for Assignment.new, remote: true do |f| %>
+									<p>
+										<%= f.hidden_field :user_id, value: @user.id %>
+										<%= f.select :organization_id, @otherOrgs.collect {|o| [o.name, o.id]}, include_blank: "Add Organization" %>
+										<%= f.submit "Add", :class => "button button-okay" %>
+									</p>
+								<% end %>
+							</td>
+						</tr>
+					</table>
+				</article>
+			</section>
 
-
-<p>Orders:</p>
-<% if @orders.present? %>
-	<ul>
-	<% @orders.each do |order| %>
-		<li><%= order.name %></li>
-	<% end %>
-	</ul>
+			<aside>
+				<h2>Basic Info</h2>
+				<article>
+					<p>
+						<em>E-Mail:</em> <a href="mailto:<%= @user.email %>"><%= @user.email %></a><br>
+<% if @user.phone.present? %>
+						<em>Phone:</em> <%= @user.phone %><br>
 <% end %>
+					</p>
+				</article>
+			</aside>
