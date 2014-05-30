@@ -1,16 +1,9 @@
 			<div class="actions">
 				<p>
-<% if can? :index, User %>
+<% if can? :manage, User %>
 					<%= link_to "Back to Users", users_path, :class => "button button-okay" %>
 <% else %>
 					<%= link_to "Back to Home", root_url, :class => "button button-okay" %>
-<% end %>
-<% if can? :edit, @user %>
-	<% if @user == current_user %>
-					<%= link_to "Edit Profile", edit_user_path(@user), :class => "button button-neutral" %>
-	<% else %>
-					<%= link_to	"Edit User", edit_user_path(@user), :class => "button button-neutral" %>
-	<% end %>
 <% end %>
 <% if can? :destroy, @user %>
 					<%= link_to "Remove User", @user, :method => :delete, :class => "button button-alert", confirm: "Are you sure you want to delete #{@user.name}?" %>
@@ -21,27 +14,64 @@
 			<section>
 				<h2>Profile: <%= @user.name %></h2>
 				<article>
-					<table class="organizations">
+					<%= form_for @user do |f| %>
+						<fieldset>
+							<h3>Personal Information</h3>
+							<p>
+								<%= f.label :first_name, "First Name" %> <span>*</span><br>
+								<%= f.text_field :first_name, required: true %>
+							</p>
+							<p>
+								<%= f.label :last_name, "Last Name" %> <span>*</span><br>
+								<%= f.text_field :last_name, required: true %>
+							</p>
+							<p>
+								<%= f.label :email, "E-Mail" %> <span>*</span><br>
+								<%= f.email_field :email, required: true %>
+							</p>
+							<p>
+								<%= f.label :phone, "Phone Number" %><br>
+								<%= f.telephone_field :phone %>
+							</p>
+<% if can? :manage, @user %>
+							<p class="role">
+								<%= f.label :role %><br>
+								<%= f.collection_select :role, User::ROLES, :to_s, :humanize %>
+							</p>
+							<p class="flavor" <% unless @user.role == "Creative" %>style="display:none"<% end %>>
+								<%= f.label :flavor, "Type of Creative" %> <span>*</span><br>
+								<%= f.collection_select :flavor, Order::TYPES, :to_s, :humanize %>
+							</p>
+<% end %>
+						</fieldset>
+
+						<fieldset>
+							<h3>Change Password</h3>
+							<p>
+								<%= f.label :password, "New Password" %><br>
+								<%= f.password_field :password, autocomplete: "off" %>
+							</p>
+							<p>
+								<%= f.label :password_confirmation, "New Password Confirmation" %><br>
+								<%= f.password_field :password_confirmation, autocomplete: "off" %>
+							</p>
+						</fieldset>
+						<p class="submit"><%= f.submit "Update", :class => "button button-okay" %></p>
+					<% end %>
+				</article>
+			</section>
+
+			<aside>
+				<h2>Organizations</h2>
+				<table class="organizations">
 						<tr>
 							<th>Organization</th>
 							<th>Role</th>
 						</tr>
 <% @assignments.each do |assignment| %>
-						<tr>
-							<th><%= assignment.organization.name %></th>
-							<td>
-	<% if can? :manage, @user %>
-								<%= form_for assignment, remote: true do |f| %>
-									<%= f.select :role, ["Member", "Advisor"] %>
-									<%= f.submit "Update", :class => "button button-neutral" %>
-								<% end %>
-								<%= link_to "Remove", assignment, remote: true, method: :delete, :class => "button button-alert", :id => "remove-#{assignment.id}" %>
-	<% else %>
-								<%= assignment.role %>
-	<% end %>
-							</td>
-						</tr>
+<%= render "assignments/listing", assignment: assignment %>
 <% end %>
+<% if can? :manage, @user %>
 						<tr class="create">
 							<td colspan="2">
 								<%= form_for Assignment.new, remote: true do |f| %>
@@ -53,18 +83,6 @@
 								<% end %>
 							</td>
 						</tr>
-					</table>
-				</article>
-			</section>
-
-			<aside>
-				<h2>Basic Info</h2>
-				<article>
-					<p>
-						<em>E-Mail:</em> <a href="mailto:<%= @user.email %>"><%= @user.email %></a><br>
-<% if @user.phone.present? %>
-						<em>Phone:</em> <%= @user.phone %><br>
 <% end %>
-					</p>
-				</article>
+					</table>
 			</aside>

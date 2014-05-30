@@ -12,8 +12,8 @@
 						<th><%= user.name %></th>
 						<td><a href="<%= user.email %>"><%= user.email %></a></td>
 						<td>
-<% if can? :read, user %>
-							<%= link_to "See Profile", user, :class => "button button-neutral" %>
+<% if can? :update, user %>
+							<%= link_to "Edit Profile", user, :class => "button button-neutral" %>
 <% end %>
 <% if can? :destroy, user %>
 							<%= link_to "Remove", user, method: :delete, :class => "button button-alert" %>
@@ -40,8 +40,11 @@
 						<td><%= user.organizations.order(name: :asc).map(&:name).join(', ') %></td>
 						<td><%= user.role %></td>
 						<td>
-<% if can? :read, user %>
-							<%= link_to "See Profile", user, :class => "button button-neutral" %>
+<% if can? :update, user %>
+							<%= link_to "Edit Profile", user, :class => "button button-neutral" %>
+<% end %>
+<% if can? :destroy, user %>
+							<%= link_to "Remove", user, method: :delete, :class => "button button-alert", confirm: "Are you sure you'd like to remove #{user.name}?" %>
 <% end %>
 						</td>
 					</tr>

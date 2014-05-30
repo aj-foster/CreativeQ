@@ -1,0 +1,14 @@
+						<tr>
+							<th><%= assignment.organization.name %></th>
+							<td>
+	<% if can? :manage, @user %>
+								<%= form_for assignment, remote: true do |f| %>
+									<%= f.select :role, ["Member", "Advisor"] %>
+									<%= f.submit "Update", :class => "button button-neutral" %>
+								<% end %>
+								<%= link_to "Remove", assignment, remote: true, method: :delete, :class => "button button-alert", :id => "destroy-#{assignment.id}" %>
+	<% else %>
+								<%= assignment.role %>
+	<% end %>
+							</td>
+						</tr>

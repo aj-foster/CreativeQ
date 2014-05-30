@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
 
 	def index
-		unless can? :index, User
+		unless can? :manage, User
 			return redirect_to current_user, alert: "You aren't allowed to list users."
 		end
 
@@ -21,6 +21,15 @@ class UsersController < ApplicationController
 	end
 
 
+	def retired
+		unless can? :manage, User
+			return redirect_to current_user, alert: "You aren't allowed to list users."
+		end
+
+		@users = User.where(role: "Retired").order(last_name: :asc)
+	end
+
+
 	def show
 		@user = User.find(params[:id])
 
@@ -30,6 +39,7 @@ class UsersController < ApplicationController
 
 		@assignments = @user.assignments.joins(:organization).order("organizations.name ASC")
 		@orgs, @otherOrgs = [], []
+		
 		Organization.all.each do |org|
 			if @user.organizations.include?(org)
 				@orgs << org

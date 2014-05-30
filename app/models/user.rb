@@ -2,7 +2,9 @@ class User < ActiveRecord::Base
 
 	devise :database_authenticatable, :registerable,
 		:recoverable, :rememberable, :trackable, :validatable
-	ROLES = %w[Unapproved Basic Creative Admin]
+
+	ROLES = %w[Unapproved Basic Creative Admin Retired]
+
 	after_initialize :setup_user
 	before_destroy :unlink_orders
 

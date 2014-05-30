@@ -1,7 +1,7 @@
 class Order < ActiveRecord::Base
 
 	STATUSES = %w[Unapproved Unclaimed Claimed Started Proofing Revising Complete]
-	TYPES = %w[Graphic Web Video]
+	TYPES = %w[Graphics Web Video]
 	self.per_page = 20
 
 	after_initialize :setup_order
@@ -12,6 +12,10 @@ class Order < ActiveRecord::Base
 
 
 	validates :name, :due, :description, :needs, presence: true
+
+	scope :completed, -> (user) { where(status: "Completed").where("owner_id = ? OR
+		creative_id = ? OR organization_id IN (?)", user.id, user.id,
+		user.assignments.advised.pluck(&:id)) }
 
 	class << self
 		def graphics_needs
