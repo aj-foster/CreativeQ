@@ -39,13 +39,17 @@
 			</article>
 
 			<article>
+<% unless @owner.nil? %>
 				<h3>About the Requester</h3>
 				<p>
-					<%= @owner.name %><br>
+					<%= @owner.name  %><br>
 					Member of <%= @organization.name %><br>
 					<a href="mailto:<%= @owner.email %>"><%= @owner.email %></a><br>
 					<%= @owner.phone %>
 				</p>
+<% else %>
+				<p>The order's owner has been removed.</p>
+<% end %>
 			</article>
 
 <% if @creative == current_user %>
