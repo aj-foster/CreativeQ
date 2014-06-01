@@ -56,15 +56,6 @@ class UsersController < ApplicationController
 	end
 
 
-	def edit
-		@user = User.find(params[:id])
-
-		unless can? :update, @user
-			return redirect_to @user, alert: "You aren't allowed to edit this profile."
-		end
-	end
-
-
 	def update
 		@user = User.find(params[:id])
 
@@ -101,7 +92,7 @@ class UsersController < ApplicationController
 		end
 
 		if @user.destroy
-			redirect_to users_path, notice: "User deleted."
+			redirect_to users_path, notice: "User successfully deleted."
 		else
 			redirect_to @user, alert: "Error: User could not be deleted."
 		end

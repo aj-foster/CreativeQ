@@ -19,21 +19,26 @@ class User < ActiveRecord::Base
 	validate :validate_creative_flavor
 
 
-	def name
-		first_name + " " + last_name
+	def active_for_authentication?
+		super && self.role != "Retired"
 	end
 
 
-	def validate_creative_flavor
-		if self.role == "Creative" && self.flavor.nil?
-			errors.add :flavor, "must be given for Creatives (Graphics, Web, or Video)."
-		end
+	def name
+		first_name + " " + last_name
 	end
 
 
 	def unlink_orders
 		Order.where(owner_id: id).each do |order|
 			order.owner = nil
+		end
+	end
+
+
+	def validate_creative_flavor
+		if self.role == "Creative" && self.flavor.nil?
+			errors.add :flavor, "must be given for Creatives (Graphics, Web, or Video)."
 		end
 	end
 

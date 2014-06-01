@@ -13,10 +13,7 @@
 						<td><a href="<%= user.email %>"><%= user.email %></a></td>
 						<td>
 <% if can? :update, user %>
-							<%= link_to "Edit Profile", user, :class => "button button-neutral" %>
-<% end %>
-<% if can? :destroy, user %>
-							<%= link_to "Remove", user, method: :delete, :class => "button button-alert" %>
+							<%= link_to "Edit Profile", user, :class => "button button-okay" %>
 <% end %>
 						</td>
 					</tr>
@@ -42,9 +39,6 @@
 						<td>
 <% if can? :update, user %>
 							<%= link_to "Edit Profile", user, :class => "button button-neutral" %>
-<% end %>
-<% if can? :destroy, user %>
-							<%= link_to "Remove", user, method: :delete, :class => "button button-alert", confirm: "Are you sure you'd like to remove #{user.name}?" %>
 <% end %>
 						</td>
 					</tr>

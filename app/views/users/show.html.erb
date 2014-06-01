@@ -6,7 +6,7 @@
 					<%= link_to "Back to Home", root_url, :class => "button button-okay" %>
 <% end %>
 <% if can? :destroy, @user %>
-					<%= link_to "Remove User", @user, :method => :delete, :class => "button button-alert", confirm: "Are you sure you want to delete #{@user.name}?" %>
+					<%= link_to "Remove User", @user, :method => :delete, :class => "button button-alert", data: { confirm: "Are you sure you want to delete #{@user.name}? You can also set this user's role to 'Retired'." } %>
 <% end %>
 				</p>
 			</div>
