@@ -3,8 +3,10 @@ class OrdersMailer < ActionMailer::Base
 
 	def order_awaiting_approval (order)
 		@order = order
-		mail(to: Assignment.where(organization: @order.organization).where(role: "Advisor")
-			.joins(:user).map{ |a| a.user.email },
-			subject: "[CreativeQ] Order Awaiting Approval: #{@order.name}")
+		recipients = Assignment.where(organization: @order.organization).where(role: "Advisor")
+					.joins(:user).map{ |a| a.user.email }
+		if recipients.any?
+			mail(to: recipients, subject: "[CreativeQ] Order Awaiting Approval: #{@order.name}")
+		end
 	end
 end
