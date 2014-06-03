@@ -78,6 +78,7 @@ class OrdersController < ApplicationController
 
 		if @order.save
 			redirect_to @order, notice: "Order created successfully."
+			OrdersMailer.order_awaiting_approval(@order).deliver
 		else
 			render 'new'
 		end
