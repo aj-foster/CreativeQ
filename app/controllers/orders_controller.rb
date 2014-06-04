@@ -18,7 +18,7 @@ class OrdersController < ApplicationController
 		# - Record selection and CanCan would both use these scopes to be DRY.
 
 		@superset = Order.where.not(status: "Complete").order(due: :asc)
-		@unapproved, @unclaimed, @orders = [], [], []
+		@unapproved, @unclaimed, @claimed, @orders = [], [], [], []
 
 		@superset.each do |order|
 			if can? :read, order
@@ -26,6 +26,8 @@ class OrdersController < ApplicationController
 					@unapproved << order
 				elsif order.status == "Unclaimed" && can?(:claim, order)
 					@unclaimed << order
+				elsif order.creative == current_user
+					@claimed << order
 				else
 					@orders << order
 				end
