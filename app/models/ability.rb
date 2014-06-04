@@ -10,7 +10,14 @@ class Ability
 
 		can :index, Order
 
-		can :read, Order { |order| !order.creative.nil? } if user.role == "Creative"
+		if user.role == "Creative"
+			can :read, Order do |order|
+				order.creative.present? && order.flavor == user.flavor
+			end
+
+			can :claim, Order, :status => "Unclaimed", :flavor => user.flavor
+			can [:unclaim, :change_status, :complete], Order, :creative_id => user.id
+		end
 		
 		can :rud, Order, :owner_id => user.id
 		can :rud, Order, :organization_id => user.assignments.advised.pluck(:organization_id)
@@ -18,9 +25,6 @@ class Ability
 		can :create, Order unless user.role == "Unapproved"
 
 		can :approve, Order, :organization_id => user.assignments.advised.pluck(:organization_id)
-
-		can :claim, Order, :status => "Unclaimed", :flavor => user.flavor if user.role == "Creative"
-		can [:unclaim, :change_status, :complete], Order, :creative_id => user.id
 
 		can [:read, :update], User, :id => user.id
 	end
