@@ -2,6 +2,5 @@
  *= require_self
  *= require fancybox
  *= require jquery.ui.datepicker
+ *= require styles
  */
-
-@import "styles";
