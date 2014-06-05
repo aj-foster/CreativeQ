@@ -8,6 +8,11 @@
 			</div>
 
 			<section>
+<% unless @unapproved.any? || @unclaimed.any? || @claimed.any? || @orders.any? %>
+				<article>
+					There aren't any orders to display, yet.
+				</article>
+<% end %>
 <% if @unapproved.any? %>
 				<table>
 					<caption>Orders Awaiting Approval</caption>
