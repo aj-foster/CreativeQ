@@ -40,7 +40,7 @@ class UsersController < ApplicationController
 		@assignments = @user.assignments.joins(:organization).order("organizations.name ASC")
 		@orgs, @otherOrgs = [], []
 		
-		Organization.all.each do |org|
+		Organization.all.order(name: :asc).each do |org|
 			if @user.organizations.include?(org)
 				@orgs << org
 			else
