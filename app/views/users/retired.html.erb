@@ -1,0 +1,31 @@
+			<section>
+<% if @users.any? %>
+				<table>
+					<caption>Retired Users</caption>
+					<tr>
+						<th>Name</th>
+						<th>E-Mail</th>
+						<th>Organizations</th>
+						<th>Role</th>
+						<th></th>
+					</tr>
+	<% @users.each do |user| %>
+					<tr>
+						<th><%= user.name %></th>
+						<td><a href="<%= user.email %>"><%= user.email %></a></td>
+						<td><%= user.organizations.order(name: :asc).map(&:name).join(', ') %></td>
+						<td><%= user.role %></td>
+						<td>
+		<% if can? :update, user %>
+							<%= link_to "Edit Profile", user, :class => "button button-neutral" %>
+		<% end %>
+						</td>
+					</tr>
+	<% end %>
+				</table>
+<% else %>
+				<article>
+					There aren't any retired users, yet.
+				</article>
+<% end %>
+			</section>

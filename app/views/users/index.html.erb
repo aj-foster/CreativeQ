@@ -34,7 +34,7 @@
 					<tr>
 						<th><%= user.name %></th>
 						<td><a href="<%= user.email %>"><%= user.email %></a></td>
-						<td><%= user.organizations.order(name: :asc).map(&:name).join(', ') %></td>
+						<td><%= user.organizations.map(&:name).join(', ') %></td>
 						<td><%= user.role %></td>
 						<td>
 <% if can? :update, user %>

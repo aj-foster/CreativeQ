@@ -8,7 +8,7 @@ class UsersController < ApplicationController
 			return redirect_to current_user, alert: "You aren't allowed to list users."
 		end
 
-		@superset = User.order(last_name: :asc)
+		@superset = User.includes(:organizations).where.not(role: "Retired").order(last_name: :asc)
 		@unapproved, @users = [], []
 
 		@superset.each do |user|
