@@ -79,7 +79,7 @@ class OrdersController < ApplicationController
 		@order.validate_due_date unless can?(:manage, @order)
 
 		if @order.save
-			redirect_to @order, notice: "Order created successfully."
+			redirect_to @order, notice: "Your order has been submitted to your advisor for approval."
 			OrdersMailer.order_awaiting_approval(@order).deliver
 		else
 			render 'new'
