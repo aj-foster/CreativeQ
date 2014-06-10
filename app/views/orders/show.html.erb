@@ -85,5 +85,8 @@
 
 			<article>
 				<p>Last activity: <%= @order.updated_at.strftime("%-m/%-d/%Y") %>.</p>
+<% if can? :manage, Order %>
+				<p>Order Created: <%= @order.created_at.strftime("%-m/%-d/%Y") %>.</p>
+<% end %>
 			</article>
 		</aside>
