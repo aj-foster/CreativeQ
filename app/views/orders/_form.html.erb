@@ -41,6 +41,7 @@
 
 <% if @order.flavor.nil? %>
 					<fieldset class="flavor">
+						<p>Please choose the "flavor" of the order. If you need multiple, please create separate orders so the proper creatives can claim them.</p>
 						<ul>
 							<li><%= f.radio_button :flavor, "Graphics", checked: true, :data => {:flavor => "graphics"} %> <%= f.label :flavor_graphics, "Graphics" %></li>
 							<li><%= f.radio_button :flavor, "Web", :data => {:flavor => "web"} %> <%= f.label :flavor_web, "Web" %></li>
