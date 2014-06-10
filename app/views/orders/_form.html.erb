@@ -28,10 +28,6 @@
 						<h3>Event Information</h3>
 						<%= f.fields_for :event do |e| %>
 							<p>
-								<%= e.label :name, "Event Name" %><br>
-								<%= e.text_field :name, value: @order.event["name"] %>
-							</p>
-							<p>
 								<%= e.label :time, "Event Date / Time" %><br>
 								<%= e.text_field :time, value: @order.event["time"] %>
 							</p>

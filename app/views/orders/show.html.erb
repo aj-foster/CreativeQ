@@ -37,12 +37,24 @@
 <% end %>
 				</ul>
 			</article>
-
+<% unless @order.event.nil? || @order.event.empty? %>
+			<article>
+				<h3>Event Information</h3>
+				<p>
+	<% unless @order.event['time'].nil? %>
+					<em>When:</em> <%= @order.event['time'] %><br>
+	<% end %>
+	<% unless @order.event['location'].nil? %>
+					<em>Where:</em> <%= @order.event['location'] %>
+	<% end %>
+				</p>
+			</article>
+<% end %>
 			<article>
 <% unless @owner.nil? %>
 				<h3>About the Requester</h3>
 				<p>
-					<%= @owner.name  %><br>
+					<%= @owner.name %><br>
 					Member of <%= @organization.name %><br>
 					<a href="mailto:<%= @owner.email %>"><%= @owner.email %></a><br>
 					<%= @owner.phone %>
