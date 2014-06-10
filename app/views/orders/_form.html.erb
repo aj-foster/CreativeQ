@@ -41,7 +41,6 @@
 
 <% if @order.flavor.nil? %>
 					<fieldset class="flavor">
-						<h3>Flavor of Order</h3>
 						<ul>
 							<li><%= f.radio_button :flavor, "Graphics", checked: true, :data => {:flavor => "graphics"} %> <%= f.label :flavor_graphics, "Graphics" %></li>
 							<li><%= f.radio_button :flavor, "Web", :data => {:flavor => "web"} %> <%= f.label :flavor_web, "Web" %></li>
