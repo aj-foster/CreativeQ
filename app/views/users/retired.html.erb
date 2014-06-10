@@ -5,15 +5,13 @@
 					<tr>
 						<th>Name</th>
 						<th>E-Mail</th>
-						<th>Organizations</th>
 						<th>Role</th>
 						<th></th>
 					</tr>
 	<% @users.each do |user| %>
 					<tr>
 						<th><%= user.name %></th>
-						<td><a href="<%= user.email %>"><%= user.email %></a></td>
-						<td><%= user.organizations.order(name: :asc).map(&:name).join(', ') %></td>
+						<td><a href="mailto:<%= user.email %>"><%= user.email %></a></td>
 						<td><%= user.role %></td>
 						<td>
 		<% if can? :update, user %>
