@@ -41,10 +41,10 @@
 			<article>
 				<h3>Event Information</h3>
 				<p>
-	<% unless @order.event['time'].nil? %>
+	<% if @order.event['time'].present? %>
 					<em>When:</em> <%= @order.event['time'] %><br>
 	<% end %>
-	<% unless @order.event['location'].nil? %>
+	<% if @order.event['location'].present? %>
 					<em>Where:</em> <%= @order.event['location'] %>
 	<% end %>
 				</p>
