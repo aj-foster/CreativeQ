@@ -193,15 +193,25 @@
 			margin-top: 0 
 
 		.need-elements
+
+			display: block
 	
-			@include flexbox
-			flex-flow: row wrap
-			align-content: flex-start
+			//@include flexbox
+			//-webkit-flex-flow: row wrap
+			//flex-flow: row wrap
+			//align-content: flex-start
+
+			//@supports not (flex-wrap: wrap)
+			//	display: block
 			
 		.need
 
-			@include flex(1 1 150px)
+			display: inline-block
+			//@include flex(1 1 150px)
 			margin-right: 1em
+
+			//@supports not (flex-wrap: wrap)
+			//	display: inline-block
 			
 		.need-label
 			
