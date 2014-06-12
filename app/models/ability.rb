@@ -9,6 +9,9 @@ class Ability
 		can :manage, :all if user.role == "Admin"
 
 		can :index, Order
+		can :read, Order, Order.readable(user) do |order|
+			order.readable?(user)
+		end
 
 		if user.role == "Creative"
 			can :read, Order do |order|

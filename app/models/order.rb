@@ -13,6 +13,12 @@ class Order < ActiveRecord::Base
 
 	validates :name, :due, :description, :needs, presence: true
 
+	scope :readable, -> (user) {
+		where("owner_id = ? OR creative_id = ? OR (status = 'Unclaimed' AND
+		flavor = ?) OR organization_id IN (?)", user.id, user.id, user.flavor,
+		user.assignments.advised.pluck(:organization_id))
+	}
+
 	scope :completed, -> (user) { where(status: "Completed").where("owner_id = ? OR
 		creative_id = ? OR organization_id IN (?)", user.id, user.id,
 		user.assignments.advised.pluck(:organization_id)) }
@@ -34,7 +40,7 @@ class Order < ActiveRecord::Base
 
 
 		def video_needs
-			["Pre-Event Promo", "Post-Event Promo", "Day of Event",
+			["Pre-Event Promo", "Post-Event Promo", "Exec Video",
 			 "Live Event", "Other"]
 		end
 
@@ -42,6 +48,15 @@ class Order < ActiveRecord::Base
 		def statuses
 			STATUSES[3..6]
 		end
+	end
+
+
+	def readable? user
+		readable ||= !owner.nil? && owner == user
+		readable ||= !creative.nil? && creative == user
+		readable ||= user.role == "Creative" && status == "Unclaimed" && flavor == user.flavor
+		readable ||= !organization.nil? &&
+			organization_id.in?(user.assignments.advised.pluck(:organization_id))
 	end
 
 
