@@ -1,6 +1,10 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+
+  config.relative_url_root = '/creativeq'
+
+
   # Code is not reloaded between requests.
   config.cache_classes = true
 
@@ -78,6 +82,12 @@ Rails.application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
+  # Don't output so much.
+  config.log_level = :warn
+
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.action_mailer.default_url_options = { :host => 'osi.ucf.edu/creativeq' }
+  config.action_mailer.delivery_method = :sendmail
 end
