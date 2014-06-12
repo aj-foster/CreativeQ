@@ -16,3 +16,7 @@
 /tmp
 
 *.DS_Store
+/public
+/vendor
+config/database.yml
+config/secrets.yml
