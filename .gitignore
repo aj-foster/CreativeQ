@@ -16,9 +16,10 @@
 /tmp
 
 *.DS_Store
-/public
-/vendor
+/public/assets
+/vendor/bundle
 config/database.yml
 config/secrets.yml
 config/environment.rb
 config/initializers/devise.rb
+/secrets
