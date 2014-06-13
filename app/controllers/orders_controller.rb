@@ -121,9 +121,18 @@ class OrdersController < ApplicationController
 		end
 
 		if @order.destroy
-			redirect_to orders_path, notice: "Order deleted successfully."
+			respond_to do |format|
+				format.html {
+					redirect_to orders_path, notice: "Order deleted successfully."
+				}
+				format.js
+			end
 		else
-			redirect_to @order, alert: "Error: Order could not be deleted."
+			respond_to do |format|
+				format.html {
+					redirect_to @order, alert: "Error: Order could not be deleted."
+				}
+			end
 		end
 	end
 
