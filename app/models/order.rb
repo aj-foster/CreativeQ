@@ -19,7 +19,7 @@ class Order < ActiveRecord::Base
 		user.assignments.advised.pluck(:organization_id))
 	}
 
-	scope :completed, -> (user) { where(status: "Completed").where("owner_id = ? OR
+	scope :completed, -> (user) { where(status: "Complete").where("owner_id = ? OR
 		creative_id = ? OR organization_id IN (?)", user.id, user.id,
 		user.assignments.advised.pluck(:organization_id)) }
 
