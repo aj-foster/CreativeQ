@@ -27,8 +27,8 @@ class Order < ActiveRecord::Base
 		def graphics_needs
 			["Handbill", "Poster", "A-Frame", "Banner", "Newspaper", "T-Shirt",
 			 "Logo", "Brochure", "Program", "FB Event Photo",
-			 "FB Cover Photo", "FB Profile Photo",
-			 "KnightConnect", "Business Card", "Union TV"]
+			 "FB Cover Photo", "FB Profile Photo", "KnightConnect",
+			 "Business Card", "Union TV", "Other"]
 		end
 
 
@@ -40,8 +40,8 @@ class Order < ActiveRecord::Base
 
 
 		def video_needs
-			["Pre-Event Promo", "Post-Event Promo", "Exec Video",
-			 "Live Event", "Other"]
+			["Event Promotion", "Live Production", "Event Recap",
+			 "Exec Video", "Reveal / Teaser", "Other"]
 		end
 
 
