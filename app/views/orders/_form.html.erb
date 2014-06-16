@@ -62,6 +62,7 @@
 <% else %>
 					<fieldset class="needs">
 						<h3>Needs <span>*</span></h3>
+						<%= f.hidden_field :flavor %>
 	<% case @order.flavor %>
 	<% when "Graphics" %>
 <%= render partial: "orders/form/graphics", locals: {f: f, display: "block"} %>
