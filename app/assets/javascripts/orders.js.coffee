@@ -48,5 +48,8 @@ $(document).on 'ready page:load', ->
 
 		evt.preventDefault()
 
+		$(".video.need-wrap .need input").each ->
+			this.disabled = true
+
 		$(@).siblings("input").each ->
 			this.disabled = !this.disabled
