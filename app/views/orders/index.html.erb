@@ -28,10 +28,7 @@
 						<td class="status"><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
 						<td class="name"><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></td>
 						<td><%= order.due_date %></td>
-						<td>
-							<%= order.owner.name unless order.owner.nil? %><br>
-							<%= order.organization.name unless order.organization.nil? %>
-						</td>
+						<td><%= order.organization.name unless order.organization.nil? %></td>
 						<td class="action">
 		<% if can? :approve, order %>
 							<%= link_to "Approve", approve_order_path(order), remote: true, method: :put, :id => "approve-#{order.id}", :class => "button button-okay" %>
@@ -92,10 +89,7 @@
 						<td class="status"><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
 						<td class="name"><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></td>
 						<td><%= order.due_date %></td>
-						<td>
-							<%= order.owner.name unless order.owner.nil? %><br>
-							<%= order.organization.name unless order.organization.nil? %>
-						</td>
+						<td><%= order.organization.name unless order.organization.nil? %></td>
 						<td class="action">
 		<% if can? :claim, order %>
 							<%= link_to "Claim", claim_order_path(order), method: :put, :id => "claim-#{order.id}", :class => "button button-okay" %>
@@ -154,10 +148,7 @@
 						<td class="status"><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
 						<td class="name"><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></td>
 						<td><%= order.due_date %></td>
-						<td>
-							<%= order.owner.name unless order.owner.nil? %><br>
-							<%= order.organization.name unless order.organization.nil? %>
-						</td>
+						<td><%= order.organization.name unless order.organization.nil? %></td>
 						<td><%= order.status %><%= " (" + order.creative.name + ")" unless order.creative.nil? %></td>
 						<td class="action">
 							<%= link_to "Details", order, :class => "button button-okay" %>
@@ -217,10 +208,7 @@
 						<td class="status"><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
 						<td class="name"><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></td>
 						<td><%= order.due_date %></td>
-						<td>
-							<%= order.owner.name unless order.owner.nil? %><br>
-							<%= order.organization.name unless order.organization.nil? %>
-						</td>
+						<td><%= order.organization.name unless order.organization.nil? %></td>
 						<td><%= order.status %><%= " (" + order.creative.name + ")" unless order.creative.nil? %></td>
 						<td class="action">
 							<%= link_to "Details", order, :class => "button button-okay" %>
