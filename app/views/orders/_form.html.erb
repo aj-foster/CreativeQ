@@ -4,7 +4,19 @@
 					<p class="flash alert"><%= msg %></p>
 	<% end %>
 <% end %>
-					<fieldset>
+					<fieldset class="flavor">
+<% if @order.flavor.nil? %>
+						<ul>
+							<li><%= f.radio_button :flavor, "Graphics", checked: true, :data => {:flavor => "graphics"} %> <%= f.label :flavor_graphics, "Graphics" %></li>
+							<li><%= f.radio_button :flavor, "Web", :data => {:flavor => "web"} %> <%= f.label :flavor_web, "Web" %></li>
+							<li><%= f.radio_button :flavor, "Video", :data => {:flavor => "video"} %> <%= f.label :flavor_video, "Production" %></li>
+						</ul>
+<% else %>
+						<%= f.hidden_field :flavor %>
+<% end %>
+					</fieldset>
+
+					<fieldset class="general">
 						<h3>General Information</h3>
 						<p>
 							<%= f.label :name, "Order Name" %> <span>*</span><br>
@@ -24,7 +36,7 @@
 						</p>
 					</fieldset>
 
-					<fieldset>
+					<fieldset class="event">
 						<h3>Event Information</h3>
 						<%= f.fields_for :event do |e| %>
 							<p>
@@ -39,18 +51,9 @@
 						<% end %>
 					</fieldset>
 
-<% if @order.flavor.nil? %>
-					<fieldset class="flavor">
-						<p>Please choose the "flavor" of the order. If you need multiple, please create separate orders so the proper creatives can claim them.</p>
-						<ul>
-							<li><%= f.radio_button :flavor, "Graphics", checked: true, :data => {:flavor => "graphics"} %> <%= f.label :flavor_graphics, "Graphics" %></li>
-							<li><%= f.radio_button :flavor, "Web", :data => {:flavor => "web"} %> <%= f.label :flavor_web, "Web" %></li>
-							<li><%= f.radio_button :flavor, "Video", :data => {:flavor => "video"} %> <%= f.label :flavor_video, "Production" %></li>
-						</ul>
-					</fieldset>
-
 					<fieldset class="needs">
 						<h3>Needs <span>*</span></h3>
+<% if @order.flavor.nil? %>
 						
 <%= render partial: "orders/form/graphics", locals: {f: f, display: "block"} %>
 
@@ -58,11 +61,8 @@
 
 <%= render partial: "orders/form/video", locals: {f: f, display: "none"} %>
 
-					</fieldset>
 <% else %>
-					<fieldset class="needs">
-						<h3>Needs <span>*</span></h3>
-						<%= f.hidden_field :flavor %>
+
 	<% case @order.flavor %>
 	<% when "Graphics" %>
 <%= render partial: "orders/form/graphics", locals: {f: f, display: "block"} %>
@@ -71,8 +71,8 @@
 	<% when "Video" %>
 <%= render partial: "orders/form/video", locals: {f: f, display: "block"} %>
 	<% end %>
-					</fieldset>
 <% end %>
+					</fieldset>
 
 					<fieldset class="description">
 						<h3>Description <span>*</span></h3>

@@ -88,11 +88,11 @@
 	.claim
 
 		text-align: center
-			
+
 
 .orders.new, .orders.create, .orders.edit, .orders.update
 
-	form
+	form, fieldset
 
 		@extend %clearfix
 		
@@ -100,18 +100,23 @@
 	fieldset
 		
 		border: 0px none
-		float: left
+		clear: both
 		margin: 0
 		padding: 1em
-		width: 50%
-		
-		@extend %clearfix
-		
-		&:nth-of-type(2n+1)
+		width: 100%
 
-			clear: left
-		
+		&.general, &.event
 
+			clear: none
+			float: left
+			width: 50%
+
+			@media screen and (max-width: 35em)
+
+				float: none
+				width: 100%
+
+		
 	input[type="text"], input[type="email"]
 
 		width: 100%
@@ -120,21 +125,11 @@
 	textarea
 
 		max-width: 100%
-		min-height: 200px
-		width: 100%
-		
-
-	.flavor, .needs, .description, .submit
-
-		clear: both
-		padding: 1em 
+		min-height: 250px
 		width: 100%
 		
 
 	.flavor
-		
-		margin: 2em 0 1em
-		padding: 0 1em
 		
 		label
 			
@@ -183,6 +178,8 @@
 
 	.needs
 
+		padding-bottom: 0
+
 		p
 
 			margin-top: 0 
@@ -190,23 +187,11 @@
 		.need-elements
 
 			display: block
-	
-			//@include flexbox
-			//-webkit-flex-flow: row wrap
-			//flex-flow: row wrap
-			//align-content: flex-start
-
-			//@supports not (flex-wrap: wrap)
-			//	display: block
 			
 		.need
 
 			display: inline-block
-			//@include flex(1 1 150px)
-			margin-right: 1em
-
-			//@supports not (flex-wrap: wrap)
-			//	display: inline-block
+			margin-right: 1.5em
 			
 		.need-label
 			
@@ -234,7 +219,7 @@
 				color: $success
 				content: "\2713"
 				margin-right: 3px 
-			
+
 		input:disabled ~ .need-label
 			
 			&:before
