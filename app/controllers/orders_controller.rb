@@ -157,7 +157,7 @@ class OrdersController < ApplicationController
 		@order = Order.find(params[:id])
 
 		unless can? :claim, @order
-			return redirect_to orders_path, alert: "You can't claim this order."
+			return redirect_to orders_path, alert: "You can't claim this order. It might have already been claimed."
 		end
 
 		@order.status = "Claimed"
