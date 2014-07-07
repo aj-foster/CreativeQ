@@ -21,8 +21,8 @@
 	<% @orders.each do |order| %>
 					<tr>
 						<th><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></th>
-						<td><%= order.due_date %></td>
-						<td><%= order.organization.name unless order.organization.nil? %> - <%= order.owner.name unless order.owner.nil? %></td>
+						<td><%= order.due.strftime("%B %-d, %Y") %></td>
+						<td><%= order.organization.name unless order.organization.nil? %></td>
 						<td class="action">
 							<%= link_to "See Details", order, :class => "button button-neutral" %>
 		<% if can? :destroy, order %>

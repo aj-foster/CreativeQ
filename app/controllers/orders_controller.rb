@@ -37,7 +37,11 @@ class OrdersController < ApplicationController
 
 
 	def completed
-		@orders = Order.completed(current_user).page(params[:page]).order(due: :desc)
+		if can? :manage, Order
+			@orders = Order.where(status: "Complete").page(params[:page]).order(due: :desc)
+		else
+			@orders = Order.completed(current_user).page(params[:page]).order(due: :desc)
+		end
 	end
 
 
