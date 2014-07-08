@@ -70,7 +70,7 @@ class UsersController < ApplicationController
 			if @user.update_attributes(user_params)
 				redirect_to @user, notice: "Profile updated successfully."
 			else
-				render :edit
+				redirect_to @user, alert: @user.errors.full_messages.first
 			end
 
 		else
@@ -78,7 +78,7 @@ class UsersController < ApplicationController
 				sign_in(current_user, :bypass => true) if current_user.id == @user.id
 				redirect_to @user, notice: "Password updated."
 			else
-				render :edit
+				redirect_to @user, alert: @user.errors.full_messages.first
 			end
 		end
 	end
