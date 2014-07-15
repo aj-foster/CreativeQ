@@ -21,7 +21,7 @@ CreativeQ is built using Ruby on Rails. We chose Rails as it provides an accessi
 
 ## Reflections
 
-A detailed reflection can be found [on my website](). CreativeQ was quite fun to build, and it's my first Rails project to see production.
+A detailed reflection can be found [on my website](http://aj-foster.com/reflections/creativeq-reflection.html). CreativeQ was quite fun to build, and it's my first Rails project to see production.
 
 **Later Features**
 
