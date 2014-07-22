@@ -25,7 +25,7 @@
 					</tr>
 	<% @unapproved.each do |order| %>
 					<tr class="order">
-						<td class="status"><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
+						<td class="status"><span style="color: <%= order.hsl %>"><i class="icon-<%= order.flavor.downcase %>"></i></span></td>
 						<td class="name"><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></td>
 						<td><%= order.due_date %></td>
 						<td><%= order.organization.name unless order.organization.nil? %></td>
@@ -86,7 +86,7 @@
 					</tr>
 	<% @unclaimed.each do |order| %>
 					<tr class="order">
-						<td class="status"><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
+						<td class="status"><span style="color: <%= order.hsl %>"><i class="icon-<%= order.flavor.downcase %>"></i></span></td>
 						<td class="name"><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></td>
 						<td><%= order.due_date %></td>
 						<td><%= order.organization.name unless order.organization.nil? %></td>
@@ -148,7 +148,7 @@
 					</tr>
 	<% @claimed.each do |order| %>
 					<tr class="order">
-						<td class="status"><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
+						<td class="status"><span style="color: <%= order.hsl %>"><i class="icon-<%= order.flavor.downcase %>"></i></span></td>
 						<td class="name"><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></td>
 						<td><%= order.due_date %></td>
 						<td><%= order.organization.name unless order.organization.nil? %></td>
@@ -208,7 +208,7 @@
 					</tr>
 	<% @orders.each do |order| %>
 					<tr class="order">
-						<td class="status"><span style="color: <%= order.hsl %>">&#x25CF;</span></td>
+						<td class="status"><span style="color: <%= order.hsl %>"><i class="icon-<%= order.flavor.downcase %>"></i></span></td>
 						<td class="name"><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></td>
 						<td><%= order.due_date %></td>
 						<td><%= order.organization.name unless order.organization.nil? %></td>
