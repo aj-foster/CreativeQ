@@ -164,7 +164,7 @@ class OrdersController < ApplicationController
 			return redirect_to orders_path, alert: "You can't claim this order. It might have already been claimed."
 		end
 
-		@order.status = "Claimed"
+		@order.status = "Due Date Pending"
 		@order.creative = current_user
 
 		if @order.save
