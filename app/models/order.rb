@@ -27,8 +27,9 @@ class Order < ActiveRecord::Base
 		def graphics_needs
 			["Handbill", "Poster", "A-Frame", "Banner", "Newspaper", "T-Shirt",
 			 "Logo", "Brochure", "Program", "FB Event Photo",
-			 "FB Cover Photo", "FB Profile Photo", "KnightConnect",
-			 "Business Card", "Union TV", "Other"]
+			 "FB Cover Photo", "FB Profile Photo", "Twitter Photo",
+			 "Instagram Photo", "KnightConnect", "Business Card", "Union TV",
+			 "Other"]
 		end
 
 
