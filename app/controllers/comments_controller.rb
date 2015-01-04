@@ -33,4 +33,10 @@ class CommentsController < ApplicationController
 			redirect_to @order, alert: "Error: Comment could not be removed."
 		end
 	end
+
+
+	private
+		def comment_params
+			params.require(:comment).permit!
+		end
 end
