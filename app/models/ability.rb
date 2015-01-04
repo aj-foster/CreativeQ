@@ -15,20 +15,23 @@ class Ability
 
 		if user.role == "Creative"
 			can :read, Order do |order|
+				# This is likely redundant and most definitely wrong.
 				order.creative.present? && order.flavor == user.flavor
 			end
 
 			can :claim, Order, :status => "Unclaimed", :flavor => user.flavor
-			can [:unclaim, :change_status, :complete], Order, :creative_id => user.id
+			can [:unclaim, :change_status, :complete, :comment_on], Order, :creative_id => user.id
 		end
 		
-		can :rud, Order, :owner_id => user.id
-		can :rud, Order, :organization_id => user.assignments.advised.pluck(:organization_id)
+		can [:rud, :comment_on], Order, :owner_id => user.id
+		can [:rud, :comment_on], Order, :organization_id => user.assignments.advised.pluck(:organization_id)
 
 		can :create, Order unless user.role == "Unapproved"
 
 		can :approve, Order, :organization_id => user.assignments.advised.pluck(:organization_id)
 
 		can [:read, :update], User, :id => user.id
+
+		can :destroy, Comment, :user_id => user.id
 	end
 end
