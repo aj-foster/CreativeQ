@@ -1,0 +1,49 @@
+.list
+	background-color: $foreground
+	margin-bottom: 2em
+	border: 1px solid $border
+	border-bottom: 0px none
+
+.tile
+	border-bottom: 1px solid $border
+	display: flex
+	justify-content: space-around
+	padding: 0.5em 1em
+
+.tile--twoline
+	height: 4em
+
+.tile--twoline > .tile-focus
+	padding-top: 0.25em
+
+.tile-focus
+	flex-grow: 1
+	flex-shrink: 1
+	width: 0
+
+.tile-icon--a
+	height: 100%
+	padding: 0 (2em / 3) 0 0
+
+.tile-title
+	font-weight: bold
+	overflow: hidden
+	text-overflow: ellipsis
+	white-space: nowrap
+
+.tile-subtitle
+	overflow: hidden
+	text-overflow: ellipsis
+	white-space: nowrap
+
+	@extend .subtitle
+
+
+// Modifiers
+
+.tile.has-action
+	cursor: pointer
+	transition: background-color 0.2s
+
+	&:active, &:hover, &:focus
+		background-color: lighten($main, 40%)

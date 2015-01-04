@@ -13,245 +13,48 @@
 					There aren't any orders to display, yet.
 				</article>
 <% end %>
+
 <% if @unapproved.any? %>
-				<table>
-					<caption>Orders Awaiting Approval</caption>
-					<tr>
-						<th></th>
-						<th>Name</th>
-						<th>Due Date</th>
-						<th>Requested By</th>
-						<th></th>
-					</tr>
+				<h2>Orders Awaiting Approval (<%= @unapproved.count %>)</h2>
+				<div class="list">
 	<% @unapproved.each do |order| %>
-					<tr class="order">
-						<td class="status"><span style="color: <%= order.hsl %>"><i class="icon-<%= order.flavor.downcase %>"></i></span></td>
-						<td class="name"><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></td>
-						<td><%= order.due_date %></td>
-						<td><%= order.organization.name unless order.organization.nil? %></td>
-						<td class="action">
-		<% if can? :approve, order %>
-							<%= link_to "Approve", approve_order_path(order), remote: true, method: :put, :id => "approve-#{order.id}", :class => "button button-okay" %>
-		<% end %>
-							<%= link_to "Details", order, :class => "button button-neutral" %>
-		<% if can? :destroy, order %>
-							<%= link_to "Remove", order, remote: true, method: :delete, :id => "destroy-#{order.id}", :class => "button button-alert", data: { confirm: "Are you sure you want to remove the order #{order.name}?" } %>
-		<% end %>
-						</td>
-					</tr>
-					<tr class="preview">
-						<td colspan="5">
-							<article>
-								<h3><%= order.name %></h3>
-								<%= simple_format(order.description) %>
-							</article>
-							<article class="needs">
-								<h3>Needs</h3>
-								<ul>
-<%
-		case order.flavor
-		when "Graphics"
-			needs = Order.graphics_needs
-		when "Web"
-			needs = Order.web_needs
-		when "Video"
-			needs = Order.video_needs
-		end
-%>
-		<% needs.each do |need| %>
-			<% need_param = need.parameterize.underscore %>
-			<% unless order.needs[need_param].nil? %>
-									<li>
-										<em><%= need %></em> <%= order.needs[need_param] %>
-									</li>
-			<% end %>
-		<% end %>
-								</ul>
-							</article>
-						</td>
-					</tr>
+
+<%= render 'listing', :order => order %>
+
 	<% end %>
-				</table>
+				</div>
 <% end %>
 
 <% if @unclaimed.any? %>
-				<table>
-					<caption>Unclaimed Orders</caption>
-					<tr>
-						<th></th>
-						<th>Name</th>
-						<th>Due Date</th>
-						<th>Requested By</th>
-						<th></th>
-					</tr>
+				<h2>Unclaimed Orders (<%= @unclaimed.count %>)</h2>
+				<div class="list">
 	<% @unclaimed.each do |order| %>
-					<tr class="order">
-						<td class="status"><span style="color: <%= order.hsl %>"><i class="icon-<%= order.flavor.downcase %>"></i></span></td>
-						<td class="name"><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></td>
-						<td><%= order.due_date %></td>
-						<td><%= order.organization.name unless order.organization.nil? %></td>
-						<td class="action">
-		<% if can? :claim, order %>
-							<%= link_to "Claim", claim_order_path(order), method: :put, :id => "claim-#{order.id}", :class => "button button-okay" %>
-		<% end %>
-							<%= link_to "Details", order, :class => "button button-neutral" %>
-		<% if can? :update, order %>
-							<%= link_to "Edit", edit_order_path(order), :class => "button button-neutral" %>
-		<% end %>
-						</td>
-					</tr>
-					<tr class="preview">
-						<td colspan="5">
-							<article>
-								<h3><%= order.name %></h3>
-								<%= simple_format(order.description) %>
-							</article>
-							<article class="needs">
-								<h3>Needs</h3>
-								<ul>
-<%
-		case order.flavor
-		when "Graphics"
-			needs = Order.graphics_needs
-		when "Web"
-			needs = Order.web_needs
-		when "Video"
-			needs = Order.video_needs
-		end
-%>
-		<% needs.each do |need| %>
-			<% need_param = need.parameterize.underscore %>
-			<% unless order.needs[need_param].nil? %>
-									<li>
-										<em><%= need %></em> <%= order.needs[need_param] %>
-									</li>
-			<% end %>
-		<% end %>
-								</ul>
-							</article>
-						</td>
-					</tr>
+
+<%= render 'listing', :order => order %>
+
 	<% end %>
-				</table>
+				</div>
 <% end %>
 
 <% if @claimed.any? %>
-				<table>
-					<caption>Your Orders</caption>
-					<tr>
-						<th></th>
-						<th>Name</th>
-						<th>Due Date</th>
-						<th>Requested by</th>
-						<th>Status</th>
-						<th></th>
-					</tr>
+				<h2>Your Orders (<%= @claimed.count %>)</h2>
+				<div class="list">
 	<% @claimed.each do |order| %>
-					<tr class="order">
-						<td class="status"><span style="color: <%= order.hsl %>"><i class="icon-<%= order.flavor.downcase %>"></i></span></td>
-						<td class="name"><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></td>
-						<td><%= order.due_date %></td>
-						<td><%= order.organization.name unless order.organization.nil? %></td>
-						<td><%= order.status %><%= " (" + order.creative.name + ")" unless order.creative.nil? %></td>
-						<td class="action">
-							<%= link_to "Details", order, :class => "button button-okay" %>
-		<% if can? :update, order %>
-							<%= link_to "Edit", edit_order_path(order), :class => "button button-neutral" %>
-		<% end %>
-						</td>
-					</tr>
-					<tr class="preview">
-						<td colspan="5">
-							<article>
-								<h3><%= order.name %></h3>
-								<%= simple_format(order.description) %>
-							</article>
-							<article class="needs">
-								<h3>Needs</h3>
-								<ul>
-<%
-		case order.flavor
-		when "Graphics"
-			needs = Order.graphics_needs
-		when "Web"
-			needs = Order.web_needs
-		when "Video"
-			needs = Order.video_needs
-		end
-%>
-		<% needs.each do |need| %>
-			<% need_param = need.parameterize.underscore %>
-			<% unless order.needs[need_param].nil? %>
-									<li>
-										<em><%= need %></em> <%= order.needs[need_param] %>
-									</li>
-			<% end %>
-		<% end %>
-								</ul>
-							</article>
-						</td>
-					</tr>
+
+<%= render 'listing', :order => order %>
+
 	<% end %>
-				</table>
+				</div>
 <% end %>
 
 <% if @orders.any? %>
-				<table>
-					<caption>Orders</caption>
-					<tr>
-						<th></th>
-						<th>Name</th>
-						<th>Due Date</th>
-						<th>Requested by</th>
-						<th>Status</th>
-						<th></th>
-					</tr>
+				<h2>Orders (<%= @orders.count %>)</h2>
+				<div class="list">
 	<% @orders.each do |order| %>
-					<tr class="order">
-						<td class="status"><span style="color: <%= order.hsl %>"><i class="icon-<%= order.flavor.downcase %>"></i></span></td>
-						<td class="name"><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></td>
-						<td><%= order.due_date %></td>
-						<td><%= order.organization.name unless order.organization.nil? %></td>
-						<td><%= order.status %><%= " (" + order.creative.name + ")" unless order.creative.nil? %></td>
-						<td class="action">
-							<%= link_to "Details", order, :class => "button button-okay" %>
-		<% if can? :update, order %>
-							<%= link_to "Edit", edit_order_path(order), :class => "button button-neutral" %>
-		<% end %>
-						</td>
-					</tr>
-					<tr class="preview">
-						<td colspan="5">
-							<article>
-								<h3><%= order.name %></h3>
-								<%= simple_format(order.description) %>
-							</article>
-							<article class="needs">
-								<h3>Needs</h3>
-								<ul>
-<%
-		case order.flavor
-		when "Graphics"
-			needs = Order.graphics_needs
-		when "Web"
-			needs = Order.web_needs
-		when "Video"
-			needs = Order.video_needs
-		end
-%>
-		<% needs.each do |need| %>
-			<% need_param = need.parameterize.underscore %>
-			<% unless order.needs[need_param].nil? %>
-									<li>
-										<em><%= need %></em> <%= order.needs[need_param] %>
-									</li>
-			<% end %>
-		<% end %>
-								</ul>
-							</article>
-						</td>
-					</tr>
+
+<%= render 'listing', :order => order %>
+
 	<% end %>
-				</table>
+				</dive>
 <% end %>
 			</section>
