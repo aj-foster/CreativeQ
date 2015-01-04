@@ -27,17 +27,26 @@
 				<h3>Comments (<%= @order.comments.count %>)</h3>
 <% if @order.comments.any? %>
 	<% @order.comments.order(created_at: :asc).each do |comment| %>
-				<p>
-					<em><%= comment.user.name %></em>
-					(<%= comment.created_at.strftime("%-m/%-d/%Y") %>):
-					<%= comment.message.gsub(/\n/, '<br>').html_safe %>
-		<% if comment.attachment.exists? %>
-					(<%= link_to "See Attachment", comment.attachment.url %>)
-		<% end %>
+				<div class="comment">
+					<p>
+						<em><%= comment.user.name %></em><br>
+						<span class="subtitle">
+							Posted <%= comment.created_at.strftime("%-m/%-d/%Y at %-I:%M%P") %>
 		<% if can? :destroy, comment %>
-					<%= link_to "Remove", comment, method: :delete, data: {confirm: "Are you sure you want to remove this comment?"} %>
+							&mdash;
+							<%= link_to "Remove", comment, method: :delete, data: {confirm: "Are you sure you want to remove this comment?"} %>
 		<% end %>
-				</p>
+						</span><br>
+						<span class="subtitle">
+		<% if comment.attachment.exists? %>
+						<%= link_to "View Attachment", comment.attachment.url %>
+		<% end %>
+						</span>
+					</p>
+					<p>
+						<%= comment.message.gsub(/\n/, '<br>').html_safe %>
+					</p>
+				</div>
 	<% end %>
 <% else %>
 				<p>There are no comments on this order.</p>
