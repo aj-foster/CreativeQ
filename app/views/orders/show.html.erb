@@ -22,6 +22,44 @@
 				<h3>Description</h3>
 				<%= simple_format(@order.description) %>
 			</article>
+
+			<article>
+				<h3>Comments (<%= @order.comments.count %>)</h3>
+<% if @order.comments.any? %>
+	<% @order.comments.order(created_at: :asc).each do |comment| %>
+				<p>
+					<em><%= comment.user.name %></em>
+					(<%= comment.created_at.strftime("%-m/%-d/%Y") %>):
+					<%= comment.message.gsub(/\n/, '<br>').html_safe %>
+		<% if comment.attachment.exists? %>
+					(<%= link_to "See Attachment", comment.attachment.url %>)
+		<% end %>
+		<% if can? :destroy, comment %>
+					<%= link_to "Remove", comment, method: :delete, data: {confirm: "Are you sure you want to remove this comment?"} %>
+		<% end %>
+				</p>
+	<% end %>
+<% else %>
+				<p>There are no comments on this order.</p>
+<% end %>
+
+<% if can? :comment_on, @order %>
+				<p><em>Add Comment:</em></p>
+				<%= form_for Comment.new, html: {multipart: true} do |c| %>
+					<p>
+						<%= c.hidden_field :order_id, value: @order.id %>
+						<%= c.text_area :message %><br>
+					</p>
+					<p>
+						<%= c.label :attachment, "Attach File (optional):" %><br>
+						<%= c.file_field :attachment %>
+					</p>
+					<p>
+						<%= c.submit "Add Comment", :class => "button button-neutral" %>
+					</p>
+				<% end %>
+<% end %>
+			</article>
 		</section>
 
 		<aside>

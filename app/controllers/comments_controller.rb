@@ -1,7 +1,7 @@
 class CommentsController < ApplicationController
 
 	def create
-		@order = Order.find(params[:order_id])
+		@order = Order.find(comment_params[:order_id])
 
 		unless can? :comment_on, @order
 			return redirect_to orders_path, alert: "You aren't allowed to comment on this order."

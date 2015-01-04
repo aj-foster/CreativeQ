@@ -17,6 +17,7 @@
 
 *.DS_Store
 /public/assets
+/public/system
 /vendor/bundle
 config/database.yml
 config/secrets.yml
