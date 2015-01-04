@@ -10,6 +10,8 @@ class Order < ActiveRecord::Base
 	belongs_to :creative, class_name: 'User'
 	belongs_to :organization
 
+	has_many :comments, dependent: :destroy
+
 
 	validates :name, :due, :description, :needs, presence: true
 

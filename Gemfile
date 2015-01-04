@@ -37,3 +37,6 @@ gem 'will_paginate'
 gem 'fancybox2-rails', :git => 'git://github.com/mikbe/fancybox2-rails.git'
 gem 'jquery-ui-rails'
 gem 'american_date'
+
+# Paperclip, for attachments
+gem "paperclip", "~> 4.2"
