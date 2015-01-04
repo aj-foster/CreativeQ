@@ -1,0 +1,37 @@
+.icon
+	box-sizing: content-box
+	color: $c-text-secondary
+	display: inline-block
+	font-size: 1.5em
+	height: 1em
+	padding: 0.5em
+
+	&:active, &:focus, &:hover
+		color: $c-text-disabled
+
+// .icon--light
+// 	color: $c-text-invert-primary
+
+// 	&:active, &:focus, &:hover
+// 		color: $c-text-invert-disabled
+
+.icon > svg
+	display: inline-block
+	fill: currentColor
+	height: 100%
+	margin: auto
+	width: 1em
+
+// .icon--float
+	// background: #1565c0
+	// border-radius: 50%
+	// box-shadow: 0 2px 4px 0 $c-shadow
+	// padding: (1em / 3)
+	// position: absolute
+	// left: (1em / 3)
+	// top: 0.875em
+
+	// @extend .icon--light
+
+	// +respond-to($b-maxWidth)
+	// 	left: 1em
