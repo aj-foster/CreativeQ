@@ -22,5 +22,8 @@ module CreativeQ
 
 		# Add Icomoon Fonts to the asset pipeline
 		config.assets.paths << Rails.root.join("app", "assets", "fonts")
+
+		# Precompile IE styles
+		config.assets.precompile += %w( ie.css )
 	end
 end
