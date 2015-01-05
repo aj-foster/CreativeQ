@@ -1,13 +1,16 @@
 $(document).on 'ready page:load', ->
 
 	# Allow users to see order descriptions by clicking on the orders
-	$("tr.order").on 'click', (evt) ->
+	$("a.tile-focus").on 'click', (evt) ->
 
-		# Don't display previews if the click was generated on a link
-		unless evt.target.tagName == "A"
+		# Grab the ID of the order we want to preview.
+		order_id = $(@).attr("data-order")
 
-			# Use fancybox to open the preview immediately after the order
-			$.fancybox.open($(@).next("tr.preview"), {maxWidth: 1200})
+		# Use fancybox to open the preview immediately after the order
+		$.fancybox.open($(".preview[data-order='" + order_id + "']"), {maxWidth: 1200})
+
+		# Prevent the default action
+		evt.preventDefault()
 
 
 	# Use a datepicker to make entering due dates easier

@@ -2,7 +2,7 @@
 						<div class="icon tile-icon--a" style="color: <%= order.hsl %>">
 							<svg><use xlink:href="#icon-<%= order.flavor.downcase %>"></use></svg>
 						</div>
-						<div class="tile-focus">
+						<a href="#" class="tile-focus" data-order="<%= order.id %>">
 							<div class="tile-title"><%= order.name %></div>
 							<div class="tile-subtitle">
 								Due <%= order.due_date %>
@@ -10,29 +10,32 @@
 <% if order.creative.present? %>
 								It is currently "<%= order.status %>" by <%= order.creative.name %>.
 <% end %>
-								</div>
-						</div>
+							</div>
+						</a>
 <% if order.status == "Unapproved" && can?(:approve, order) %>
-						<%= link_to approve_order_path(order), remote: true, method: :put, :id => "approve-#{order.id}", class: "icon", title: "Approve Order" do %>
-							<svg><use xlink:href="#icon-approve"></use></svg>
+						<%= link_to approve_order_path(order), remote: true, method: :put, id: "approve-#{order.id}", class: "icon", title: "Approve Order" do %>
+							<svg>
+								<use xlink:href="#icon-approve"></use>
+								<foreignObject display="none">
+									<div class="fallback">Approve</div>
+								</foreignObject>
+            				</svg>
 						<% end %>
 <% end %>
+
 <% if order.status == "Unclaimed" && can?(:claim, order) %>
 						<%= link_to claim_order_path(order), method: :put, :id => "claim-#{order.id}", class: "icon", title: "Claim Order" do %>
 							<svg><use xlink:href="#icon-check"></use></svg>
 						<% end %>
 <% end %>
+
 						<%= link_to order, class: "icon", title: "View Order" do %>
 							<svg><use xlink:href="#icon-view"></use></svg>
 						<% end %>
-<!-- <% if can? :update, order %>
-						<%= link_to edit_order_path(order), class: "icon", title: "Edit Order" do %>
-							<svg><use xlink:href="#icon-edit"></use></svg>
-						<% end %>
-<% end %> -->
+
 					</div>
 
-					<div class="preview">
+					<div class="preview" data-order="<%= order.id %>">
 						<div colspan="5">
 							<article>
 								<h3><%= order.name %></h3>

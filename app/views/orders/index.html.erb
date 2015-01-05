@@ -19,7 +19,7 @@
 				<div class="list">
 	<% @unapproved.each do |order| %>
 
-<%= render 'listing', :order => order %>
+<%= render 'listing', order: order %>
 
 	<% end %>
 				</div>
@@ -30,7 +30,7 @@
 				<div class="list">
 	<% @unclaimed.each do |order| %>
 
-<%= render 'listing', :order => order %>
+<%= render 'listing', order: order %>
 
 	<% end %>
 				</div>
@@ -41,7 +41,7 @@
 				<div class="list">
 	<% @claimed.each do |order| %>
 
-<%= render 'listing', :order => order %>
+<%= render 'listing', order: order %>
 
 	<% end %>
 				</div>
@@ -52,9 +52,9 @@
 				<div class="list">
 	<% @orders.each do |order| %>
 
-<%= render 'listing', :order => order %>
+<%= render 'listing', order: order %>
 
 	<% end %>
-				</dive>
+				</div>
 <% end %>
 			</section>
