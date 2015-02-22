@@ -9,22 +9,22 @@ $main: #4B9FC0
 $success: #5EB160
 $alert: #e2757a
 
-$btn-color-default: $main
-$btn-color-red: #EE5E3D
-$btn-color-green: $success
+// $btn-color-default: $main
+// $btn-color-red: #EE5E3D
+// $btn-color-green: $success
 
-$c-text: #000
-$c-text-invert: #fff
-
-$c-text-primary: rgba($c-text, 0.87)
-$c-text-secondary: rgba($c-text, 0.54)
-$c-text-disabled: rgba($c-text, 0.26)
-$c-text-divider: rgba($c-text, 0.12)
-
-$c-text-invert-primary: $c-text-invert
-$c-text-invert-secondary: rgba($c-text-invert, 0.7)
-$c-text-invert-disabled: rgba($c-text-invert, 0.30)
-$c-text-invert-divider: rgba($c-text-invert, 0.12)
+// $c-text: #000
+// $c-text-invert: #fff
+//
+// $c-text-primary: rgba($c-text, 0.87)
+// $c-text-secondary: rgba($c-text, 0.54)
+// $c-text-disabled: rgba($c-text, 0.26)
+// $c-text-divider: rgba($c-text, 0.12)
+//
+// $c-text-invert-primary: $c-text-invert
+// $c-text-invert-secondary: rgba($c-text-invert, 0.7)
+// $c-text-invert-disabled: rgba($c-text-invert, 0.30)
+// $c-text-invert-divider: rgba($c-text-invert, 0.12)
 
 
 // Typography
@@ -43,27 +43,10 @@ $maxWidth: 1200px
 	zoom: 1
 	&:before, &:after
 		content: ""
-		display: table 
+		display: table
 	&:after
 		clear: both
 
-
-@mixin button-color($color)
-
-	background-attachment: scroll
-	background-color: $color
-	background-image: linear-gradient(to bottom, lighten($color, 10%), darken($color, 10%))
-	background-repeat: repeat
-	border: 1px solid darken($color, 10%)
-	text-shadow: 0 -1px 0 darken($color, 20%)
-	text-decoration: none
-
-	&:active, &:focus, &:hover
-
-		background-color: darken($color, 5%)
-		background-image: none
-		color: $foreground
-		
 
 @mixin flexbox
 	display: -webkit-box
@@ -71,7 +54,7 @@ $maxWidth: 1200px
 	display: -ms-flexbox
 	display: -webkit-flex
 	display: flex
-	
+
 
 @mixin flex ($values)
 	-webkit-box-flex: $values
