@@ -3,9 +3,16 @@
 	flex-flow: row wrap
 	margin-bottom: 1em
 
+	// Fallback
+	@extend %clearfix
+
 .fieldSet-column
 	border-bottom: 1px solid $c-text-divider
 	flex: 1 0 auto
+
+	// Fallback
+	float: left
+	width: 50%
 
 .field
 	padding: 1em 1em 0
