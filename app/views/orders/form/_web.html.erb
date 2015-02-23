@@ -1,14 +1,15 @@
 						<div class="web need-wrap" style="display: <%= display %>">
-							<p>Please check the fields that most accurately describe the order, and provide details in the Description section below.</p>
-							<div class="need-elements">
-							<%= f.fields_for :needs do |n| %>
-		<% Order.web_needs.each do |need| %>
-			<% need_param = need.parameterize.underscore %>
-								<p class="need">
-									<%= n.hidden_field need_param.to_sym, disabled: @order.needs[need_param].nil? %>
-									<a href="#" class="need-label"><%= need %></a><br>
-								</p>
-		<% end %>
+							<div class="field">
+								<p>Please check the fields that most accurately describe the order, and provide details in the Description section below.</p>
+								<%= f.fields_for :needs do |n| %>
+<% Order.web_needs.each do |need| %>
+	<% need_param = need.parameterize.underscore %>
+									<p class="need">
+										<%= n.hidden_field need_param.to_sym,
+										disabled: @order.needs.nil? || @order.needs[need_param].nil? %>
+										<a href="#" class="need-label"><%= need %></a><br>
+									</p>
+<% end %>
 							<% end %>
 							</div>
 						</div>

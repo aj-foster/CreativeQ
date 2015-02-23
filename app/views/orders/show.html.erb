@@ -95,7 +95,13 @@
 					<em>When:</em> <%= @order.event['time'] %><br>
 	<% end %>
 	<% if @order.event['location'].present? %>
-					<em>Where:</em> <%= @order.event['location'] %>
+					<em>Where:</em> <%= @order.event['location'] %><br>
+	<% end %>
+	<% if @order.event['contact'].present? %>
+					<em>Contact:</em> <%= @order.event['contact'] %><br>
+	<% end %>
+	<% if @order.event['accomodations'].present? %>
+					<em>Accomodations:</em> <%= @order.event['accomodations'] %>
 	<% end %>
 				</p>
 			</article>

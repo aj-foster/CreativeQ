@@ -1,15 +1,16 @@
 						<div class="video need-wrap" style="display: <%= display %>">
-							<p>Please choose one of the following types of production for your order. If you need multiple, please create separate orders for each.</p>
-							<div class="need-elements">
-							<%= f.fields_for :needs do |n| %>
-		<% Order.video_needs.each do |need| %>
-			<% need_param = need.parameterize.underscore %>
-								<p class="need">
-									<%= n.hidden_field need_param.to_sym, disabled: @order.needs[need_param].nil? %>
-									<a href="#" class="need-label"><%= need %></a>
-									<a href="#<%= need_param %>_modal" class="fancybox">(?)</a><br>
-								</p>
-		<% end %>
-							<% end %>
+							<div class="field">
+								<p>Please choose one of the following types of production for your order. If you need multiple, please create separate orders for each.</p>
+								<%= f.fields_for :needs do |n| %>
+<% Order.video_needs.each do |need| %>
+	<% need_param = need.parameterize.underscore %>
+									<p class="need">
+										<%= n.hidden_field need_param.to_sym,
+										disabled: @order.needs.nil? || @order.needs[need_param].nil? %>
+										<a href="#" class="need-label"><%= need %></a>
+										<a href="#<%= need_param %>_modal" class="fancybox">(?)</a><br>
+									</p>
+<% end %>
+								<% end %>
 							</div>
 						</div>

@@ -47,23 +47,33 @@
 
 								<div class="field field--text">
 									<%= e.label :time, "Event Date / Time" %>
-									<%= e.text_field :time, placeholder: "(if applicable)" %>
+									<%= e.text_field :time, placeholder: "(if applicable)", value: @order.event.nil? ? '' : @order.event["time"] %>
 								</div>
 
 								<div class="field field--text">
 									<%= e.label :location, "Event Location" %>
-									<%= e.text_field :location, placeholder: "(if applicable)" %>
+									<%= e.text_field :location, placeholder: "(if applicable)", value: @order.event.nil? ? '' : @order.event["location"] %>
+								</div>
+
+								<div class="field field--text">
+									<%= e.label :contact, "Event Contact" %>
+									<%= e.text_field :contact, placeholder: "For interested students", value: @order.event.nil? ? '' : @order.event["contact"] %>
+								</div>
+
+								<div class="field field--text">
+									<%= e.label :accomodations, "Accomodations Contact" %>
+									<%= e.text_field :accomodations, placeholder: "(if applicable)", value: @order.event.nil? ? '' : @order.event["accomodations"] %>
 								</div>
 							<% end %>
 						</div>
 					</div>
 
-					<p class="subheader">Needs *</p>
-					<div class="needs">
 <% if @order.errors.include? :needs %>
-						<div><%= @order.errors.full_messages_for(:needs).first %></div>
+					<p class="subheader">Needs * - <span class="field--alert">Required</span></p>
+<% else %>
+					<p class="subheader">Needs *</p>
 <% end %>
-
+					<div class="needs">
 <% if @order.flavor.nil? %>
 
 <%= render partial: "orders/form/graphics", locals: {f: f, display: "block"} %>
@@ -86,7 +96,11 @@
 					</div>
 					<div class="divider"></div>
 
-					<p class="subheader">Description *</p>
+					<% if @order.errors.include? :description %>
+										<p class="subheader">Description * - <span class="field--alert">Required</span></p>
+					<% else %>
+										<p class="subheader">Description *</p>
+					<% end %>
 					<div class="field field--textarea">
 <% if @order.errors.include? :description %>
 						<div><%= @order.errors.full_messages_for(:description).first %></div>
