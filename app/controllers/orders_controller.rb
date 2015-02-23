@@ -60,7 +60,7 @@ class OrdersController < ApplicationController
 		when "Video"
 			@needs = Order.video_needs
 		end
-		
+
 		@organization = @order.organization
 		@owner = @order.owner
 		@creative = @order.creative
@@ -86,6 +86,7 @@ class OrdersController < ApplicationController
 			redirect_to @order, notice: "Your order has been submitted to your advisor for approval."
 			OrdersMailer.order_awaiting_approval(@order).deliver
 		else
+			@can_edit_organization = true
 			render 'new'
 		end
 	end
@@ -150,7 +151,7 @@ class OrdersController < ApplicationController
 
 		@order.status = "Unclaimed" if @order.status == "Unapproved"
 		@order.save
-		
+
 		respond_to do |format|
 			format.js
 		end
@@ -184,7 +185,7 @@ class OrdersController < ApplicationController
 
 		@order.status = "Unclaimed"
 		@order.creative = nil
-		
+
 		if @order.save
 			redirect_to orders_path, notice: "Order unclaimed successfully."
 		else
