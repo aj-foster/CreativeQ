@@ -5,7 +5,6 @@ class User < ActiveRecord::Base
 
 	ROLES = %w[Unapproved Basic Creative Admin Retired]
 
-	after_initialize :setup_user
 	before_destroy :unlink_orders
 
 	has_many :assignments, dependent: :destroy
