@@ -36,6 +36,9 @@ GEM
       tzinfo (~> 1.1)
     american_date (1.1.0)
     arel (5.0.1.20140414130214)
+    autoprefixer-rails (5.1.1)
+      execjs
+      json
     bcrypt (3.1.7)
     builder (3.2.2)
     cancan (1.6.10)
@@ -145,6 +148,7 @@ PLATFORMS
 
 DEPENDENCIES
   american_date
+  autoprefixer-rails
   cancan
   coffee-rails (~> 4.0.0)
   devise

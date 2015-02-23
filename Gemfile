@@ -40,3 +40,6 @@ gem 'american_date'
 
 # Paperclip, for attachments
 gem "paperclip", "~> 4.2"
+
+# Autoprefixer
+gem 'autoprefixer-rails'
