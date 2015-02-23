@@ -1,23 +1,33 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# Validation Tests
 
-one:
-  name: MyString
-  due: 2014-05-01 13:19:53
-  description: MyText
-  event: 
-  needs: 
-  status: MyString
-  owner_id: 
-  organization_id: 
-  creative_id: 
+order_no_name:
+  due: 2020-01-01 00:00:00
+  description: This is a brief description.
+  event: {}
+  needs: {other: "stuff"}
+  owner: user_basic
+  organization: org_canonical
 
-two:
-  name: MyString
-  due: 2014-05-01 13:19:53
-  description: MyText
-  event: 
-  needs: 
-  status: MyString
-  owner_id: 
-  organization_id: 
-  creative_id: 
+order_no_due_date:
+  name: Order with no due date
+  description: This is a brief description.
+  event: {}
+  needs: {other: "stuff"}
+  owner: user_basic
+  organization: org_canonical
+
+order_no_description:
+  name: Order with no description
+  due: 2020-01-01 00:00:00
+  event: {}
+  needs: {other: "stuff"}
+  owner: user_basic
+  organization: org_canonical
+
+order_no_needs:
+  name: Order with no needs
+  due: 2020-01-01 00:00:00
+  description: This is a brief description.
+  event: {}
+  owner: user_basic
+  organization: org_canonical
