@@ -42,10 +42,4 @@ class User < ActiveRecord::Base
 			errors.add :flavor, "must be given for Creatives (Graphics, Web, or Video)."
 		end
 	end
-
-
-	private
-		def setup_user
-			self.role ||= ROLES[0]
-		end
 end

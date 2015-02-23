@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150104005216) do
+ActiveRecord::Schema.define(version: 20150223020410) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20150104005216) do
   create_table "assignments", force: true do |t|
     t.integer  "user_id"
     t.integer  "organization_id"
-    t.string   "role"
+    t.string   "role",            default: "Member"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20150104005216) do
   create_table "comments", force: true do |t|
     t.integer  "user_id"
     t.integer  "order_id"
-    t.text     "message"
+    t.text     "message",                 default: ""
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "attachment_file_name"
@@ -43,13 +43,23 @@ ActiveRecord::Schema.define(version: 20150104005216) do
   add_index "comments", ["order_id"], name: "index_comments_on_order_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
+  create_table "needs", force: true do |t|
+    t.string   "name",        default: ""
+    t.string   "flavor",      default: ""
+    t.string   "placeholder", default: ""
+    t.text     "description", default: ""
+    t.boolean  "auto",        default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "orders", force: true do |t|
-    t.string   "name"
+    t.string   "name",            default: ""
     t.date     "due"
-    t.text     "description"
-    t.hstore   "event"
-    t.hstore   "needs"
-    t.string   "status"
+    t.text     "description",     default: ""
+    t.hstore   "event",           default: {},           null: false
+    t.hstore   "needs",           default: {},           null: false
+    t.string   "status",          default: "Unapproved"
     t.integer  "owner_id"
     t.integer  "organization_id"
     t.integer  "creative_id"
@@ -63,25 +73,25 @@ ActiveRecord::Schema.define(version: 20150104005216) do
   add_index "orders", ["owner_id"], name: "index_orders_on_owner_id", using: :btree
 
   create_table "organizations", force: true do |t|
-    t.string   "name"
+    t.string   "name",       default: ""
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "role"
-    t.string   "phone"
-    t.string   "flavor"
+    t.string   "first_name",             default: ""
+    t.string   "last_name",              default: ""
+    t.string   "role",                   default: "Unapproved"
+    t.string   "phone",                  default: ""
+    t.string   "flavor",                 default: ""
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                  default: "",           null: false
+    t.string   "encrypted_password",     default: "",           null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",          default: 0,            null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"

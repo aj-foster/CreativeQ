@@ -4,8 +4,6 @@ class Order < ActiveRecord::Base
 	TYPES = %w[Graphics Web Video]
 	self.per_page = 20
 
-	after_initialize :setup_order
-
 	belongs_to :owner, class_name: 'User'
 	belongs_to :creative, class_name: 'User'
 	belongs_to :organization
@@ -91,13 +89,5 @@ class Order < ActiveRecord::Base
 		lightness = "#{50.0 - 10 * (hue - 50).abs / 50.0}%"
 
 		return "hsl(" + hue.to_s + ", " + saturation + ", " + lightness + ")"
-	end
-
-
-	def setup_order
-		self.status ||= STATUSES[0]
-		self.event ||= {}
-		self.needs ||= {}
-		# self.flavor ||= "Graphics"
 	end
 end
