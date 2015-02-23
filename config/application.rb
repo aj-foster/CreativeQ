@@ -25,5 +25,10 @@ module CreativeQ
 
 		# Precompile IE styles
 		config.assets.precompile += %w( ie.css )
+
+		# Do not wrap fields with errors in a special element or class.
+		config.action_view.field_error_proc = Proc.new { |html_tag, instance|
+			html_tag
+		}
 	end
 end

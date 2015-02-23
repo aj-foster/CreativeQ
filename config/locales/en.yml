@@ -20,4 +20,15 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    attributes:
+      order:
+        due: "Due date"
+    errors:
+      models:
+        order:
+          attributes:
+            name:
+              blank: "is required"
+            due:
+              blank: "is required"

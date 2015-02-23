@@ -1,60 +1,71 @@
-				<%= form_for @order do |f| %>
-<% if @order.errors.any? %>
-	<% @order.errors.full_messages.each do |msg| %>
-					<p class="flash alert"><%= msg %></p>
-	<% end %>
-<% end %>
-					<fieldset class="flavor">
+				<%= form_for @order, html: {novalidate: true} do |f| %>
 <% if @order.flavor.nil? %>
+					<fieldset class="flavor">
 						<ul>
 							<li><%= f.radio_button :flavor, "Graphics", checked: true, :data => {:flavor => "graphics"} %> <%= f.label :flavor_graphics, "Graphics" %></li>
 							<li><%= f.radio_button :flavor, "Web", :data => {:flavor => "web"} %> <%= f.label :flavor_web, "Web" %></li>
 							<li><%= f.radio_button :flavor, "Video", :data => {:flavor => "video"} %> <%= f.label :flavor_video, "Production" %></li>
 						</ul>
-<% else %>
-						<%= f.hidden_field :flavor %>
-<% end %>
 					</fieldset>
+<% else %>
+					<%= f.hidden_field :flavor %>
+<% end %>
 
-					<fieldset class="general">
-						<h3>General Information</h3>
-						<p>
-							<%= f.label :name, "Order Name" %> <span>*</span><br>
-							<%= f.text_field :name, autofocus: true, required: true %>
-						</p>
-						<p>
-							<%= f.label :due, "Due Date (mm/dd/yyyy)" %> <span>*</span><br>
-							<%= f.text_field :due, required: true, value: @order.due.present? ? @order.due.strftime("%m/%d/%Y") : "", :class => "datepicker" %>
-						</p>
-						<p>
+					<div class="fieldSet">
+						<div class="fieldSet-column">
+							<p class="subheader">General Information</p>
+
+							<div class="field field--text <%= "has-error" if @order.errors.include? :name %>">
+								<%= f.label :name, "Order Name", class: "is-required" %>
+								<%= f.text_field :name, placeholder: "Brief Name", required: true, autofocus: true %>
+								<% if @order.errors.include? :name %>
+									<div class="field--text-error"><%= @order.errors.full_messages_for(:name).first %></div>
+								<% end %>
+							</div>
+
+							<div class="field field--text <%= "has-error" if @order.errors.include? :due %>">
+								<%= f.label :due, "Due Date", class: "is-required" %>
+								<%= f.text_field :due, placeholder: "mm/dd/yyyy", required: true, value: @order.due.present? ? @order.due.strftime("%m/%d/%Y") : "", class: "datepicker" %>
+								<% if @order.errors.include? :due %>
+									<div class="field--text-error"><%= @order.errors.full_messages_for(:due).first %></div>
+								<% end %>
+							</div>
+
 <% if current_user.organizations.count > 1 && @can_edit_organization %>
-							<%= f.label :organization_id %> <span>*</span><br>
-							<%= f.select :organization_id, current_user.organizations.collect {|o| [o.name, o.id]} %>
+							<div class="field">
+								<%= f.label :organization_id, class: "is-required" %>
+								<%= f.select :organization_id, current_user.organizations.collect {|o| [o.name, o.id]} %>
+							</div>
 <% else %>
 							<%= f.hidden_field :organization_id, :value => (@order.organization_id || current_user.organizations.first.id) %>
 <% end %>
-						</p>
-					</fieldset>
+						</div>
 
-					<fieldset class="event">
-						<h3>Event Information</h3>
-						<%= f.fields_for :event do |e| %>
-							<p>
-								<%= e.label :time, "Event Date / Time" %><br>
-								<%= e.text_field :time, value: @order.event["time"] %>
-							</p>
+						<div class="fieldSet-column">
+							<%= f.fields_for :event do |e| %>
+								<p class="subheader">Event Information</p>
 
-							<p>
-								<%= e.label :location, "Event Location" %><br>
-								<%= e.text_field :location, value: @order.event["location"] %>
-							</p>
-						<% end %>
-					</fieldset>
+								<div class="field field--text">
+									<%= e.label :time, "Event Date / Time" %>
+									<%= e.text_field :time, placeholder: "(if applicable)" %>
+								</div>
 
-					<fieldset class="needs">
-						<h3>Needs <span>*</span></h3>
+								<div class="field field--text">
+									<%= e.label :location, "Event Location" %>
+									<%= e.text_field :location, placeholder: "(if applicable)" %>
+								</div>
+							<% end %>
+						</div>
+					</div>
+
+					<p class="subheader">Needs *</p>
+					<div class="needs">
+<% if @order.errors.include? :needs %>
+						<div><%= @order.errors.full_messages_for(:needs).first %></div>
+<% end %>
+
 <% if @order.flavor.nil? %>
-						
+
 <%= render partial: "orders/form/graphics", locals: {f: f, display: "block"} %>
 
 <%= render partial: "orders/form/web", locals: {f: f, display: "none"} %>
@@ -72,16 +83,20 @@
 <%= render partial: "orders/form/video", locals: {f: f, display: "block"} %>
 	<% end %>
 <% end %>
-					</fieldset>
+					</div>
+					<div class="divider"></div>
 
-					<fieldset class="description">
-						<h3>Description <span>*</span></h3>
-						<p>
-							<%= f.text_area :description, required: true %>
-						</p>
-					</fieldset>
+					<p class="subheader">Description *</p>
+					<div class="field field--textarea">
+<% if @order.errors.include? :description %>
+						<div><%= @order.errors.full_messages_for(:description).first %></div>
+<% end %>
+						<%= f.text_area :description, required: true %>
+					</div>
 
-					<p class="submit"><%= f.submit "Submit", :class => "button button-okay" %></p>
+					<div class="field">
+						<%= f.submit "Submit", :class => "button button-okay" %>
+					</div>
 				<% end %>
 
 <%= render "modals" %>
