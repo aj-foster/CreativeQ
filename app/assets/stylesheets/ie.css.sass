@@ -1,9 +1,25 @@
-.tile > div, .tile > a
-	float: left
-	font-size: 1em
+.tile
+	height: auto
+	overflow: hidden
+
+	@extend .group
 
 .tile-icon--a
 	display: none
 
 .tile-focus
-	color: #000
+	display: inline-block
+
+	@extend %clearfix
+
+	div
+		clear: left
+		float: left
+
+.tile .icon
+	height: 1.5em
+	float: right
+
+.fieldSet-column
+	float: left
+	width: 50%
