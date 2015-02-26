@@ -75,7 +75,7 @@
 
 								<div class="field field--text <%= "has-error" if @user.errors.include? :password %>">
 									<%= f.label :password, "New Password" %>
-									<%= f.text_field :password, autocomplete: "off" %>
+									<%= f.password_field :password, autocomplete: "off" %>
 <% if @user.errors.include? :password %>
 									<div class="field--text-error"><%= @user.errors.full_messages_for(:password).first %></div>
 <% end %>
@@ -83,7 +83,7 @@
 
 								<div class="field field--text <%= "has-error" if @user.errors.include? :password_confirmation %>">
 									<%= f.label :password_confirmation, "Confirm Password" %>
-									<%= f.text_field :password_confirmation, autocomplete: "off" %>
+									<%= f.password_field :password_confirmation, autocomplete: "off" %>
 <% if @user.errors.include? :password_confirmation %>
 									<div class="field--text-error"><%= @user.errors.full_messages_for(:password_confirmation).first %></div>
 <% end %>

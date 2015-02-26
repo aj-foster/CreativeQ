@@ -80,7 +80,8 @@ class UsersController < ApplicationController
 				sign_in(current_user, :bypass => true) if current_user.id == @user.id
 				redirect_to @user, notice: "Password updated."
 			else
-				redirect_to @user #, alert: @user.errors.full_messages.first
+				show()
+				render :show
 			end
 		end
 	end
