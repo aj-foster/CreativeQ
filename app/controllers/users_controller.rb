@@ -31,7 +31,8 @@ class UsersController < ApplicationController
 
 
 	def show
-		@user = User.find(params[:id])
+		puts "Running UsersController#show"
+		@user ||= User.find(params[:id])
 
 		unless can? :read, @user
 			return redirect_to root_url, alert: "You aren't allowed to view this profile."
@@ -39,7 +40,7 @@ class UsersController < ApplicationController
 
 		@assignments = @user.assignments.joins(:organization).order("organizations.name ASC")
 		@orgs, @otherOrgs = [], []
-		
+
 		Organization.all.order(name: :asc).each do |org|
 			if @user.organizations.include?(org)
 				@orgs << org
@@ -70,7 +71,8 @@ class UsersController < ApplicationController
 			if @user.update_attributes(user_params)
 				redirect_to @user, notice: "Profile updated successfully."
 			else
-				redirect_to @user, alert: @user.errors.full_messages.first
+				show()
+				render :show
 			end
 
 		else
@@ -78,7 +80,7 @@ class UsersController < ApplicationController
 				sign_in(current_user, :bypass => true) if current_user.id == @user.id
 				redirect_to @user, notice: "Password updated."
 			else
-				redirect_to @user, alert: @user.errors.full_messages.first
+				redirect_to @user #, alert: @user.errors.full_messages.first
 			end
 		end
 	end

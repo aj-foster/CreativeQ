@@ -14,48 +14,83 @@
 			<section>
 				<h2>Profile: <%= @user.name %></h2>
 				<article>
-					<%= form_for @user do |f| %>
-						<fieldset>
-							<h3>Personal Information</h3>
-							<p>
-								<%= f.label :first_name, "First Name" %> <span>*</span><br>
-								<%= f.text_field :first_name, required: true %>
-							</p>
-							<p>
-								<%= f.label :last_name, "Last Name" %> <span>*</span><br>
-								<%= f.text_field :last_name, required: true %>
-							</p>
-							<p>
-								<%= f.label :email, "E-Mail" %> <span>*</span><br>
-								<%= f.email_field :email, required: true %>
-							</p>
-							<p>
-								<%= f.label :phone, "Phone Number" %><br>
-								<%= f.telephone_field :phone %>
-							</p>
-<% if can? :manage, @user %>
-							<p class="role">
-								<%= f.label :role %><br>
-								<%= f.collection_select :role, User::ROLES, :to_s, :humanize %>
-							</p>
-							<p class="flavor" <% unless @user.role == "Creative" %>style="display:none"<% end %>>
-								<%= f.label :flavor, "Type of Creative" %> <span>*</span><br>
-								<%= f.collection_select :flavor, Order::TYPES, :to_s, :humanize %>
-							</p>
-<% end %>
-						</fieldset>
+					<%= form_for @user, html: {novalidate: true} do |f| %>
+						<div class="fieldSet">
+							<div class="fieldSet-column">
+								<p class="subheader">Personal Information</p>
 
-						<fieldset>
-							<h3>Change Password</h3>
-							<p>
-								<%= f.label :password, "New Password" %><br>
-								<%= f.password_field :password, autocomplete: "off" %>
-							</p>
-							<p>
-								<%= f.label :password_confirmation, "New Password Confirmation" %><br>
-								<%= f.password_field :password_confirmation, autocomplete: "off" %>
-							</p>
-						</fieldset>
+								<div class="field field--text <%= "has-error" if @user.errors.include? :first_name %>">
+									<%= f.label :first_name, "First Name", class: "is-required" %>
+									<%= f.text_field :first_name, placeholder: "Bill", required: true %>
+<% if @user.errors.include? :first_name %>
+									<div class="field--text-error"><%= @user.errors.full_messages_for(:first_name).first %></div>
+<% end %>
+								</div>
+
+								<div class="field field--text <%= "has-error" if @user.errors.include? :last_name %>">
+									<%= f.label :last_name, "Last Name", class: "is-required" %>
+									<%= f.text_field :last_name, placeholder: "Columbia", required: true %>
+<% if @user.errors.include? :last_name %>
+									<div class="field--text-error"><%= @user.errors.full_messages_for(:last_name).first %></div>
+<% end %>
+								</div>
+
+								<div class="field field--text <%= "has-error" if @user.errors.include? :email %>">
+									<%= f.label :email, "E-Mail", class: "is-required" %>
+									<%= f.email_field :email, placeholder: "bill@columbia.me", required: true %>
+<% if @user.errors.include? :email %>
+									<div class="field--text-error"><%= @user.errors.full_messages_for(:email).first %></div>
+<% end %>
+								</div>
+
+								<div class="field field--text <%= "has-error" if @user.errors.include? :phone %>">
+									<%= f.label :phone, "Phone Number" %>
+									<%= f.telephone_field :phone, placeholder: "407-882-1010" %>
+<% if @user.errors.include? :phone %>
+									<div class="field--text-error"><%= @user.errors.full_messages_for(:phone).first %></div>
+<% end %>
+								</div>
+
+<% if can? :manage, @user %>
+								<div class="field <%= "has-error" if @user.errors.include? :role %>">
+									<%= f.label :role, "Role" %>
+									<%= f.collection_select :role, User::ROLES, :to_s, :humanize %>
+	<% if @user.errors.include? :role %>
+									<div class="field--alert"><%= @user.errors.full_messages_for(:role).first %></div>
+	<% end %>
+								</div>
+
+								<div class="field <%= "has-error" if @user.errors.include? :flavor %>" <% unless @user.role == "Creative" %>style="display:none"<% end %>>
+									<%= f.label :flavor, "Type of Creative" %>
+									<%= f.collection_select :flavor, Order::TYPES, :to_s, :humanize %>
+	<% if @user.errors.include? :flavor %>
+									<div class="field--alert"><%= @user.errors.full_messages_for(:flavor).first %></div>
+	<% end %>
+								</div>
+<% end %>
+							</div>
+
+							<div class="fieldSet-column">
+								<p class="subheader">Change Password</p>
+
+								<div class="field field--text <%= "has-error" if @user.errors.include? :password %>">
+									<%= f.label :password, "New Password" %>
+									<%= f.text_field :password, autocomplete: "off" %>
+<% if @user.errors.include? :password %>
+									<div class="field--text-error"><%= @user.errors.full_messages_for(:password).first %></div>
+<% end %>
+								</div>
+
+								<div class="field field--text <%= "has-error" if @user.errors.include? :password_confirmation %>">
+									<%= f.label :password_confirmation, "Confirm Password" %>
+									<%= f.text_field :password_confirmation, autocomplete: "off" %>
+<% if @user.errors.include? :password_confirmation %>
+									<div class="field--text-error"><%= @user.errors.full_messages_for(:password_confirmation).first %></div>
+<% end %>
+								</div>
+							</div>
+						</div>
+
 						<p class="submit"><%= f.submit "Update", :class => "button button-okay" %></p>
 					<% end %>
 				</article>
