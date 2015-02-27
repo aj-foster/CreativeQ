@@ -1,0 +1,15 @@
+.nav
+	float: right
+	font-size: $b-fontSize-xl
+
+.nav-link
+	border-radius: 4px
+	color: $foreground
+	display: inline-block
+	padding: 0.25em 0.5em
+	text-decoration: none
+	transition: background-color 0.2s
+
+	&:active, &:focus, &:hover
+		background-color: darken($main, 10%)
+		color: $foreground

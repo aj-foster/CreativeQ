@@ -1,21 +1,21 @@
-		<header>
-			<div class="constraint">
-				<h1><%= link_to "CreativeQ", root_url %></h1>
-				<nav>
+		<header class="header">
+			<div class="header-wrap">
+				<h1 class="header-title"><%= link_to "CreativeQ", root_url, class: "header-link" %></h1>
+				<nav class="nav">
 
 <% if user_signed_in? %>
-					<%= link_to "Orders", orders_path %>
+					<%= link_to "Orders", orders_path, class: "nav-link", title: "Orders" %>
 	<% if can? :manage, User %>
-					<%= link_to "Users", users_path %>
+					<%= link_to "Users", users_path, class: "nav-link", title: "Users" %>
 	<% end %>
 	<% if can? :index, Organization %>
-					<%= link_to "Organizations", organizations_path %>
+					<%= link_to "Organizations", organizations_path, class: "nav-link", title: "Organizations" %>
 	<% end %>
-					<%= link_to "Profile", user_path(current_user), :class => "profile", :title => "Profile" %>
-					<%= link_to "Log Out", destroy_user_session_path, :method => :delete, :class => "logout", :title => "Log Out" %>
+					<%= link_to "Profile", user_path(current_user), class: "nav-link profile", title: "Profile" %>
+					<%= link_to "Log Out", destroy_user_session_path, method: :delete, class: "nav-link logout", title: "Log Out" %>
 <% else %>
-					<%= link_to "Sign Up", new_user_registration_path, :class => "signup", :title => "Sign Up" %>
-					<%= link_to "Sign In", root_url, :class => "signin", :title => "Sign In" %>
+					<%= link_to "Sign Up", new_user_registration_path, class: "nav-link signup", title: "Sign Up" %>
+					<%= link_to "Sign In", root_url, class: "nav-link signin", title: "Sign In" %>
 <% end %>
 				</nav>
 			</div>

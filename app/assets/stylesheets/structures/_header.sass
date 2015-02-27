@@ -1,0 +1,25 @@
+.header
+	background-color: $c-accent
+	border-bottom: 1px solid
+	color: $c-text-invert-primary
+	padding: 0.5em 0
+
+	@extend .group
+
+.header-wrap
+	padding: 0 1em
+
+	@extend .mwn
+
+.header-title
+	display: inline-block
+	letter-spacing: 1px
+	margin: 0
+
+.header-link
+	color: $c-text-invert-primary
+	text-decoration: none
+	transition: color 0.2s
+
+	&:active, &:focus, &:hover
+		color: lighten($c-accent, 30%)
