@@ -1,47 +1,17 @@
 			<section>
 <% if @unapproved.any? %>
-				<table>
-					<caption>Unapproved Users</caption>
-					<tr>
-						<th>Name</th>
-						<th>E-Mail</th>
-						<th></th>
-					</tr>
+				<h2>Unapproved Users</h2>
+				<div class="list">
 	<% @unapproved.each do |user| %>
-					<tr>
-						<th><%= user.name %></th>
-						<td><a href="mailto:<%= user.email %>"><%= user.email %></a></td>
-						<td>
-<% if can? :update, user %>
-							<%= link_to "Edit Profile", user, :class => "button button-okay" %>
-<% end %>
-						</td>
-					</tr>
+<%= render 'listing', user: user %>
 	<% end %>
-				</table>
+				</div>
 <% end %>
 
-				<table>
-					<caption>Users</caption>
-					<tr>
-						<th>Name</th>
-						<th>E-Mail</th>
-						<th>Organizations</th>
-						<th>Role</th>
-						<th></th>
-					</tr>
+				<h2>Users</h2>
+				<div class="list">
 <% @users.each do |user| %>
-					<tr>
-						<th><%= user.name %></th>
-						<td><a href="mailto:<%= user.email %>"><%= user.email %></a></td>
-						<td class="orgs"><%= user.organizations.map(&:name).join(', ') %></td>
-						<td><%= user.role %></td>
-						<td>
-<% if can? :update, user %>
-							<%= link_to "Profile", user, :class => "button button-neutral" %>
+<%= render 'listing', user: user %>
 <% end %>
-						</td>
-					</tr>
-<% end %>
-				</table>
+				</div>
 			</section>

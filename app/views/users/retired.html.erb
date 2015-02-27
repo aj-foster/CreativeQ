@@ -1,26 +1,11 @@
 			<section>
 <% if @users.any? %>
-				<table>
-					<caption>Retired Users</caption>
-					<tr>
-						<th>Name</th>
-						<th>E-Mail</th>
-						<th>Role</th>
-						<th></th>
-					</tr>
+				<h2>Users</h2>
+				<div class="list">
 	<% @users.each do |user| %>
-					<tr>
-						<th><%= user.name %></th>
-						<td><a href="mailto:<%= user.email %>"><%= user.email %></a></td>
-						<td><%= user.role %></td>
-						<td>
-		<% if can? :update, user %>
-							<%= link_to "Edit Profile", user, :class => "button button-neutral" %>
-		<% end %>
-						</td>
-					</tr>
+<%= render 'listing', user: user %>
 	<% end %>
-				</table>
+				</div>
 <% else %>
 				<article>
 					There aren't any retired users, yet.
