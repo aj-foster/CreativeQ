@@ -107,7 +107,6 @@ class OrdersController < ApplicationController
 		end
 
 		@order.assign_attributes(order_params)
-		@order.setup_order
 		@valid_date = can?(:manage, @order) ? true : @order.validate_due_date
 
 		if @valid_date && @order.save
