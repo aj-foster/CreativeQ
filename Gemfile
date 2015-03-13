@@ -43,3 +43,9 @@ gem "paperclip", "~> 4.2"
 
 # Autoprefixer
 gem 'autoprefixer-rails'
+
+# Use Capistrano for deployment
+gem 'capistrano-rails', group: :development
+gem 'capistrano-passenger', group: :development
+gem 'capistrano-bundler', group: :development
+gem 'capistrano-rvm', group: :development

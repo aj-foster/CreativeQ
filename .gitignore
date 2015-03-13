@@ -19,8 +19,15 @@
 /public/assets
 /public/system
 /vendor/bundle
+/vendor/cache
 config/database.yml
 config/secrets.yml
 config/environment.rb
 config/initializers/devise.rb
 /secrets
+
+# Ignore deployment settings.
+Capfile
+.capistrano
+config/deploy
+config/deploy.rb
