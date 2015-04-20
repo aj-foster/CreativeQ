@@ -39,7 +39,7 @@
 						</span><br>
 						<span class="subtitle">
 		<% if comment.attachment.exists? %>
-						<%= link_to "View Attachment", comment.attachment.url %>
+						<%= link_to "View Attachment", asset_path(comment.attachment.url) %>
 		<% end %>
 						</span>
 					</p>
