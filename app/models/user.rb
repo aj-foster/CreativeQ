@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
 
 
 	def send_emails?
-		can_receive_emails? && read_attribute(:send_emails)
+		can_receive_emails? && read_attribute(:send_emails) && role != "Retired"
 	end
 
 
