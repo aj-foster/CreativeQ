@@ -11,6 +11,11 @@ class Organization < ActiveRecord::Base
 	has_many :orders
 
 
+	def advisors
+		self.assignments.where(role: "Advisor").includes(:user).map(&:user)
+	end
+
+
 	def unlink_orders
 		Order.where(organization_id: id).each do |order|
 			order.organization = nil

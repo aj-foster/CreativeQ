@@ -52,12 +52,33 @@ class Order < ActiveRecord::Base
 	end
 
 
+	def advisors
+		organization.advisors
+	end
+
+
 	def readable? user
 		readable ||= !owner.nil? && owner == user
 		readable ||= !creative.nil? && creative == user
 		readable ||= user.role == "Creative" && status == "Unclaimed" && flavor == user.flavor
 		readable ||= !organization.nil? &&
 			organization_id.in?(user.assignments.advised.pluck(:organization_id))
+	end
+
+
+	def subscribe *users
+		self.subscriptions += users.map { |u| (u.respond_to? :id) ? u.id : u }
+		subscriptions.uniq!
+		subscriptions.compact!
+		save
+	end
+
+
+	def unsubscribe *users
+		self.subscriptions -= users.map { |u| (u.respond_to? :id) ? u.id : u }
+		subscriptions.uniq!
+		subscriptions.compact!
+		save
 	end
 
 
