@@ -24,6 +24,11 @@ class User < ActiveRecord::Base
 	end
 
 
+	def can_receive_emails?
+		/@ucf.edu$/.match email
+	end
+
+
 	def name
 		first_name + " " + last_name
 	end

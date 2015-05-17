@@ -88,6 +88,13 @@
 									<div class="field--text-error"><%= @user.errors.full_messages_for(:password_confirmation).first %></div>
 <% end %>
 								</div>
+
+<% if @user.can_receive_emails? %>
+								<div class="field field--text">
+									<%= f.label :send_emails, "E-Mail Subscriptions" %>
+									<%= f.check_box :send_emails %> Send e-mails
+								</div>
+<% end %>
 							</div>
 						</div>
 
