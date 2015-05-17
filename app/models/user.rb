@@ -25,12 +25,17 @@ class User < ActiveRecord::Base
 
 
 	def can_receive_emails?
-		/@ucf.edu$/.match email
+		!!(/@ucf.edu$/.match email)
 	end
 
 
 	def name
 		first_name + " " + last_name
+	end
+
+
+	def send_emails?
+		can_receive_emails? && read_attribute(:send_emails)
 	end
 
 
