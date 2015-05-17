@@ -82,6 +82,9 @@ class OrdersController < ApplicationController
 		@order.owner = current_user
 		@order.validate_due_date unless can?(:manage, @order)
 
+		@order.subscribe @order.owner
+		@order.subscribe @order.advisors
+
 		if @order.save
 			redirect_to @order, notice: "Your order has been submitted to your advisor for approval."
 			OrdersMailer.order_awaiting_approval(@order).deliver
@@ -166,6 +169,7 @@ class OrdersController < ApplicationController
 
 		@order.status = "Due Date Pending"
 		@order.creative = current_user
+		@order.subscribe @order.creative
 
 		if @order.save
 			redirect_to @order, notice: "Order claimed successfully. Please begin by e-mailing its owner."
@@ -184,6 +188,7 @@ class OrdersController < ApplicationController
 
 		@order.status = "Unclaimed"
 		@order.creative = nil
+		@order.unsubscribe current_user
 
 		if @order.save
 			redirect_to orders_path, notice: "Order unclaimed successfully."
