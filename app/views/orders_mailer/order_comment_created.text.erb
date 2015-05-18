@@ -4,7 +4,7 @@ One of your orders, <%= @order.name %>, has a new comment posted by <%= @comment
 
 "<%= @comment.message %>"
 
-<% if @comment.has_attachment? %>
+<% if @comment.attachment? %>
 It also has a file attachment. If you have any questions, feel free to contact the web folks at OSI Design Group.
 <% else %>
 If you have any questions, feel free to contact the web folks at OSI Design Group.

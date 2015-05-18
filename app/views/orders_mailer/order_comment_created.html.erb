@@ -21,7 +21,7 @@
             <p style="line-height: 1.25em !important; margin: 1em 0;">Hello there!</p>
             <p style="line-height: 1.25em !important; margin: 1em 0;">One of your orders, <%= @order.name %>, has a new <a href="http://osi.ucf.edu/creativeq/orders/<%= @order.id %>" style="color: #4B9FC0;">comment</a> posted by <%= @comment.user.name unless @comment.user.nil? %>. It reads:</p>
             <p style="line-height: 1.25em !important; margin: 1em 2em;"><%= @comment.message %></p>
-<% if @comment.has_attachment? %>
+<% if @comment.attachment? %>
             <p style="margin: 1em 0;">It also has a file attachment. If you have any questions, feel free to contact the web folks at OSI Design Group.</p>
 <% else %>
             <p style="margin: 1em 0;">If you have any questions, feel free to contact the web folks at OSI Design Group.</p>
