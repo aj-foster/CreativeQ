@@ -67,7 +67,7 @@ class Order < ActiveRecord::Base
 
 
 	def subscribe *users
-		self.subscriptions += users.map { |u| (u.respond_to? :id) ? u.id : u }
+		self.subscriptions += users.flatten.map { |u| (u.respond_to? :id) ? u.id : u }
 		subscriptions.uniq!
 		subscriptions.compact!
 		save
@@ -75,7 +75,7 @@ class Order < ActiveRecord::Base
 
 
 	def unsubscribe *users
-		self.subscriptions -= users.map { |u| (u.respond_to? :id) ? u.id : u }
+		self.subscriptions -= users.flatten.map { |u| (u.respond_to? :id) ? u.id : u }
 		subscriptions.uniq!
 		subscriptions.compact!
 		save
