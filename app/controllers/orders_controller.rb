@@ -213,6 +213,32 @@ class OrdersController < ApplicationController
 	end
 
 
+	def subscribe
+		@order = Order.find(params[:id])
+
+		unless can? :read, @order
+			return redirect_to orders_path, alert: "You aren't allowed to view this order."
+		end
+
+		if @order.subscribe current_user
+			redirect_to @order, notice: "You have been subscribed to notifications."
+		else
+			redirect_to @order, alert: "Error: Could not subscribe to notifications."
+		end
+	end
+
+
+	def unsubscribe
+		@order = Order.find(params[:id])
+
+		if @order.unsubscribe current_user
+			redirect_to @order, notice: "You have been unsubscribed from notifications."
+		else
+			redirect_to @order, alert: "Error: Could not unsubscribe from notifications."
+		end
+	end
+
+
 	private
 		def order_params
 			params.require(:order).permit(:name, :due, :description, :flavor, :organization_id).tap do |whitelisted|

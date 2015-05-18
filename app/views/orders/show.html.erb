@@ -24,7 +24,11 @@
 			</article>
 
 			<article>
-				<h3>Comments (<%= @order.comments.count %>)</h3>
+<% if @order.subscriptions.include? current_user.id %>
+				<h3>Comments (<%= @order.comments.count %>) <%= link_to "Unsubscribe", unsubscribe_order_path(@order), method: :put, :id => "unsub-#{@order.id}" %></h3>
+<% else %>
+				<h3>Comments (<%= @order.comments.count %>) <%= link_to "Subscribe", subscribe_order_path(@order), method: :put, :id => "sub-#{@order.id}" %></h3>
+<% end %>
 <% if @order.comments.any? %>
 	<% @order.comments.order(created_at: :asc).each do |comment| %>
 				<div class="comment">

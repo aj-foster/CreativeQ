@@ -16,6 +16,8 @@ Rails.application.routes.draw do
 			put 'claim'
 			put 'unclaim'
 			put 'change_status'
+			put 'subscribe'
+			put 'unsubscribe'
 		end
 		collection do
 			get 'completed'
