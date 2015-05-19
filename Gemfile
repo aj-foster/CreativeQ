@@ -49,3 +49,8 @@ gem 'capistrano-rails', group: :development
 gem 'capistrano-passenger', group: :development
 gem 'capistrano-bundler', group: :development
 gem 'capistrano-rvm', group: :development
+
+# Testing-related gems
+group :development, :test do
+  gem 'factory_girl_rails'
+end
