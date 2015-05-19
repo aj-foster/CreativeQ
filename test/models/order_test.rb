@@ -3,24 +3,30 @@ require 'test_helper'
 class OrderTest < ActiveSupport::TestCase
 
     # Validation Tests
+    #
+
+    test "order is valid with all attributes" do
+        order = FactoryGirl.build(:order)
+        assert order.valid?, "Order was not valid with all attributes"
+    end
     
-    def test_name_presence_validation
-        order_no_name = orders(:order_no_name)
-        assert_not order_no_name.save, "Saved order without a name"
+    test "order is invalid without a name" do
+        order = FactoryGirl.build(:order, name: nil)
+        assert_not order.valid?, "Order was valid without a name"
     end
-
-    def test_due_date_presence_validation
-        order_no_due_date = orders(:order_no_due_date)
-        assert_not order_no_due_date.save, "Saved order without a due date"
+    
+    test "order is invalid without a due date" do
+        order = FactoryGirl.build(:order, due: nil)
+        assert_not order.valid?, "Order was valid without a due date"
     end
-
-    def test_description_presence_validation
-        order_no_description = orders(:order_no_description)
-        assert_not order_no_description.save, "Saved order without a description"
+    
+    test "order is invalid without a description" do
+        order = FactoryGirl.build(:order, description: nil)
+        assert_not order.valid?, "Order was valid without a description"
     end
-
-    def test_needs_presence_validation
-        order_no_needs = orders(:order_no_needs)
-        assert_not order_no_needs.save, "Saved order without needs"
+    
+    test "order is invalid without needs" do
+        order = FactoryGirl.build(:order, needs: nil)
+        assert_not order.valid?, "Order was valid without needs"
     end
 end
