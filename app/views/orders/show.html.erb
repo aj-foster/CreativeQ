@@ -15,7 +15,7 @@
 			<article>
 				<p>
 					<em>Status:</em> <%= @order.status %><%= " (" + @order.creative.name + ")" unless @order.creative.nil? %><br>
-					<em>Due date:</em> <%= @order.due_date %><br>
+					<em>Due date:</em> <%= due_date(@order) %><br>
 					<em>Requested by:</em> <%= @order.organization.name unless @order.organization.nil? %> - <%= @order.owner.name unless @order.owner.nil? %>
 				</p>
 

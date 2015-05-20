@@ -51,12 +51,16 @@ class Order < ActiveRecord::Base
 		end
 	end
 
-
+	# Returns a list of users who advise the order's organization. This uses the
+	# eponymous Organization#advisors.
+	#
 	def advisors
 		organization.advisors
 	end
 
-
+	# Answers whether a given user can read the order. See also the readable scope
+	# for the purpose of querying readable orders.
+	#
 	def readable? user
 		readable ||= !owner.nil? && owner == user
 		readable ||= !creative.nil? && creative == user
@@ -80,7 +84,11 @@ class Order < ActiveRecord::Base
 		save
 	end
 
-
+	# Check the due date for invalid conditions, including due dates less than
+	# two weeks away and due dates placed on weekends. Note that this is not
+	# currently given as an ActiveRecord validation, as we don't wish to validate
+	# changes made by administrators.
+	#
 	def validate_due_date
 		return_value = true
 
@@ -95,19 +103,5 @@ class Order < ActiveRecord::Base
 		end
 
 		return return_value
-	end
-
-
-	def due_date
-		return due.strftime("%A, %B #{due.day.ordinalize}")
-	end
-
-
-	def hsl
-		hue = [[(due - Date.today).to_f / 14.0 * 75 + 25, 100].min, 25].max
-		saturation = "100%"
-		lightness = "#{50.0 - 10 * (hue - 50).abs / 50.0}%"
-
-		return "hsl(" + hue.to_s + ", " + saturation + ", " + lightness + ")"
 	end
 end

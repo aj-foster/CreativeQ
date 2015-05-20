@@ -1,11 +1,11 @@
 					<div class="tile tile--twoline has-action">
-						<div class="icon tile-icon--a" style="color: <%= order.hsl %>">
+						<div class="icon tile-icon--a" style="color: <%= color(order) %>">
 							<svg><use xlink:href="#icon-<%= order.flavor.downcase %>"></use></svg>
 						</div>
 						<a href="#" class="tile-focus" data-order="<%= order.id %>">
 							<div class="tile-title"><%= order.name %></div>
 							<div class="tile-subtitle">
-								Due <%= order.due_date %>
+								Due <%= due_date(order) %>
 								for <%= order.organization.name unless order.organization.nil? %>.
 <% if order.creative.present? %>
 								It is currently "<%= order.status %>" by <%= order.creative.name %>.
