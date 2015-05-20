@@ -61,8 +61,7 @@ class Order < ActiveRecord::Base
 		readable ||= !owner.nil? && owner == user
 		readable ||= !creative.nil? && creative == user
 		readable ||= user.role == "Creative" && status == "Unclaimed" && flavor == user.flavor
-		readable ||= !organization.nil? &&
-			organization_id.in?(user.assignments.advised.pluck(:organization_id))
+		readable ||= !organization.nil? && advisors.include?(user)
 	end
 
 

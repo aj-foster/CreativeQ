@@ -29,4 +29,131 @@ class OrderTest < ActiveSupport::TestCase
     order = FactoryGirl.build(:order, needs: nil)
     assert_not order.valid?, "Order was valid without needs"
   end
+
+
+  # Instance Method Tests
+  #
+
+  # Order#readable?
+
+  test "order is readable by its owner" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:order, owner: user)
+    assert order.readable?(user), "Order was not readable by its owner"
+  end
+
+  test "order is readable by its creative" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:order, creative: user)
+    assert order.readable?(user), "Order was not readable by its creative"
+  end
+
+  test "unclaimed order is readable by a creative of the correct flavor" do
+    user = FactoryGirl.create(:user, role: "Creative", flavor: "TestFlavor")
+    order = FactoryGirl.create(:order, status: "Unclaimed",
+      flavor: "TestFlavor")
+    assert order.readable?(user),
+      "Unclaimed order was not readable by a creative of the correct flavor"
+  end
+
+  test "unclaimed order is not readable by a creative of an incorrect flavor" do
+    user = FactoryGirl.create(:user, role: "Creative", flavor: "TestFlavor1")
+    order = FactoryGirl.create(:order, status: "Unclaimed",
+      flavor: "TestFlavor2")
+    assert_not order.readable?(user),
+      "Unclaimed order was readable by a creative of the incorrect flavor"
+  end
+
+  test "order is readable by an advisor" do
+    user = FactoryGirl.create(:user_advisor)
+    order = FactoryGirl.create(:order, organization: user.organizations.first)
+    assert order.readable?(user), "Order was not readable by an advisor"
+  end
+
+  test "order is not readable by an unrelated user" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:order)
+    assert_not order.readable?(user), "Order was readable by an unrelated user"
+  end
+
+
+  # Order#subscribe
+
+  test "subscribe adds single user to subscriptions" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:order)
+    order.subscribe user
+    assert order.subscriptions.include?(user.id),
+      "Subscribe did not add user to subscriptions"
+  end
+
+  test "subscribe adds multiple users to subscriptions" do
+    user1 = FactoryGirl.create(:user)
+    user2 = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:order)
+    order.subscribe user1, user2
+    assert [user1.id, user2.id].sort == order.subscriptions.sort,
+      "Subscribe did not add multiple users to subscriptions"
+  end
+
+  test "subscribe does not duplicate users in subscriptions" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:order)
+    2.times { order.subscribe user }
+    assert_equal 1, order.subscriptions.count(user.id),
+      "Subscribe duplicated user in subscriptions"
+  end
+
+
+  # Order#unsubscribe
+
+  test "unsubscribe removes single user from subscriptions" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:order, subscriptions: [user.id])
+    order.unsubscribe user
+    assert_not order.subscriptions.include?(user.id),
+      "Unsubscribe did not remove single user from subscriptions"
+  end
+
+  test "unsubscribe removes multiple users from subscriptions" do
+    user1 = FactoryGirl.create(:user)
+    user2 = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:order, subscriptions: [user1.id, user2.id])
+    order.unsubscribe user1, user2
+    assert order.subscriptions.empty?,
+      "Unsubscribe did not remove multiple users from subscriptions"
+  end
+
+
+  # Order#validate_due_date
+
+  test "order is invalid with due date on a Saturday" do
+    date = Date.today
+    date = date - date.wday - 1 + 3.weeks
+    order = FactoryGirl.build(:order, due: date)
+    assert_not order.validate_due_date,
+      "Order was valid with due date on a Saturday"
+  end
+
+  test "order is invalid with due date on a Sunday" do
+    date = Date.today
+    date = date - date.wday + 3.weeks
+    order = FactoryGirl.build(:order, due: date)
+    assert_not order.validate_due_date,
+      "Order was valid with due date on a Sunday"
+  end
+
+  test "order is invalid with a due date less than two weeks away" do
+    date = Date.today + 13.days
+    date = date - 2.days if date.saturday? || date.sunday?
+    order = FactoryGirl.build(:order, due: date)
+    assert_not order.validate_due_date, "Order was valid with short due date"
+  end
+
+  test "order is valid with valid due date" do
+    date = Date.today
+    date = date - date.wday + 1.day + 3.weeks
+    order = FactoryGirl.build(:order, due: date)
+    assert order.validate_due_date, "Order was invalid with valid due date"
+  end
 end
