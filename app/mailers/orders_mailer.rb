@@ -9,7 +9,7 @@ class OrdersMailer < ActionMailer::Base
 		end
 	end
 
-  def order_comment_created (order, comment)
+  def order_comment_created (order, comment, current_user)
     @order = order
     @comment = comment
 
@@ -18,6 +18,7 @@ class OrdersMailer < ActionMailer::Base
     rescue ActiveRecord::RecordNotFound
       recipients = User.find(@order.subscriptions.map { |uid| User.exists? uid } || [])
     ensure
+      recipients.reject! { |user| user.id == current_user.id }
       emails = recipients.select(&:send_emails?).map(&:email) || []
     end
 
