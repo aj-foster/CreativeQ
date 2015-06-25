@@ -20,7 +20,7 @@ class AssignmentsController < ApplicationController
 		end
 
 		@assignment = Assignment.find(params[:id])
-		@assignment.update(assignment_params)
+		@saved = @assignment.update(assignment_params)
 
 		respond_to do |format|
 			format.js
@@ -34,7 +34,7 @@ class AssignmentsController < ApplicationController
 		end
 
 		@assignment = Assignment.find(params[:id])
-		@assignment.destroy
+		@destroyed = @assignment.destroy
 
 		respond_to do |format|
 			format.js

@@ -1,14 +1,28 @@
-						<tr>
-							<th><%= assignment.organization.name %></th>
-							<td>
+						<div class="tile tile--oneline" id="assignment_<%= assignment.id %>">
 	<% if can? :manage, @user %>
+							<%= link_to assignment, remote: true, method: :delete, :class => "icon", :id => "destroy-#{assignment.id}", title: "Remove Assignment" do %>
+								<svg>
+									<use xlink:href="#icon-cross"></use>
+									<foreignObject display="none">
+										Remove
+									</foreignObject>
+								</svg>
+							<% end %>
+	<% end %>
+							<div class="tile-focus">
+								<%= assignment.organization.name %>
+							</div>
+	<% if can? :manage, @user %>
+							<div class="pts">
 								<%= form_for assignment, remote: true do |f| %>
 									<%= f.select :role, ["Member", "Advisor"] %>
-									<%= f.submit "Update", :class => "button button-neutral" %>
+									<script type="text/javascript">
+										$('#edit_assignment_<%= assignment.id %> select').change(function () {
+											$('#edit_assignment_<%= assignment.id %> .temp').remove();
+											$('#edit_assignment_<%= assignment.id %>').submit();
+										});
+									</script>
 								<% end %>
-								<%= link_to "Remove", assignment, remote: true, method: :delete, :class => "button button-alert", :id => "destroy-#{assignment.id}" %>
-	<% else %>
-								<%= assignment.role %>
+							</div>
 	<% end %>
-							</td>
-						</tr>
+						</div>

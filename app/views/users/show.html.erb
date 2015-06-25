@@ -105,26 +105,20 @@
 
 			<aside>
 				<h2>Organizations</h2>
-				<table class="organizations">
-						<tr>
-							<th>Organization</th>
-							<th>Role</th>
-						</tr>
+				<div class="list">
 <% @assignments.each do |assignment| %>
 <%= render "assignments/listing", assignment: assignment %>
 <% end %>
 <% if can? :manage, @user %>
-						<tr class="create">
-							<td colspan="2">
-								<%= form_for Assignment.new, remote: true do |f| %>
-									<p>
-										<%= f.hidden_field :user_id, value: @user.id %>
-										<%= f.select :organization_id, @otherOrgs.collect {|o| [o.name, o.id]}, include_blank: "Add Organization" %>
-										<%= f.submit "Add", :class => "button button-okay" %>
-									</p>
-								<% end %>
-							</td>
-						</tr>
+						<div class="tile create">
+							<%= form_for Assignment.new, remote: true do |f| %>
+								<p>
+									<%= f.hidden_field :user_id, value: @user.id %>
+									<%= f.select :organization_id, @otherOrgs.collect {|o| [o.name, o.id]}, include_blank: "Add Organization" %>
+									<%= f.submit "Add", :class => "button button-okay" %>
+								</p>
+							<% end %>
+						</div>
 <% end %>
-					</table>
+					</div>
 			</aside>

@@ -1,6 +1,4 @@
-assignmentID = <%= @assignment.id %>
-button = $("#destroy-" + assignmentID)
-
-button.html("&#10003;").on 'click', (evt) ->
-	evt.preventDefault()
-	false
+<% if @destroyed %>
+  $('#assignment_<%= @assignment.id %>').fadeOut 500, ->
+    $('#assignment_<%= @assignment.id %>').remove()
+<% end %>
