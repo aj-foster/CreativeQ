@@ -153,6 +153,7 @@ class OrdersController < ApplicationController
 
 		@order.status = "Unclaimed" if @order.status == "Unapproved"
 		@order.save
+		@order.comments.create(message: "#{current_user.name} approved this order.")
 
 		respond_to do |format|
 			format.js
@@ -173,6 +174,7 @@ class OrdersController < ApplicationController
 
 		if @order.save
 			redirect_to @order, notice: "Order claimed successfully. Please begin by e-mailing its owner."
+			@order.comments.create(message: "#{current_user.name} claimed this order.")
 		else
 			redirect_to @order, alert: "Error: Could not claim this order."
 		end
@@ -192,6 +194,7 @@ class OrdersController < ApplicationController
 
 		if @order.save
 			redirect_to orders_path, notice: "Order unclaimed successfully."
+			@order.comments.create(message: "#{current_user.name} unclaimed this order.")
 		else
 			redirect_to @order, alert: "Error: Could not unclaim this order."
 		end
@@ -206,6 +209,7 @@ class OrdersController < ApplicationController
 		end
 
 		@order.update_attribute(:status, params[:order][:status])
+		@order.comments.create(message: "#{current_user.name} set the order status to #{params[:order][:status]}.")
 
 		respond_to do |format|
 			format.js

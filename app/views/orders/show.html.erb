@@ -35,7 +35,7 @@
 					<p>
 						<em><%= comment.user.name %></em><br>
 						<span class="subtitle">
-							Posted <%= comment.created_at.strftime("%-m/%-d/%Y at %-I:%M%P") %>
+							<%= comment.created_at.strftime("%-m/%-d/%Y at %-I:%M%P") %>
 		<% if can? :destroy, comment %>
 							&mdash;
 							<%= link_to "Remove", comment, method: :delete, data: {confirm: "Are you sure you want to remove this comment?"} %>
