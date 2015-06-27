@@ -1,6 +1,8 @@
 class Order < ActiveRecord::Base
 
-	STATUSES = ["Unapproved", "Unclaimed", "Due Date Pending", "In-Progress", "Proofing", "Revising", "Awaiting Approval", "Complete"]
+	PROGRESSES = ["Due Date Pending", "In-Progress", "Proofing", "Revising",
+								"Awaiting Approval"]
+	STATUSES = ["Unapproved", "Unclaimed", "Claimed", "Complete"]
 	TYPES = %w[Graphics Web Video]
 	self.per_page = 20
 
