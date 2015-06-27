@@ -102,3 +102,12 @@ class Order < ActiveRecord::Base
 		return return_value
 	end
 end
+
+class GraphicOrder < Order
+end
+
+class WebOrder < Order
+end
+
+class VideoOrder < Order
+end
