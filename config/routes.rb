@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 			put 'deny'
 			put 'claim'
 			put 'unclaim'
-			put 'change_status'
+			put 'change_progress'
 			put 'subscribe'
 			put 'unsubscribe'
 		end

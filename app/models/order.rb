@@ -46,11 +46,6 @@ class Order < ActiveRecord::Base
 			["Event Promotion", "Live Production", "Event Recap",
 			 "Exec Video", "Reveal / Teaser", "Other"]
 		end
-
-
-		def statuses
-			STATUSES[3..7]
-		end
 	end
 
 	# Returns a list of users who advise the order's organization. This uses the

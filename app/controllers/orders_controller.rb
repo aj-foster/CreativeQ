@@ -168,7 +168,8 @@ class OrdersController < ApplicationController
 			return redirect_to orders_path, alert: "You can't claim this order. It might have already been claimed."
 		end
 
-		@order.status = "Due Date Pending"
+		@order.status = "Claimed"
+		@order.progress = "Due Date Pending"
 		@order.creative = current_user
 		@order.subscribe @order.creative
 
@@ -201,15 +202,15 @@ class OrdersController < ApplicationController
 	end
 
 
-	def change_status
+	def change_progress
 		@order = Order.find(params[:id])
 
-		unless can? :change_status, @order
-			return redirect_to @order, alert: "You aren't allowed to change this order's status."
+		unless can? :change_progress, @order
+			return redirect_to @order, alert: "You aren't allowed to change this order's progress."
 		end
 
-		@order.update_attribute(:status, params[:order][:status])
-		@order.comments.create(message: "#{current_user.name} set the order status to #{params[:order][:status]}.")
+		@order.update_attribute(:progress, params[:order][:progress])
+		@order.comments.create(message: "#{current_user.name} set the order progress to #{params[:order][:progress]}.")
 
 		respond_to do |format|
 			format.js

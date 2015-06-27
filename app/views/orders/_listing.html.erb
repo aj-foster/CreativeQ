@@ -8,7 +8,7 @@
 								Due <%= due_date(order) %>
 								for <%= order.organization.name unless order.organization.nil? %>.
 <% if order.creative.present? %>
-								It is currently "<%= order.status %>" by <%= order.creative.name %>.
+								It is currently "<%= order.progress %>" by <%= order.creative.name %>.
 <% end %>
 							</div>
 						</a>
