@@ -41,13 +41,13 @@ class User < ActiveRecord::Base
 
 	def unlink_orders
 		Order.where(owner_id: id).each do |order|
-			order.owner = nil
+			order.update(owner: nil)
 		end
 	end
 
 
 	def validate_creative_flavor
-		if self.role == "Creative" && self.flavor.nil?
+		if self.role == "Creative" && self.flavor.blank?
 			errors.add :flavor, "must be given for Creatives (Graphics, Web, or Video)."
 		end
 	end
