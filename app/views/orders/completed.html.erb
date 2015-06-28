@@ -24,9 +24,9 @@
 						<td><%= order.due.strftime("%B %-d, %Y") %></td>
 						<td><%= order.organization.name unless order.organization.nil? %></td>
 						<td class="action">
-							<%= link_to "See Details", order, :class => "button button-neutral" %>
+							<%= link_to "See Details", order_path(order), :class => "button button-neutral" %>
 		<% if can? :destroy, order %>
-							<%= link_to "Remove", order, remote: true, method: :delete, :id => "destroy-#{order.id}", :class => "button button-alert" %>
+							<%= link_to "Remove", order_path(order), remote: true, method: :delete, :id => "destroy-#{order.id}", :class => "button button-alert" %>
 		<% end %>
 						</td>
 					</tr>
