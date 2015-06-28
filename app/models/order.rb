@@ -17,7 +17,8 @@ class Order < ActiveRecord::Base
 
 	scope :readable, -> (user) {
 		where("owner_id = ? OR creative_id = ? OR (status = 'Unclaimed' AND
-		flavor = ?) OR organization_id IN (?)", user.id, user.id, user.flavor,
+		type = ?) OR organization_id IN (?)", user.id, user.id,
+		user.flavor.singularize + "Order",
 		user.assignments.advised.pluck(:organization_id))
 	}
 
