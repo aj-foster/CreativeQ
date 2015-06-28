@@ -49,17 +49,15 @@ class OrderTest < ActiveSupport::TestCase
   end
 
   test "unclaimed order is readable by a creative of the correct flavor" do
-    user = FactoryGirl.create(:user, role: "Creative", flavor: "TestFlavor")
-    order = FactoryGirl.create(:order, status: "Unclaimed",
-      flavor: "TestFlavor")
+    user = FactoryGirl.create(:user, role: "Creative", flavor: "Graphics")
+    order = FactoryGirl.create(:graphic_order, status: "Unclaimed")
     assert order.readable?(user),
       "Unclaimed order was not readable by a creative of the correct flavor"
   end
 
   test "unclaimed order is not readable by a creative of an incorrect flavor" do
-    user = FactoryGirl.create(:user, role: "Creative", flavor: "TestFlavor1")
-    order = FactoryGirl.create(:order, status: "Unclaimed",
-      flavor: "TestFlavor2")
+    user = FactoryGirl.create(:user, role: "Creative", flavor: "Graphics")
+    order = FactoryGirl.create(:web_order, status: "Unclaimed")
     assert_not order.readable?(user),
       "Unclaimed order was readable by a creative of the incorrect flavor"
   end
