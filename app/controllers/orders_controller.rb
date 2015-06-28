@@ -52,15 +52,7 @@ class OrdersController < ApplicationController
 			return redirect_to orders_path, alert: "You aren't allowed to view that order."
 		end
 
-		case @order.flavor
-		when "Graphics"
-			@needs = Order.graphics_needs
-		when "Web"
-			@needs = Order.web_needs
-		when "Video"
-			@needs = Order.video_needs
-		end
-
+		@needs = @order.class.needs
 		@organization = @order.organization
 		@owner = @order.owner
 		@creative = @order.creative
@@ -78,7 +70,18 @@ class OrdersController < ApplicationController
 			return redirect_to orders_path, alert: "You aren't allowed to create orders."
 		end
 
-		@order = Order.new(order_params)
+		@flavor = params[:order][:flavor]
+		params[:order].delete(:flavor)
+
+		case @flavor
+		when "Graphics"
+			@order = GraphicOrder.new(order_params)
+		when "Web"
+			@order = WebOrder.new(order_params)
+		when "Video"
+			@order = VideoOrder.new(order_params)
+		end
+
 		@order.owner = current_user
 		@order.validate_due_date unless can?(:manage, @order)
 
@@ -86,7 +89,7 @@ class OrdersController < ApplicationController
 		@order.subscribe @order.advisors
 
 		if @order.save
-			redirect_to @order, notice: "Your order has been submitted to your advisor for approval."
+			redirect_to order_path(@order), notice: "Your order has been submitted to your advisor for approval."
 			OrdersMailer.order_awaiting_approval(@order).deliver
 		else
 			@can_edit_organization = true
@@ -106,14 +109,14 @@ class OrdersController < ApplicationController
 		@can_edit_organization = current_user.organizations.pluck(:id).include?(@order.organization_id)
 
 		unless can? :update, @order
-			return redirect_to @order, alert: "You aren't allowed to edit this order."
+			return redirect_to order_path(@order), alert: "You aren't allowed to edit this order."
 		end
 
 		@order.assign_attributes(order_params)
 		@valid_date = can?(:manage, @order) ? true : @order.validate_due_date
 
 		if @valid_date && @order.save
-			redirect_to @order, notice: "Order updated successfully."
+			redirect_to order_path(@order), notice: "Order updated successfully."
 		else
 			render 'edit'
 		end
@@ -137,7 +140,7 @@ class OrdersController < ApplicationController
 		else
 			respond_to do |format|
 				format.html {
-					redirect_to @order, alert: "Error: Order could not be deleted."
+					redirect_to order_path(@order), alert: "Error: Order could not be deleted."
 				}
 			end
 		end
@@ -148,7 +151,7 @@ class OrdersController < ApplicationController
 		@order = Order.find(params[:id])
 
 		unless can? :approve, @order
-			return redirect_to @order, alert: "You aren't allowed to approve this order."
+			return redirect_to order_path(@order), alert: "You aren't allowed to approve this order."
 		end
 
 		@order.status = "Unclaimed" if @order.status == "Unapproved"
@@ -174,10 +177,10 @@ class OrdersController < ApplicationController
 		@order.subscribe @order.creative
 
 		if @order.save
-			redirect_to @order, notice: "Order claimed successfully. Please begin by e-mailing its owner."
+			redirect_to order_path(@order), notice: "Order claimed successfully. Please begin by e-mailing its owner."
 			@order.comments.create(message: "#{current_user.name} claimed this order.")
 		else
-			redirect_to @order, alert: "Error: Could not claim this order."
+			redirect_to order_path(@order), alert: "Error: Could not claim this order."
 		end
 	end
 
@@ -186,7 +189,7 @@ class OrdersController < ApplicationController
 		@order = Order.find(params[:id])
 
 		unless can? :unclaim, @order
-			return redirect_to @order, alert: "You can't unclaim this order."
+			return redirect_to order_path(@order), alert: "You can't unclaim this order."
 		end
 
 		@order.status = "Unclaimed"
@@ -197,7 +200,7 @@ class OrdersController < ApplicationController
 			redirect_to orders_path, notice: "Order unclaimed successfully."
 			@order.comments.create(message: "#{current_user.name} unclaimed this order.")
 		else
-			redirect_to @order, alert: "Error: Could not unclaim this order."
+			redirect_to order_path(@order), alert: "Error: Could not unclaim this order."
 		end
 	end
 
@@ -206,7 +209,7 @@ class OrdersController < ApplicationController
 		@order = Order.find(params[:id])
 
 		unless can? :change_progress, @order
-			return redirect_to @order, alert: "You aren't allowed to change this order's progress."
+			return redirect_to order_path(@order), alert: "You aren't allowed to change this order's progress."
 		end
 
 		@order.update_attribute(:progress, params[:order][:progress])
@@ -226,9 +229,9 @@ class OrdersController < ApplicationController
 		end
 
 		if @order.subscribe current_user
-			redirect_to @order, notice: "You have been subscribed to notifications."
+			redirect_to order_path(@order), notice: "You have been subscribed to notifications."
 		else
-			redirect_to @order, alert: "Error: Could not subscribe to notifications."
+			redirect_to order_path(@order), alert: "Error: Could not subscribe to notifications."
 		end
 	end
 
@@ -237,9 +240,9 @@ class OrdersController < ApplicationController
 		@order = Order.find(params[:id])
 
 		if @order.unsubscribe current_user
-			redirect_to @order, notice: "You have been unsubscribed from notifications."
+			redirect_to order_path(@order), notice: "You have been unsubscribed from notifications."
 		else
-			redirect_to @order, alert: "Error: Could not unsubscribe from notifications."
+			redirect_to order_path(@order), alert: "Error: Could not unsubscribe from notifications."
 		end
 	end
 
