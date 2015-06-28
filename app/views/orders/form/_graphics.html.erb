@@ -2,7 +2,7 @@
 							<div class="field">
 								<p>Please choose the graphic formats that would be most effective for your organization or event.</p>
 								<%= f.fields_for :needs do |n| %>
-<% Order.graphics_needs.each do |need| %>
+<% GraphicOrder.needs.each do |need| %>
 	<% need_param = need.parameterize.underscore %>
 									<div class="need">
 										<a href="#" class="need-label">&#x25B8; <%= need %></a>

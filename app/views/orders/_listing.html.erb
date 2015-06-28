@@ -34,7 +34,7 @@
 						<% end %>
 <% end %>
 
-						<%= link_to order, class: "icon", title: "View Order" do %>
+						<%= link_to order_path(order), class: "icon", title: "View Order" do %>
 							<svg>
 								<use xlink:href="#icon-view"></use>
 								<foreignObject display="none">
@@ -54,17 +54,7 @@
 							<article class="needs">
 								<h3>Needs</h3>
 								<ul>
-<%
-		case order.flavor
-		when "Graphics"
-			needs = Order.graphics_needs
-		when "Web"
-			needs = Order.web_needs
-		when "Video"
-			needs = Order.video_needs
-		end
-%>
-		<% needs.each do |need| %>
+		<% order.class.needs.each do |need| %>
 			<% need_param = need.parameterize.underscore %>
 			<% unless order.needs[need_param].nil? %>
 									<li>

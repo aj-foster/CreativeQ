@@ -2,7 +2,7 @@
 							<div class="field">
 								<p>Please check the fields that most accurately describe the order, and provide details in the Description section below.</p>
 								<%= f.fields_for :needs do |n| %>
-<% Order.web_needs.each do |need| %>
+<% WebOrder.needs.each do |need| %>
 	<% need_param = need.parameterize.underscore %>
 									<p class="need">
 										<%= n.hidden_field need_param.to_sym,

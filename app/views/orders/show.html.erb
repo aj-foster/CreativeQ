@@ -5,7 +5,7 @@
 				<%= link_to "Edit Order", edit_order_path(@order), :class => "button button-neutral" %>
 <% end %>
 <% if can? :destroy, @order %>
-				<%= link_to "Remove Order", @order, method: :delete, :class => "button button-alert", data: {confirm: "Are you sure you want to remove the order #{@order.name}?"} %>
+				<%= link_to "Remove Order", order_path(@order), method: :delete, :class => "button button-alert", data: {confirm: "Are you sure you want to remove the order #{@order.name}?"} %>
 <% end %>
 			</p>
 		</div>

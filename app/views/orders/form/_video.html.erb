@@ -2,7 +2,7 @@
 							<div class="field">
 								<p>Please choose one of the following types of production for your order. If you need multiple, please create separate orders for each.</p>
 								<%= f.fields_for :needs do |n| %>
-<% Order.video_needs.each do |need| %>
+<% VideoOrder.needs.each do |need| %>
 	<% need_param = need.parameterize.underscore %>
 									<p class="need">
 										<%= n.hidden_field need_param.to_sym,
