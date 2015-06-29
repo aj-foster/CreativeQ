@@ -60,6 +60,10 @@ class OrdersController < ApplicationController
 
 
 	def new
+		unless can? :create, Order
+			return redirect_to orders_path, alert: "You aren't allowed to create orders."
+		end
+
 		@order = Order.new
 		@can_edit_organization = true
 	end
@@ -100,6 +104,11 @@ class OrdersController < ApplicationController
 
 	def edit
 		@order = Order.find(params[:id])
+
+		unless can? :update, @order
+			return redirect_to order_path(@order), alert: "You aren't allowed to edit this order."
+		end
+		
 		@can_edit_organization = current_user.organizations.pluck(:id).include?(@order.organization_id)
 	end
 

@@ -143,4 +143,115 @@ class OrdersControllerTest < ActionController::TestCase
     assert_not_nil assigns(:order),
       "Failed to assign order for admin"
   end
+
+  test "protect unrelated order from user" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:graphic_order)
+    sign_in user
+    get :show, {id: order.id}
+    assert_redirected_to orders_path, "Showed order to an unrelated user"
+  end
+
+  # orders#new
+
+  test "render new order form for users" do
+    user = FactoryGirl.create(:user, role: "Basic")
+    sign_in user
+    get :new
+    assert_response :success, "Failed to show new order form to user"
+  end
+
+  test "protect new order form from unapproved users" do
+    user = FactoryGirl.create(:user, role: "Unapproved")
+    sign_in user
+    get :new
+    assert_redirected_to orders_path, "Showed new order form to unapproved user"
+  end
+
+  test "protect new order form from non-users" do
+    get :new
+    assert_redirected_to new_user_session_path,
+      "Showed new order form to non-user"
+  end
+
+  # orders#create
+
+  test "create new order for users" do
+    user = FactoryGirl.create(:user, role: "Basic")
+    sign_in user
+    assert_difference "Order.count", 1, "Failed to create order for user" do
+      put :create, order: FactoryGirl.attributes_for(:order, organization_id:
+        user.organizations.first.id).merge({flavor: "Graphics"})
+    end
+  end
+
+  test "protect order creation from unapproved users" do
+    user = FactoryGirl.create(:user, role: "Unapproved")
+    sign_in user
+    assert_difference "Order.count", 0, "Created order for unapproved user" do
+      put :create, order: FactoryGirl.attributes_for(:order, organization_id:
+        user.organizations.first.id).merge({flavor: "Graphics"})
+    end
+    assert_redirected_to orders_path,
+      "Failed to redirect unapproved user during order creation"
+  end
+
+  test "protect order creation from non-users" do
+    organization = FactoryGirl.create(:organization)
+    assert_difference "Order.count", 0, "Created order for non-user" do
+      put :create, order: FactoryGirl.attributes_for(:order, organization_id:
+        organization.id).merge({flavor: "Graphics"})
+    end
+    assert_redirected_to new_user_session_path,
+      "Failed to redirect non-user during order creation"
+  end
+
+  # orders#edit
+
+  test "render edit order form for owner" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:graphic_order, owner: user)
+    sign_in user
+    get :edit, {id: order.id}
+    assert_response :success, "Failed to show edit order form to its owner"
+    assert_not_nil assigns(:order),
+      "Failed to assign order for editing by its owner"
+  end
+
+  test "render edit order form for advisor" do
+    user = FactoryGirl.create(:user_advisor)
+    order = FactoryGirl.create(:graphic_order,
+      organization: user.organizations.first)
+    sign_in user
+    get :edit, {id: order.id}
+    assert_response :success, "Failed to show edit order form to advisor"
+    assert_not_nil assigns(:order),
+      "Failed to assign order for editing by advisor"
+  end
+
+  test "render unrelated edit order form for admin" do
+    user = FactoryGirl.create(:user, role: "Admin")
+    order = FactoryGirl.create(:graphic_order)
+    sign_in user
+    get :edit, {id: order.id}
+    assert_response :success, "Failed to show edit order form to admin"
+    assert_not_nil assigns(:order),
+      "Failed to assign order for admin"
+  end
+
+  test "protect unrelated edit order from from user" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:graphic_order)
+    sign_in user
+    get :edit, {id: order.id}
+    assert_redirected_to order_path(order),
+      "Showed edit order form to an unrelated user"
+  end
+
+  test "protect edit order form from non-users" do
+    order = FactoryGirl.create(:graphic_order)
+    get :edit, {id: order.id}
+    assert_redirected_to new_user_session_path,
+      "Showed edit order form to non-user"
+  end
 end
