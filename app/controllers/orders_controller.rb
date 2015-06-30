@@ -108,7 +108,7 @@ class OrdersController < ApplicationController
 		unless can? :update, @order
 			return redirect_to order_path(@order), alert: "You aren't allowed to edit this order."
 		end
-		
+
 		@can_edit_organization = current_user.organizations.pluck(:id).include?(@order.organization_id)
 	end
 
@@ -122,7 +122,7 @@ class OrdersController < ApplicationController
 		end
 
 		@order.assign_attributes(order_params)
-		@valid_date = can?(:manage, @order) ? true : @order.validate_due_date
+		@valid_date = can?(:manage, @order) || @order.validate_due_date
 
 		if @valid_date && @order.save
 			redirect_to order_path(@order), notice: "Order updated successfully."
@@ -259,8 +259,8 @@ class OrdersController < ApplicationController
 	private
 		def order_params
 			params.require(:order).permit(:name, :due, :description, :flavor, :organization_id).tap do |whitelisted|
-				whitelisted[:needs] = params[:order][:needs]
-				whitelisted[:event] = params[:order][:event]
+				whitelisted[:needs] = params[:order][:needs] if params[:order][:needs]
+				whitelisted[:event] = params[:order][:event] if params[:order][:event]
 			end
 		end
 end
