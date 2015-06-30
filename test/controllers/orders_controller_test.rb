@@ -254,4 +254,60 @@ class OrdersControllerTest < ActionController::TestCase
     assert_redirected_to new_user_session_path,
       "Showed edit order form to non-user"
   end
+
+  # orders#update
+
+  test "update order for owner" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:graphic_order, owner: user)
+    sign_in user
+    patch :update, id: order.id, order: {description: "New description"}
+    assert_redirected_to order_path(order),
+      "Failed to redirect order owner after update"
+    assert_equal "New description", Order.find(order.id).description,
+      "Failed to update order for its owner"
+  end
+
+  test "update order for advisor" do
+    user = FactoryGirl.create(:user_advisor)
+    order = FactoryGirl.create(:graphic_order,
+      organization: user.organizations.first)
+    sign_in user
+    patch :update, id: order.id, order: {description: "New description"}
+    assert_redirected_to order_path(order),
+      "Failed to redirect order advisor after update"
+    assert_equal "New description", Order.find(order.id).description,
+      "Failed to update order for its advisor"
+  end
+
+  test "update unrelated order for admin" do
+    user = FactoryGirl.create(:user, role: "Admin")
+    order = FactoryGirl.create(:graphic_order)
+    sign_in user
+    patch :update, id: order.id, order: {description: "New description"}
+    assert_redirected_to order_path(order),
+      "Failed to redirect admin after order update"
+    assert_equal "New description", Order.find(order.id).description,
+      "Failed to update order for an admin"
+  end
+
+  test "protect unrelated order from update by user" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:graphic_order)
+    sign_in user
+    patch :update, id: order.id, order: {description: "New description"}
+    assert_redirected_to order_path(order),
+      "Failed to redirect user before updating unrelated order"
+    assert_not_equal "New description", Order.find(order.id).description,
+      "Updated unrelated order for user"
+  end
+
+  test "protect order update from non-user" do
+    order = FactoryGirl.create(:graphic_order)
+    patch :update, id: order.id, order: {description: "New description"}
+    assert_redirected_to new_user_session_path,
+      "Failed to redirect non-user before order update"
+    assert_not_equal "New description", Order.find(order.id).description,
+      "Updated order for non-user"
+  end
 end
