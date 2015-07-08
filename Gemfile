@@ -54,3 +54,6 @@ gem 'capistrano-rvm', group: :development
 group :development, :test do
   gem 'factory_girl_rails'
 end
+
+# Find out where SQL queries come from
+gem 'active_record_query_trace', group: :development
