@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
 	has_many :claimed_orders, class_name: 'Order', inverse_of: :creative, foreign_key: 'creative_id'
 
 	has_many :comments, dependent: :destroy
+	has_many :notifications, dependent: :destroy
 
 	validates :first_name, :last_name, presence: true
 	validate :validate_creative_flavor
