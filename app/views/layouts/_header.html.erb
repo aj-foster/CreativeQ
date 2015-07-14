@@ -11,8 +11,22 @@
 	<% if can? :index, Organization %>
 					<%= link_to "Organizations", organizations_path, class: "nav-link", title: "Organizations" %>
 	<% end %>
-					<%= link_to "Profile", user_path(current_user), class: "nav-link profile", title: "Profile" %>
-					<%= link_to "Log Out", destroy_user_session_path, method: :delete, class: "nav-link logout", title: "Log Out" %>
+					<%= link_to user_path(current_user), class: "nav-icon nav-link profile", title: "Profile" do %>
+						<svg>
+							<use xlink:href="#icon-user"></use>
+							<foreignObject display="none">
+								Profile
+							</foreignObject>
+						</svg>
+					<% end %>
+					<%= link_to destroy_user_session_path, method: :delete, class: "nav-icon nav-link logout", title: "Log Out" do %>
+						<svg>
+							<use xlink:href="#icon-logout"></use>
+							<foreignObject display="none">
+								Log Out
+							</foreignObject>
+						</svg>
+					<% end %>
 <% else %>
 					<%= link_to "Sign Up", new_user_registration_path, class: "nav-link signup", title: "Sign Up" %>
 					<%= link_to "Sign In", root_url, class: "nav-link signin", title: "Sign In" %>
