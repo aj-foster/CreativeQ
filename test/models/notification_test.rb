@@ -36,7 +36,7 @@ class NotificationTest < ActiveSupport::TestCase
 
   # Notification::notify_comment_created
 
-  test "notification is created for comment creation" do
+  test "notification for comment creation is successful" do
     order = FactoryGirl.create(:order)
     comment = FactoryGirl.create(:comment, order: order)
     user = FactoryGirl.create(:user)
@@ -47,7 +47,7 @@ class NotificationTest < ActiveSupport::TestCase
     end
   end
 
-  test "notification is not sent to current user" do
+  test "notification for comment creation is not sent to current user" do
     order = FactoryGirl.create(:order)
     comment = FactoryGirl.create(:comment, order: order)
     user = FactoryGirl.create(:user)
@@ -55,6 +55,17 @@ class NotificationTest < ActiveSupport::TestCase
 
     assert_difference 'user.notifications.count', 0 do
       Notification.notify_comment_created(comment, user)
+    end
+  end
+
+  # Notification::notify_order_created
+
+  test "notification for order creation is successful" do
+    user = FactoryGirl.create(:user_advisor)
+    order = FactoryGirl.create(:order, organization: user.organizations.first)
+
+    assert_difference 'user.notifications.count' do
+      Notification.notify_order_created(order, order.owner)
     end
   end
 

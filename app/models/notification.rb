@@ -30,4 +30,19 @@ class Notification < ActiveRecord::Base
 
     OrdersMailer.order_comment_created(comment, emails).deliver
   end
+
+  def self.notify_order_created (order, current_user)
+    title = "New Order Awaiting Approval"
+    message = "#{order.owner.name} created a new order that needs approval: " +
+              "\"#{order.name.truncate(30, separator: ' ')}\""
+
+    recipients = order.advisors.compact || []
+    emails = recipients.select(&:send_emails?).map(&:email) || []
+
+    recipients.each do |user|
+      user.notifications.create(order: order, title: title, message: message)
+    end
+
+    OrdersMailer.order_awaiting_approval(order, emails).deliver
+  end
 end

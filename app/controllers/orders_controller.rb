@@ -94,7 +94,7 @@ class OrdersController < ApplicationController
 
 		if @order.save
 			redirect_to order_path(@order), notice: "Your order has been submitted to your advisor for approval."
-			OrdersMailer.order_awaiting_approval(@order).deliver
+			Notification.notify_order_created(@order, current_user)
 		else
 			@can_edit_organization = true
 			render 'new'

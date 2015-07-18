@@ -14,7 +14,6 @@ class CommentsController < ApplicationController
 		if @comment.save
 			redirect_to order_path(@order), notice: "Your comment has been added."
 			Notification.notify_comment_created(@comment, current_user)
-			# OrdersMailer.order_comment_created(@order, @comment, current_user).deliver
 		else
 			redirect_to order_path(@order), alert: "Error: Could not add comment."
 		end
