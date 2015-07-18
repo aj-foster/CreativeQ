@@ -25,4 +25,9 @@ Rails.application.routes.draw do
 	end
 	resources :assignments
 	resources :comments
+	resources :notifications, only: [:index, :destroy] do
+		member do
+			put 'read'
+		end
+	end
 end
