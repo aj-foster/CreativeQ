@@ -11,7 +11,7 @@
 	<% if can? :index, Organization %>
 					<%= link_to "Organizations", organizations_path, class: "nav-link", title: "Organizations" %>
 	<% end %>
-					<%= link_to user_path(current_user), class: "nav-icon nav-link profile", title: "Profile" do %>
+					<%= link_to user_path(current_user), class: "nav-icon nav-link", title: "Profile" do %>
 						<svg>
 							<use xlink:href="#icon-user"></use>
 							<foreignObject display="none">
@@ -19,7 +19,7 @@
 							</foreignObject>
 						</svg>
 					<% end %>
-					<%= link_to notifications_path, class: "nav-icon nav-link #{"has-badge" if current_user.notifications.any?}", data: {badge: current_user.notifications.count}, title: "Notifications" do %>
+					<%= link_to notifications_path, class: "nav-icon nav-icon--up nav-link #{"has-badge" if current_user.notifications.any?}", data: {badge: current_user.notifications.count}, title: "Notifications" do %>
 						<svg>
 							<use xlink:href="#icon-inbox"></use>
 							<foreignObject display="none">
@@ -27,7 +27,7 @@
 							</foreignObject>
 						</svg>
 					<% end %>
-					<%= link_to destroy_user_session_path, method: :delete, class: "nav-icon nav-link logout", title: "Log Out" do %>
+					<%= link_to destroy_user_session_path, method: :delete, class: "nav-icon nav-link", title: "Log Out" do %>
 						<svg>
 							<use xlink:href="#icon-logout"></use>
 							<foreignObject display="none">
@@ -36,8 +36,8 @@
 						</svg>
 					<% end %>
 <% else %>
-					<%= link_to "Sign Up", new_user_registration_path, class: "nav-link signup", title: "Sign Up" %>
-					<%= link_to "Sign In", root_url, class: "nav-link signin", title: "Sign In" %>
+					<%= link_to "Sign Up", new_user_registration_path, class: "nav-link", title: "Sign Up" %>
+					<%= link_to "Sign In", root_url, class: "nav-link", title: "Sign In" %>
 <% end %>
 				</nav>
 			</div>
