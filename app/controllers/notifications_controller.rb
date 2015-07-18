@@ -24,10 +24,18 @@ class NotificationsController < ApplicationController
       return redirect_to notifications_path, alert: "You aren't allowed destroy this notification."
     end
 
-    if @notification.destroy
-      redirect_to notifications_path, notice: "Notification deleted successfully."
-    else
-      redirect_to notifications_path, alert: "Error: Notification could not be deleted."
+    @destroyed = @notification.destroy
+
+    respond_to do |format|
+      format.html do
+        if @destroyed
+          redirect_to notifications_path, notice: "Notification deleted successfully."
+        else
+          redirect_to notifications_path, alert: "Error: Notification could not be deleted."
+        end
+      end
+
+      format.js
     end
   end
 

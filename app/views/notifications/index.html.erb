@@ -1,14 +1,13 @@
       <section>
         <h2 class="mtm">Notifications</h2>
-<% if @notifications.any? %>
         <div class="list">
-  <% @notifications.each do |notification| %>
-          <div class="tile tile--twoline">
+<% @notifications.each do |notification| %>
+          <div class="tile tile--twoline" id="notification_<%= notification.id %>">
             <%= link_to view_and_destroy_notification_path(notification), method: :delete, class: "tile-focus", title: "View Order" do %>
               <div class="tile-title"><%= notification.title %></div>
               <div class="tile-subtitle"><%= notification.message %></div>
             <% end %>
-            <%= link_to notification_path(notification), method: :delete, class: "icon", title: "Remove" do %>
+            <%= link_to notification_path(notification), remote: true, method: :delete, class: "icon", title: "Remove" do %>
               <svg>
                 <use xlink:href="#icon-cross"></use>
                 <foreignObject display="none">
@@ -17,11 +16,9 @@
               </svg>
             <% end %>
           </div>
-  <% end %>
-        </div>
-<% else %>
-        <article>
-          You don't currently have any notifications.
-        </article>
 <% end %>
+          <div class="tile tile--placeholder">
+            You don't currently have any notifications.
+          </div>
+        </div>
       </section>
