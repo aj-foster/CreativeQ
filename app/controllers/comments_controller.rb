@@ -12,10 +12,11 @@ class CommentsController < ApplicationController
 		@comment.order = @order
 
 		if @comment.save
-			redirect_to @order, notice: "Your comment has been added."
-			OrdersMailer.order_comment_created(@order, @comment, current_user).deliver
+			redirect_to order_path(@order), notice: "Your comment has been added."
+			Notification.notify_comment_created(@comment, current_user)
+			# OrdersMailer.order_comment_created(@order, @comment, current_user).deliver
 		else
-			redirect_to @order, alert: "Error: Could not add comment."
+			redirect_to order_path(@order), alert: "Error: Could not add comment."
 		end
 	end
 
@@ -25,13 +26,13 @@ class CommentsController < ApplicationController
 		@order = @comment.order
 		
 		unless can? :destroy, @comment
-			return redirect_to @order, alert: "You aren't allowed to delete that comment."
+			return redirect_to order_path(@order), alert: "You aren't allowed to delete that comment."
 		end
 
 		if @comment.destroy
-			redirect_to @order, notice: "Comment removed."
+			redirect_to order_path(@order), notice: "Comment removed."
 		else
-			redirect_to @order, alert: "Error: Comment could not be removed."
+			redirect_to order_path(@order), alert: "Error: Comment could not be removed."
 		end
 	end
 
