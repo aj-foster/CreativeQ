@@ -8,14 +8,6 @@
               <div class="tile-title"><%= notification.title %></div>
               <div class="tile-subtitle"><%= notification.message %></div>
             </div>
-            <%= link_to read_notification_path(notification), method: :put, class: "icon", title: "Mark as Read" do %>
-              <svg>
-                <use xlink:href="#icon-check"></use>
-                <foreignObject display="none">
-                  Read
-                </foreignObject>
-              </svg>
-            <% end %>
             <%= link_to notification_path(notification), method: :delete, class: "icon", title: "Remove" do %>
               <svg>
                 <use xlink:href="#icon-cross"></use>
