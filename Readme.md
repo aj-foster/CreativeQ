@@ -13,7 +13,7 @@ CreativeQ is built using Ruby on Rails. We chose Rails as it provides an accessi
 * **Organizations** represent the groups submitting work orders. Each organization has one or more advisor who approves all orders submitted.
 * **Users** are the people in the process.
 	* *Basic Users* can create orders and track their progress. Some may be assigned as the advisors of their agencies.
-	* *Creatives* can claim orders from the queue and update their status (started, proofing, revising, complete) as they go.
+	* *Creatives* can claim orders from the queue and update their progress (started, proofing, revising, complete, etc.) as they go.
 	* *Administrators* get a bird's-eye view of all the orders and their progress. Traditionally, the professional staff involved with Creative Services ensure that everything proceeds smoothly.
 
 *Note: As professional staff members may advise multiple agencies, there also exists an Assignments model that joins Users and Organizations. It includes a role description that determines whether the user acts as a member or advisor.*

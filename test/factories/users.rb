@@ -8,10 +8,16 @@ FactoryGirl.define do
     role "Unapproved"
     phone "(407) 882-1010"
 
+    after(:create) do |user|
+      user.assignments << FactoryGirl.create(:assignment, user: user,
+        role: "Member")
+    end
+
     factory :user_advisor do
       after(:create) do |user|
-        user.assignments << FactoryGirl.create(:assignment,
-          user: user, role: "Advisor")
+        user.assignments.each do |assign|
+          assign.update(role: "Advisor")
+        end
       end
     end
   end

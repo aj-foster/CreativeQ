@@ -1,6 +1,8 @@
 class Order < ActiveRecord::Base
 
-	STATUSES = ["Unapproved", "Unclaimed", "Due Date Pending", "In-Progress", "Proofing", "Revising", "Awaiting Approval", "Complete"]
+	PROGRESSES = ["Due Date Pending", "In-Progress", "Proofing", "Revising",
+								"Awaiting Approval"]
+	STATUSES = ["Unapproved", "Unclaimed", "Claimed", "Complete"]
 	TYPES = %w[Graphics Web Video]
 	self.per_page = 20
 
@@ -15,7 +17,8 @@ class Order < ActiveRecord::Base
 
 	scope :readable, -> (user) {
 		where("owner_id = ? OR creative_id = ? OR (status = 'Unclaimed' AND
-		flavor = ?) OR organization_id IN (?)", user.id, user.id, user.flavor,
+		type = ?) OR organization_id IN (?)", user.id, user.id,
+		user.flavor.singularize + "Order",
 		user.assignments.advised.pluck(:organization_id))
 	}
 
@@ -23,32 +26,15 @@ class Order < ActiveRecord::Base
 		creative_id = ? OR organization_id IN (?)", user.id, user.id,
 		user.assignments.advised.pluck(:organization_id)) }
 
-	class << self
-		def graphics_needs
-			["Handbill", "Poster", "A-Frame", "Banner", "Newspaper", "T-Shirt",
-			 "Logo", "Brochure", "Program", "FB Event Photo", "OSI Banner", "OSI Front Desk TV",
-			 "FB Cover Photo", "FB Profile Photo", "Twitter Photo",
-			 "Instagram Photo", "KnightConnect", "Business Card", "Union TV",
-			 "Other"]
-		end
+	# In subclasses, this method returns a list of the available needs (things
+	# an order could require). Not implemented for generic orders.
+	#
+	def self.needs
+		raise "Error: Abstract class."
+	end
 
-
-		def web_needs
-			["New Event Site", "New Org Site", "Re-Brand", "Change Text",
-			 "Change Media", "Change Layout", "Change Design", "New Feature",
-			 "Other"]
-		end
-
-
-		def video_needs
-			["Event Promotion", "Live Production", "Event Recap",
-			 "Exec Video", "Reveal / Teaser", "Other"]
-		end
-
-
-		def statuses
-			STATUSES[3..7]
-		end
+	def flavor
+		""
 	end
 
 	# Returns a list of users who advise the order's organization. This uses the

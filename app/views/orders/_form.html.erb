@@ -1,5 +1,6 @@
-				<%= form_for @order, html: {novalidate: true} do |f| %>
-<% if @order.flavor.nil? %>
+				<%= form_for @order.becomes(Order), html: {novalidate: true} do |f| %>
+					<% f.object = @order.becomes(@order.class) %>
+<% if @order.flavor.blank? %>
 					<fieldset class="flavor">
 						<ul>
 							<li><%= f.radio_button :flavor, "Graphics", checked: true, :data => {:flavor => "graphics"} %> <%= f.label :flavor_graphics, "Graphics" %></li>
@@ -7,8 +8,6 @@
 							<li><%= f.radio_button :flavor, "Video", :data => {:flavor => "video"} %> <%= f.label :flavor_video, "Production" %></li>
 						</ul>
 					</fieldset>
-<% else %>
-					<%= f.hidden_field :flavor %>
 <% end %>
 
 					<div class="fieldSet">
@@ -74,7 +73,7 @@
 					<p class="subheader">Needs *</p>
 <% end %>
 					<div class="needs">
-<% if @order.flavor.nil? %>
+<% if @order.flavor.blank? %>
 
 <%= render partial: "orders/form/graphics", locals: {f: f, display: "block"} %>
 

@@ -20,7 +20,7 @@ class Ability
 			end
 
 			can :claim, Order, :status => "Unclaimed", :flavor => user.flavor
-			can [:unclaim, :change_status, :complete, :comment_on], Order, :creative_id => user.id
+			can [:unclaim, :change_progress, :complete, :comment_on], Order, :creative_id => user.id
 		end
 		
 		can [:rud, :comment_on], Order, :owner_id => user.id

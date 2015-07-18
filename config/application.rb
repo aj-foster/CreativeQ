@@ -30,5 +30,8 @@ module CreativeQ
 		config.action_view.field_error_proc = Proc.new { |html_tag, instance|
 			html_tag
 		}
+
+		# Load subclasses of Order.
+		config.autoload_paths << "#{Rails.root}/app/models/order"
 	end
 end

@@ -1,5 +1,5 @@
 orderID = <%= @order.id %>
-button = $("#status-" + orderID)
+button = $("#progress-" + orderID)
 button.val("✓")
 button.on 'click', (evt) ->
 	evt.preventDefault()
