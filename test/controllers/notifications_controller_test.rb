@@ -88,4 +88,37 @@ class NotificationsControllerTest < ActionController::TestCase
     assert_redirected_to new_user_session_path,
       "Failed to protect notification destruction from non-user"
   end
+
+  # notification#view_and_destroy
+
+  test "view and destroy notification for user" do
+    user = FactoryGirl.create(:user)
+    notification = FactoryGirl.create(:notification, user: user)
+    sign_in user
+    assert_difference('user.notifications.count', -1) do
+      delete :view_and_destroy, id: notification.id
+    end
+    assert_redirected_to order_path(notification.order),
+      "Failed to redirect user after notification destruction"
+  end
+
+  test "protect notification viewing and destruction from other user" do
+    user = FactoryGirl.create(:user)
+    notification = FactoryGirl.create(:notification)
+    sign_in user
+    assert_difference('user.notifications.count', 0) do
+      delete :view_and_destroy, id: notification.id
+    end
+    assert_redirected_to notifications_path,
+      "Failed to redirect user after protecting notification destruction"
+  end
+
+  test "protect notification viewing and destruction from non-users" do
+    notification = FactoryGirl.create(:notification)
+    assert_difference('Notification.count', 0) do
+      delete :view_and_destroy, id: notification.id
+    end
+    assert_redirected_to new_user_session_path,
+      "Failed to protect notification destruction from non-user"
+  end
 end

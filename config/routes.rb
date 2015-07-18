@@ -28,6 +28,7 @@ Rails.application.routes.draw do
 	resources :notifications, only: [:index, :destroy] do
 		member do
 			put 'read'
+			delete 'view_and_destroy'
 		end
 	end
 end

@@ -1,7 +1,7 @@
 $(document).on 'ready page:load', ->
 
 	# Allow users to see order descriptions by clicking on the orders
-	$("a.tile-focus").on 'click', (evt) ->
+	$(".orders a.tile-focus").on 'click', (evt) ->
 
 		# Grab the ID of the order we want to preview.
 		order_id = $(@).attr("data-order")
