@@ -19,3 +19,18 @@
 	font-size: 1em
 	height: 1.25em
 	vertical-align: bottom
+
+.has-badge
+	position: relative
+
+	&[data-badge]:after
+		background-color: $c-danger
+		border-radius: 0.5em
+		content: attr(data-badge)
+		display: block
+		font-size: 0.5em
+		margin: auto
+		padding: 0 0.375em
+		position: absolute
+		right: 0
+		top: 0

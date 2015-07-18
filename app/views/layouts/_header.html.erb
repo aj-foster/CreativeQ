@@ -19,6 +19,14 @@
 							</foreignObject>
 						</svg>
 					<% end %>
+					<%= link_to notifications_path, class: "nav-icon nav-link #{"has-badge" if current_user.notifications.any?}", data: {badge: current_user.notifications.count}, title: "Notifications" do %>
+						<svg>
+							<use xlink:href="#icon-inbox"></use>
+							<foreignObject display="none">
+								Notifications
+							</foreignObject>
+						</svg>
+					<% end %>
 					<%= link_to destroy_user_session_path, method: :delete, class: "nav-icon nav-link logout", title: "Log Out" do %>
 						<svg>
 							<use xlink:href="#icon-logout"></use>
