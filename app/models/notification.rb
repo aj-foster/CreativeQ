@@ -14,7 +14,7 @@ class Notification < ActiveRecord::Base
   def self.notify_comment_created (comment, current_user)
     order = comment.order
 
-    title = "New Comment on #{order.name}"
+    title = "New Comment on #{order.name.truncate(30, separator: ' ')}"
     message = "#{comment.user.name} posted a new comment on your order: " +
               "\"#{comment.message.truncate(30, separator: ' ')}\""
 
@@ -22,10 +22,12 @@ class Notification < ActiveRecord::Base
     subscriptions.delete(current_user.id) unless current_user.nil?
 
     recipients = User.where(id: subscriptions)
-    # emails = recipients.select(&:send_emails?).map(&:email) || []
+    emails = recipients.select(&:send_emails?).map(&:email) || []
 
     recipients.each do |user|
       user.notifications.create(order: order, title: title, message: message)
     end
+
+    OrdersMailer.order_comment_created(comment, emails).deliver
   end
 end

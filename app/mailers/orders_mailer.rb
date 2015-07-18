@@ -9,18 +9,9 @@ class OrdersMailer < ActionMailer::Base
 		end
 	end
 
-  def order_comment_created (order, comment, current_user)
-    @order = order
+  def order_comment_created (comment, emails)
     @comment = comment
-
-    begin
-      recipients = User.find(@order.subscriptions || [])
-    rescue ActiveRecord::RecordNotFound
-      recipients = User.find(@order.subscriptions.map { |uid| User.exists? uid } || [])
-    ensure
-      recipients.reject! { |user| user.id == current_user.id }
-      emails = recipients.select(&:send_emails?).map(&:email) || []
-    end
+    @order = comment.order
 
     if emails.any?
       mail(to: emails, subject: "[CreativeQ] New Comment on #{@order.name}")
