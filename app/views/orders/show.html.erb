@@ -147,6 +147,12 @@
 			</article>
 <% end %>
 
+<% if @order.status == "Claimed" && can?(:change_progress, @order) %>
+			<article>
+				<p><%= link_to "Complete", complete_order_path(@order), method: :put, :class => "button button-okay" %></p>
+			</article>
+<% end %>
+
 			<article>
 				<p>Last activity: <%= @order.updated_at.strftime("%-m/%-d/%Y") %>.</p>
 <% if can? :manage, Order %>
