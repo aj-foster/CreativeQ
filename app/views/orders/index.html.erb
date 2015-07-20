@@ -15,7 +15,7 @@
 <% end %>
 
 <% if @unapproved.any? %>
-				<h2>Orders Awaiting Approval (<%= @unapproved.count %>)</h2>
+				<h2>Orders Awaiting Approval (<%= @unapproved.size %>)</h2>
 				<div class="list">
 	<% @unapproved.each do |order| %>
 
@@ -26,7 +26,7 @@
 <% end %>
 
 <% if @unclaimed.any? %>
-				<h2>Unclaimed Orders (<%= @unclaimed.count %>)</h2>
+				<h2>Unclaimed Orders (<%= @unclaimed.size %>)</h2>
 				<div class="list">
 	<% @unclaimed.each do |order| %>
 
@@ -37,7 +37,7 @@
 <% end %>
 
 <% if @claimed.any? %>
-				<h2>Your Orders (<%= @claimed.count %>)</h2>
+				<h2>Your Orders (<%= @claimed.size %>)</h2>
 				<div class="list">
 	<% @claimed.each do |order| %>
 
@@ -48,7 +48,7 @@
 <% end %>
 
 <% if @orders.any? %>
-				<h2>Orders (<%= @orders.count %>)</h2>
+				<h2>Orders (<%= @orders.size %>)</h2>
 				<div class="list">
 	<% @orders.each do |order| %>
 

@@ -6,7 +6,7 @@
 							<div class="tile-title"><%= order.name %></div>
 							<div class="tile-subtitle">
 								Due <%= due_date(order) %>
-								for <%= order.organization.name unless order.organization.nil? %>.
+								for <%= order.organization.try(:name) || "Unknown Organization" %>.
 <% if order.creative.present? %>
 								It is currently "<%= order.progress %>" by <%= order.creative.name %>.
 <% end %>
