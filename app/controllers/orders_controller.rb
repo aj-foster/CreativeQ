@@ -256,6 +256,22 @@ class OrdersController < ApplicationController
 	end
 
 
+	def complete
+		@order = Order.find(params[:id])
+
+		unless can? :change_progress, @order
+			return redirect_to orders_path, alert: "You aren't allowed to complete this order."
+		end
+
+		if @order.update_attribute(:status, "Complete")
+			@order.comments.create(message: "#{current_user.name} set the order as complete.")
+			redirect_to order_path(@order), notice: "Order has been marked as complete."
+		else
+			redirect_to order_path(@order), alert: "Error: Could not mark order as complete."
+		end
+	end
+
+
 	private
 		def order_params
 			params.require(:order).permit(:name, :due, :description, :flavor, :organization_id).tap do |whitelisted|

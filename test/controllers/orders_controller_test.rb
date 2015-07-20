@@ -310,4 +310,48 @@ class OrdersControllerTest < ActionController::TestCase
     assert_not_equal "New description", Order.find(order.id).description,
       "Updated order for non-user"
   end
+
+  # orders#complete
+
+  test "complete order for its creative" do
+    user = FactoryGirl.create(:user, role: "Creative", flavor: "Graphics")
+    order = FactoryGirl.create(:graphic_order, creative: user)
+    sign_in user
+    put :complete, id: order.id
+    assert_redirected_to order_path(order),
+      "Failed to redirect creative after completing order"
+    assert_equal "Complete", Order.find(order.id).status,
+      "Failed to complete order for its creative"
+  end
+
+  test "complete order for an admin" do
+    user = FactoryGirl.create(:user, role: "Admin")
+    order = FactoryGirl.create(:graphic_order)
+    sign_in user
+    put :complete, id: order.id
+    assert_redirected_to order_path(order),
+      "Failed to redirect admin after completing order"
+    assert_equal "Complete", Order.find(order.id).status,
+      "Failed to complete order for an admin"
+  end
+
+  test "protect order completion from an unrelated user" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:graphic_order)
+    sign_in user
+    put :complete, id: order.id
+    assert_redirected_to orders_path,
+      "Failed to redirect unrelated user after protecting order completion"
+    assert_not_equal "Complete", Order.find(order.id).status,
+      "Failed to protect order completion from an unrelated user"
+  end
+
+  test "protect order completion from a non-user" do
+    order = FactoryGirl.create(:graphic_order)
+    put :complete, id: order.id
+    assert_redirected_to new_user_session_path,
+      "Failed to redirect non-user after protecting order completion"
+    assert_not_equal "Complete", Order.find(order.id).status,
+      "Failed to protect order completion from a non-user"
+  end
 end

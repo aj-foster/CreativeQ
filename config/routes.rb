@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 			put 'change_progress'
 			put 'subscribe'
 			put 'unsubscribe'
+			put 'complete'
 		end
 		collection do
 			get 'completed'
