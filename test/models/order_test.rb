@@ -34,23 +34,29 @@ class OrderTest < ActiveSupport::TestCase
   # Instance Method Tests
   #
 
-  # Order#readable?
+  # Order#readable, Order#readable?
 
   test "order is readable by its owner" do
     user = FactoryGirl.create(:user)
     order = FactoryGirl.create(:order, owner: user)
+    assert Order.readable(user).include?(order),
+      "Order was not shown to its owner"
     assert order.readable?(user), "Order was not readable by its owner"
   end
 
   test "order is readable by its creative" do
     user = FactoryGirl.create(:user)
     order = FactoryGirl.create(:order, creative: user)
+    assert Order.readable(user).include?(order),
+      "Order was not shown to its creative"
     assert order.readable?(user), "Order was not readable by its creative"
   end
 
   test "unclaimed order is readable by a creative of the correct flavor" do
     user = FactoryGirl.create(:user, role: "Creative", flavor: "Graphics")
     order = FactoryGirl.create(:graphic_order, status: "Unclaimed")
+    assert Order.readable(user).include?(order),
+      "Unclaimed order was not shown to a creative of the correct flavor"
     assert order.readable?(user),
       "Unclaimed order was not readable by a creative of the correct flavor"
   end
@@ -58,19 +64,47 @@ class OrderTest < ActiveSupport::TestCase
   test "unclaimed order is not readable by a creative of an incorrect flavor" do
     user = FactoryGirl.create(:user, role: "Creative", flavor: "Graphics")
     order = FactoryGirl.create(:web_order, status: "Unclaimed")
+    assert_not Order.readable(user).include?(order),
+      "Unclaimed order was shown to a creative of an incorrect flavor"
     assert_not order.readable?(user),
-      "Unclaimed order was readable by a creative of the incorrect flavor"
+      "Unclaimed order was readable by a creative of an incorrect flavor"
+  end
+
+  test "claimed order is readable by a creative of the correct flavor" do
+    user = FactoryGirl.create(:user, role: "Creative", flavor: "Graphics")
+    creative = FactoryGirl.create(:user, role: "Creative", flavor: "Graphics")
+    order = FactoryGirl.create(:graphic_order, status: "Claimed",
+      creative: creative)
+    assert Order.readable(user).include?(order),
+      "Claimed order was not shown to a creative of the correct flavor"
+    assert order.readable?(user),
+      "Claimed order was not readable by a creative of the correct flavor"
+  end
+
+  test "claimed order is not readable by a creative of an incorrect flavor" do
+    user = FactoryGirl.create(:user, role: "Creative", flavor: "Graphics")
+    creative = FactoryGirl.create(:user, role: "Creative", flavor: "Web")
+    order = FactoryGirl.create(:web_order, status: "Claimed",
+      creative: creative)
+    assert_not Order.readable(user).include?(order),
+      "Claimed order was shown to a creative of an incorrect flavor"
+    assert_not order.readable?(user),
+      "Claimed order was readable by a creative of an incorrect flavor"
   end
 
   test "order is readable by an advisor" do
     user = FactoryGirl.create(:user_advisor)
     order = FactoryGirl.create(:order, organization: user.organizations.first)
+    assert Order.readable(user).include?(order),
+      "Order was not shown to an advisor"
     assert order.readable?(user), "Order was not readable by an advisor"
   end
 
   test "order is not readable by an unrelated user" do
     user = FactoryGirl.create(:user)
     order = FactoryGirl.create(:order)
+    assert_not Order.readable(user).include?(order),
+      "Order was shown to an unrelated user"
     assert_not order.readable?(user), "Order was readable by an unrelated user"
   end
 

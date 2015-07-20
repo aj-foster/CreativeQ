@@ -4,35 +4,31 @@ class OrdersController < ApplicationController
 
 	def index
 
-		# Although this method works, I don't much like it.  As much as possible,
-		# it would be nice to defer the selection sorting (i.e. can? :read) to
-		# the database.  In general, the database is going to be able to sort
-		# through records faster than Ruby.  Doing so -is- possible if you use
-		# Arel, which I would rather not do for posterity's sake.  It is possible
-		# that pull request #9052 on rails/rails will be merged into 4.2.0, so
-		# we can use #or.
+		@unapproved = Order.advised_by(current_user)
+			.where(status: "Unapproved")
+			.order(due: :asc)
+			.includes(:organization)
+			.to_a
 
-		# How I might do it differently:
-		# - Claimable, advisable, and completed would all be scopes on Order.
-		# - (Readable would use #or with the other scopes)
-		# - Record selection and CanCan would both use these scopes to be DRY.
+		@unclaimed = Order.claimable_by(current_user)
+			.order(due: :asc)
+			.includes(:organization)
+			.to_a
 
-		@superset = Order.where.not(status: "Complete").order(due: :asc)
-		@unapproved, @unclaimed, @claimed, @orders = [], [], [], []
+		@claimed = Order.claimed_by(current_user)
+			.order(due: :asc)
+			.includes(:organization, :creative)
+			.to_a
 
-		@superset.each do |order|
-			if can? :read, order
-				if order.status == "Unapproved" && can?(:approve, order)
-					@unapproved << order
-				elsif order.status == "Unclaimed" && can?(:claim, order)
-					@unclaimed << order
-				elsif order.creative == current_user
-					@claimed << order
-				else
-					@orders << order
-				end
-			end
-		end
+		seen_ids = @unapproved.map(&:id) |
+							 @unclaimed.map(&:id)  |
+							 @claimed.map(&:id)
+
+		@orders = Order.readable(current_user)
+			.where.not(status: "Complete", id: seen_ids)
+			.order(due: :asc)
+			.includes(:organization, :creative)
+			.to_a
 	end
 
 

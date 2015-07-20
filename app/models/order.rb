@@ -17,15 +17,35 @@ class Order < ActiveRecord::Base
 	validates :name, :due, :description, :needs, presence: true
 
 	scope :readable, -> (user) {
-		where("owner_id = ? OR creative_id = ? OR (status = 'Unclaimed' AND
-		type = ?) OR organization_id IN (?)", user.id, user.id,
-		user.flavor.singularize + "Order",
-		user.assignments.advised.pluck(:organization_id))
+		if user.role == "Creative"
+			orders = Order.arel_table
+			related = orders[:status].in(["Unclaimed", "Claimed"])
+								.and(orders[:type].eq(user.flavor.singularize + "Order"))
+			where(
+				_owned_by(user)
+				.or(_claimed_by(user))
+				.or(_advised_by(user))
+				.or(related)
+			)
+
+		elsif user.role == "Admin"
+			all
+
+		else
+			where(
+				_owned_by(user)
+				.or(_claimed_by(user))
+				.or(_advised_by(user))
+			)
+		end
 	}
 
-	scope :completed, -> (user) { where(status: "Complete").where("owner_id = ? OR
-		creative_id = ? OR organization_id IN (?)", user.id, user.id,
-		user.assignments.advised.pluck(:organization_id)) }
+	scope :owned_by, -> (user) { where(self._owned_by(user)) }
+	scope :claimed_by, -> (user) { where(self._claimed_by(user)) }
+	scope :claimable_by, -> (user) { where(self._claimable_by(user)) }
+	scope :advised_by, -> (user) { where(self._advised_by(user)) }
+
+	scope :completed, -> (user) { where(status: "Complete") }
 
 	# In subclasses, this method returns a list of the available needs (things
 	# an order could require). Not implemented for generic orders.
@@ -51,7 +71,9 @@ class Order < ActiveRecord::Base
 	def readable? user
 		readable ||= !owner.nil? && owner == user
 		readable ||= !creative.nil? && creative == user
-		readable ||= user.role == "Creative" && status == "Unclaimed" && flavor == user.flavor
+		readable ||= user.role == "Creative" &&
+								 (status == "Unclaimed" || status == "Claimed") &&
+								 flavor == user.flavor
 		readable ||= !organization.nil? && advisors.include?(user)
 	end
 
@@ -90,5 +112,35 @@ class Order < ActiveRecord::Base
 		end
 
 		return return_value
+	end
+
+
+	private
+
+	def self._owned_by (user)
+		self.arel_table[:owner_id].eq(user.id)
+	end
+
+	def self._claimed_by (user)
+		self.arel_table[:creative_id].eq(user.id)
+	end
+
+	def self._claimable_by (user)
+		if user.role == "Admin"
+			self.arel_table[:status].eq("Unclaimed")
+		else
+			orders = self.arel_table
+			orders[:status].eq("Unclaimed")
+				.and(orders[:type].eq(user.flavor.singularize + "Order"))
+		end
+	end
+
+	def self._advised_by (user)
+		if user.role == "Admin"
+			"1=1"
+		else
+			self.arel_table[:organization_id]
+					.in(user.assignments.advised.pluck(:organization_id))
+		end
 	end
 end
