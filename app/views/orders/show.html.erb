@@ -131,7 +131,8 @@
 <% if @creative == current_user %>
 			<article>
 				<h3>Change Progress</h3>
-				<%= form_for @order, url: change_progress_order_path(@order), method: :put, remote: true do |f| %>
+				<%= form_for @order.becomes(Order), url: change_progress_order_path(@order), method: :put, remote: true do |f| %>
+					<% f.object = @order.becomes(@order.class) %>
 					<%= f.select :progress, Order::PROGRESSES, include_blank: "Select Progress" %>
 					<%= f.submit "Update", :class => "button button-neutral", :id => "progress-#{@order.id}" %>
 				<% end %>
