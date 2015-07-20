@@ -45,7 +45,17 @@ class Order < ActiveRecord::Base
 	scope :claimable_by, -> (user) { where(self._claimable_by(user)) }
 	scope :advised_by, -> (user) { where(self._advised_by(user)) }
 
-	scope :completed, -> (user) { where(status: "Complete") }
+	scope :completed, -> (user) {
+		if user.role == "Admin"
+			where(status: "Complete")
+		else
+			where(
+				_owned_by(user)
+				.or(_claimed_by(user))
+				.or(_advised_by(user))
+			).where(status: "Complete")
+		end
+	}
 
 	# In subclasses, this method returns a list of the available needs (things
 	# an order could require). Not implemented for generic orders.

@@ -188,4 +188,36 @@ class OrderTest < ActiveSupport::TestCase
     order = FactoryGirl.build(:order, due: date)
     assert order.validate_due_date, "Order was invalid with valid due date"
   end
+
+
+  # Order#completed
+
+  test "completed order is readable by its owner" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:order, owner: user, status: "Complete")
+    assert Order.completed(user).include?(order),
+      "Completed order was not shown to its owner"
+  end
+
+  test "completed order is readable by its creative" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:order, creative: user, status: "Complete")
+    assert Order.completed(user).include?(order),
+      "Completed order was not shown to its creative"
+  end
+
+  test "completed order is readable by an advisor" do
+    user = FactoryGirl.create(:user_advisor)
+    order = FactoryGirl.create(:order, organization: user.organizations.first,
+      status: "Complete")
+    assert Order.completed(user).include?(order),
+      "Completed order was not shown to an advisor"
+  end
+
+  test "completed order is not readable by an unrelated user" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:order)
+    assert_not Order.completed(user).include?(order),
+      "Completed order was shown to an unrelated user"
+  end
 end
