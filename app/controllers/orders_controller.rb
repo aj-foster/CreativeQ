@@ -11,11 +11,13 @@ class OrdersController < ApplicationController
 			.to_a
 
 		@unclaimed = Order.claimable_by(current_user)
+			.where.not(status: "Complete")
 			.order(due: :asc)
 			.includes(:organization)
 			.to_a
 
 		@claimed = Order.claimed_by(current_user)
+			.where.not(status: "Complete")
 			.order(due: :asc)
 			.includes(:organization, :creative)
 			.to_a
