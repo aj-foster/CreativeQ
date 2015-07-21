@@ -138,10 +138,12 @@ class Order < ActiveRecord::Base
 	def self._claimable_by (user)
 		if user.role == "Admin"
 			self.arel_table[:status].eq("Unclaimed")
-		else
+		elsif user.role == "Creative"
 			orders = self.arel_table
 			orders[:status].eq("Unclaimed")
 				.and(orders[:type].eq(user.flavor.singularize + "Order"))
+		else
+			"0=1"
 		end
 	end
 
