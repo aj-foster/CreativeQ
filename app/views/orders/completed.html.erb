@@ -10,30 +10,17 @@
 			<section>
 <% if @orders.any? %>
 				<%= will_paginate @orders %>
-				<table>
-					<caption>Completed Orders</caption>
-					<tr>
-						<th>Name</th>
-						<th>Due Date</th>
-						<th>Requested By</th>
-						<th></th>
-					</tr>
+				<h2>Completed Orders</h2>
+				<div class="list">
 	<% @orders.each do |order| %>
-					<tr>
-						<th><%= truncate(order.name, length: 25, separator: " ", omission: "...") %></th>
-						<td><%= order.due.strftime("%B %-d, %Y") %></td>
-						<td><%= order.organization.name unless order.organization.nil? %></td>
-						<td class="action">
-							<%= link_to "See Details", order_path(order), :class => "button button-neutral" %>
-		<% if can? :destroy, order %>
-							<%= link_to "Remove", order_path(order), remote: true, method: :delete, :id => "destroy-#{order.id}", :class => "button button-alert" %>
-		<% end %>
-						</td>
-					</tr>
+
+<%= render 'listing', order: order %>
+
 	<% end %>
-				</table>
+				</div>
 				<%= will_paginate @orders %>
 <% else %>
+				<h2>Completed Orders</h2>
 				<article>
 					You don't have any completed orders to display, yet.
 				</article>

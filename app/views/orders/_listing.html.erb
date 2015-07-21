@@ -5,10 +5,14 @@
 						<a href="#" class="tile-focus" data-order="<%= order.id %>">
 							<div class="tile-title"><%= order.name %></div>
 							<div class="tile-subtitle">
-								Due <%= due_date(order) %>
+								Due <%= due_date(order, short: (order.status == "Complete")) %>
 								for <%= order.organization.try(:name) || "Unknown Organization" %>.
 <% if order.creative.present? %>
+	<% if order.status == "Complete" %>
+								Completed by <%= order.creative.name %>.
+	<% else %>
 								It is currently "<%= order.progress %>" by <%= order.creative.name %>.
+	<% end %>
 <% end %>
 							</div>
 						</a>

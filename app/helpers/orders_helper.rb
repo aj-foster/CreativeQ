@@ -16,7 +16,11 @@ module OrdersHelper
   #
   # Format: Monday, January 1st
   #
-  def due_date order
-    order.due.strftime("%A, %B #{order.due.day.ordinalize}")
+  def due_date (order, options = {})
+    if !!options[:short]
+      order.due.strftime("%B %-d, %Y")
+    else
+      order.due.strftime("%A, %B #{order.due.day.ordinalize}")
+    end
   end
 end
