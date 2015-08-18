@@ -2,7 +2,7 @@
 						<div class="icon tile-icon--a" style="color: <%= color(order) %>">
 							<svg><use xlink:href="#icon-<%= order.flavor.downcase %>"></use></svg>
 						</div>
-						<a href="#" class="tile-focus" data-order="<%= order.id %>">
+						<%= link_to order_path(order), class: "tile-focus", title: "View Order" do %>
 							<div class="tile-title"><%= order.name %></div>
 							<div class="tile-subtitle">
 								Due <%= due_date(order, short: (order.status == "Complete")) %>
@@ -15,7 +15,7 @@
 	<% end %>
 <% end %>
 							</div>
-						</a>
+						<% end %>
 <% if order.status == "Unapproved" && can?(:approve, order) %>
 						<%= link_to approve_order_path(order), remote: true, method: :put, id: "approve-#{order.id}", class: "icon", title: "Approve Order" do %>
 							<svg>
@@ -38,14 +38,14 @@
 						<% end %>
 <% end %>
 
-						<%= link_to order_path(order), class: "icon", title: "View Order" do %>
+						<a href="#" class="icon js-order-preview" data-order="<%= order.id %>" title="Preview Order">
 							<svg>
 								<use xlink:href="#icon-view"></use>
 								<foreignObject display="none">
 									View
 								</foreignObject>
 							</svg>
-						<% end %>
+						</a>
 
 					</div>
 
