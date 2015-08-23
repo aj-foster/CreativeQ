@@ -75,6 +75,18 @@ class Order < ActiveRecord::Base
 		organization.advisors
 	end
 
+	# Changes the model_name attribute for all subclasses so that Rails path
+	# helpers work with Single-Table Inheritance.
+	#
+	def self.inherited (child_class)
+    child_class.instance_eval do
+      def model_name
+        Order.model_name
+      end
+    end
+    super
+  end
+
 	# Answers whether a given user can read the order. See also the readable scope
 	# for the purpose of querying readable orders.
 	#
