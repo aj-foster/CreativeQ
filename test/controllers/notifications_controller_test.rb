@@ -98,7 +98,7 @@ class NotificationsControllerTest < ActionController::TestCase
     assert_difference('user.notifications.count', -1) do
       delete :view_and_destroy, id: notification.id
     end
-    assert_redirected_to order_path(notification.order),
+    assert_redirected_to order_path(notification.notable),
       "Failed to redirect user after notification destruction"
   end
 
