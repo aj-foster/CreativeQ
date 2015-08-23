@@ -21,7 +21,7 @@ class NotificationsController < ApplicationController
     @notification = Notification.find(params[:id])
 
     unless current_user == @notification.user
-      return redirect_to notifications_path, alert: "You aren't allowed destroy this notification."
+      return redirect_to notifications_path, alert: "You aren't allowed to delete this notification."
     end
 
     @destroyed = @notification.destroy
@@ -43,13 +43,22 @@ class NotificationsController < ApplicationController
     @notification = Notification.find(params[:id])
 
     unless current_user == @notification.user
-      return redirect_to notifications_path, alert: "You aren't allowed destroy this notification."
+      return redirect_to notifications_path, alert: "You aren't allowed to view this notification."
+    end
+
+    if @notification.notable.present?
+      view_path = polymorphic_path(@notification.notable)
+    elsif @notification.link_controller.present?
+      view_path = url_for(controller: @notification.link_controller,
+        only_path: true)
+    else
+      view_path = notifications_path
     end
 
     if @notification.destroy
-      redirect_to order_path(@notification.order)
+      redirect_to view_path
     else
-      redirect_to order_path(@notification.order), alert: "Error: Notification could not be deleted."
+      redirect_to view_path, alert: "Error: Notification could not be deleted."
     end
   end
 end
