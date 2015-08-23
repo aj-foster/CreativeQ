@@ -58,5 +58,7 @@ class Notification < ActiveRecord::Base
       user.notifications.create(title: title, message: message,
         link_controller: "users", link_action: "index")
     end
+
+    UsersMailer.user_awaiting_approval(user, emails).deliver
   end
 end
