@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150707021927) do
+ActiveRecord::Schema.define(version: 20150823045650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,27 +43,20 @@ ActiveRecord::Schema.define(version: 20150707021927) do
   add_index "comments", ["order_id"], name: "index_comments_on_order_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
-  create_table "needs", force: true do |t|
-    t.string   "name",        default: ""
-    t.string   "flavor",      default: ""
-    t.string   "placeholder", default: ""
-    t.text     "description", default: ""
-    t.boolean  "auto",        default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "notifications", force: true do |t|
-    t.string   "title",      default: "",    null: false
-    t.text     "message",    default: "",    null: false
-    t.boolean  "read",       default: false, null: false
+    t.string   "title",           default: "",    null: false
+    t.text     "message",         default: "",    null: false
+    t.boolean  "read",            default: false, null: false
     t.integer  "user_id"
-    t.integer  "order_id"
+    t.integer  "notable_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "notable_type",    default: "",    null: false
+    t.string   "link_controller", default: "",    null: false
+    t.string   "link_action",     default: "",    null: false
   end
 
-  add_index "notifications", ["order_id"], name: "index_notifications_on_order_id", using: :btree
+  add_index "notifications", ["notable_id"], name: "index_notifications_on_notable_id", using: :btree
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
 
   create_table "orders", force: true do |t|
