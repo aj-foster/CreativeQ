@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
 
 	ROLES = %w[Unapproved Basic Creative Admin Retired]
 
+	after_create :notify_user_created
 	before_destroy :unlink_orders
 
 	has_many :assignments, dependent: :destroy
@@ -33,6 +34,11 @@ class User < ActiveRecord::Base
 
 	def name
 		first_name + " " + last_name
+	end
+
+
+	def notify_user_created
+		Notification.notify_user_created(self)
 	end
 
 

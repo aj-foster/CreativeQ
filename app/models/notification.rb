@@ -45,4 +45,18 @@ class Notification < ActiveRecord::Base
 
     OrdersMailer.order_awaiting_approval(order, emails).deliver
   end
+
+  def self.notify_user_created (user)
+    title = "New User Awaiting Approval"
+    message = "#{user.name} (#{user.email}) registered for an account and " +
+              "requires your approval."
+
+    recipients = User.where(role: "Admin")
+    emails = recipients.select(&:send_emails?).map(&:email) || []
+
+    recipients.each do |user|
+      user.notifications.create(title: title, message: message,
+        link_controller: "users", link_action: "index")
+    end
+  end
 end

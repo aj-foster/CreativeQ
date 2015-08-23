@@ -25,10 +25,10 @@ class NotificationTest < ActiveSupport::TestCase
     assert_not notification.valid?, "Notification was valid without a user"
   end
 
-  test "notification is invalid without an order" do
-    notification = FactoryGirl.build(:notification, order: nil)
-    assert_not notification.valid?, "Notification was valid without an order"
-  end
+  # test "notification is invalid without an order" do
+  #   notification = FactoryGirl.build(:notification, order: nil)
+  #   assert_not notification.valid?, "Notification was valid without an order"
+  # end
 
 
   # Class Method Tests
@@ -66,6 +66,17 @@ class NotificationTest < ActiveSupport::TestCase
 
     assert_difference 'user.notifications.count' do
       Notification.notify_order_created(order, order.owner)
+    end
+  end
+
+  # Notification::notify_user_created
+
+  test "notification for user creation is successful" do
+    admin = FactoryGirl.create(:user, role: "Admin")
+    user = FactoryGirl.create(:user)
+
+    assert_difference 'admin.notifications.count' do
+      Notification.notify_user_created(user)
     end
   end
 
