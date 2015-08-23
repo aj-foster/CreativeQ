@@ -1,11 +1,11 @@
 class Notification < ActiveRecord::Base
 
   belongs_to :user
-  belongs_to :order
+  belongs_to :notable, polymorphic: true
 
-  validates :title, :message, :user, :order, presence: true
+  validates :title, :message, :user, presence: true
 
-  # Marks an order as "read" using its status field.
+  # Marks a notification as "read" using its status field.
   #
   def mark_as_read
     self.update(read: true)
@@ -25,7 +25,7 @@ class Notification < ActiveRecord::Base
     emails = recipients.select(&:send_emails?).map(&:email) || []
 
     recipients.each do |user|
-      user.notifications.create(order: order, title: title, message: message)
+      user.notifications.create(notable: order, title: title, message: message)
     end
 
     OrdersMailer.order_comment_created(comment, emails).deliver
@@ -40,7 +40,7 @@ class Notification < ActiveRecord::Base
     emails = recipients.select(&:send_emails?).map(&:email) || []
 
     recipients.each do |user|
-      user.notifications.create(order: order, title: title, message: message)
+      user.notifications.create(notable: order, title: title, message: message)
     end
 
     OrdersMailer.order_awaiting_approval(order, emails).deliver

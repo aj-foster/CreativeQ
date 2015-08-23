@@ -11,7 +11,7 @@ class Order < ActiveRecord::Base
 	belongs_to :organization
 
 	has_many :comments, dependent: :destroy
-	has_many :notifications, dependent: :destroy
+	has_many :notifications, as: :notable, dependent: :destroy
 
 
 	validates :name, :due, :description, :needs, presence: true
