@@ -56,3 +56,7 @@ $(document).on 'ready page:load', ->
 
 		$(@).siblings("input").each ->
 			this.disabled = !this.disabled
+
+
+	# Activate tooltips
+	$('[data-toggle="tooltip"]').tooltip()
