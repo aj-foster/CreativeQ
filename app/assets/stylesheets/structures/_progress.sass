@@ -1,0 +1,41 @@
+.progress
+  display: flex
+  margin: auto
+  max-width: 40em
+
+.progress-tile
+  color: $c-disabled
+  flex-grow: 1
+  height: 1em
+  line-height: 0
+  position: relative
+  text-align: center
+
+.progress-tile::before
+  background-color: currentColor
+  content: ''
+  display: block
+  height: 0.2em
+  position: absolute
+  right: 50%
+  top: 0.4em
+  width: 100%
+  z-index: 1
+
+.progress-tile:first-child::before
+  display: none
+
+.progress-tile:focus
+  outline: none
+
+.progress-dot
+  background-color: currentColor
+  border-radius: 50%
+  display: inline-block
+  height: 1em
+  position: relative
+  width: 1em
+  z-index: 2
+
+.progress .is-complete
+  color: $c-okay
