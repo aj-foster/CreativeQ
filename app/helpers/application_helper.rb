@@ -11,4 +11,8 @@ module ApplicationHelper
 	def devise_mapping
 		@devise_mapping ||= Devise.mappings[:user]
 	end
+
+	def tooltip(title)
+		"data-toggle='tooltip' data-placement='bottom' tabindex='0' title='#{title}'".html_safe
+	end
 end

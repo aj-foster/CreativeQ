@@ -25,6 +25,35 @@
 
 				<h3>Description</h3>
 				<%= simple_format(@order.description) %>
+
+				<p class="mal">
+					<div class="progress">
+						<div class="progress-tile is-complete" <%= tooltip "Created on #{@order.created_at.strftime('%-m/%-d/%Y')}" %>>
+							<div class="progress-dot"></div>
+						</div>
+<% unless @order.status == "Unapproved" %>
+  					<div class="progress-tile is-complete" <%= tooltip "Obtained initial approval" %>>
+<% else %>
+						<div class="progress-tile" <%= tooltip "Waiting for initial approval" %>>
+<% end %>
+							<div class="progress-dot"></div>
+						</div>
+<% if @order.creative %>
+  					<div class="progress-tile is-complete" <%= tooltip "Claimed by #{@order.creative.name}" %>>
+<% else %>
+						<div class="progress-tile" <%= tooltip "Waiting to be claimed" %>>
+<% end %>
+							<div class="progress-dot"></div>
+						</div>
+<% if @order.status == "Complete"  %>
+  					<div class="progress-tile is-complete" <%= tooltip "Order is complete" %>>
+<% else %>
+						<div class="progress-tile" <%= tooltip "Waiting for order completion" %>>
+<% end %>
+							<div class="progress-dot"></div>
+						</div>
+					</div>
+				</p>
 			</article>
 
 			<article>
