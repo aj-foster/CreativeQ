@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150823045650) do
+ActiveRecord::Schema.define(version: 20151226002818) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,25 +60,33 @@ ActiveRecord::Schema.define(version: 20150823045650) do
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
 
   create_table "orders", force: true do |t|
-    t.string   "name",            default: ""
+    t.string   "name",                default: ""
     t.date     "due"
-    t.text     "description",     default: ""
-    t.hstore   "event",           default: {},           null: false
-    t.hstore   "needs",           default: {},           null: false
-    t.string   "status",          default: "Unapproved"
+    t.text     "description",         default: ""
+    t.hstore   "event",               default: {},           null: false
+    t.hstore   "needs",               default: {},           null: false
+    t.string   "status",              default: "Unapproved"
     t.integer  "owner_id"
     t.integer  "organization_id"
     t.integer  "creative_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "type"
-    t.integer  "subscriptions",   default: [],           null: false, array: true
-    t.string   "progress",        default: "",           null: false
+    t.integer  "subscriptions",       default: [],           null: false, array: true
+    t.string   "progress",            default: "",           null: false
+    t.integer  "student_approval_id"
+    t.integer  "advisor_approval_id"
+    t.integer  "final_one_id"
+    t.integer  "final_two_id"
   end
 
+  add_index "orders", ["advisor_approval_id"], name: "index_orders_on_advisor_approval_id", using: :btree
   add_index "orders", ["creative_id"], name: "index_orders_on_creative_id", using: :btree
+  add_index "orders", ["final_one_id"], name: "index_orders_on_final_one_id", using: :btree
+  add_index "orders", ["final_two_id"], name: "index_orders_on_final_two_id", using: :btree
   add_index "orders", ["organization_id"], name: "index_orders_on_organization_id", using: :btree
   add_index "orders", ["owner_id"], name: "index_orders_on_owner_id", using: :btree
+  add_index "orders", ["student_approval_id"], name: "index_orders_on_student_approval_id", using: :btree
 
   create_table "organizations", force: true do |t|
     t.string   "name",       default: ""
