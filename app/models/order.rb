@@ -13,6 +13,11 @@ class Order < ActiveRecord::Base
 	has_many :comments, dependent: :destroy
 	has_many :notifications, as: :notable, dependent: :destroy
 
+	belongs_to :student_approval, class_name: 'User'
+	belongs_to :advisor_approval, class_name: 'User'
+	belongs_to :final_one, class_name: 'User'
+	belongs_to :final_two, class_name: 'User'
+
 
 	validates :name, :due, :description, :needs, presence: true
 

@@ -18,6 +18,11 @@ class User < ActiveRecord::Base
 	has_many :notifications, dependent: :destroy
 	has_many :notes, as: :notable, class_name: "Notification", dependent: :destroy
 
+	has_many :student_approvals, class_name: 'Order', inverse_of: :student_approval, foreign_key: 'student_approval_id', dependent: :nullify
+	has_many :advisor_approvals, class_name: 'Order', inverse_of: :advisor_approval, foreign_key: 'advisor_approval_id', dependent: :nullify
+	has_many :final_ones, class_name: 'Order', inverse_of: :final_one, foreign_key: 'final_one_id', dependent: :nullify
+	has_many :final_twos, class_name: 'Order', inverse_of: :final_two, foreign_key: 'final_two_id', dependent: :nullify
+
 	validates :first_name, :last_name, presence: true
 	validate :validate_creative_flavor
 
