@@ -4,11 +4,26 @@ class OrdersController < ApplicationController
 
 	def index
 
-		@unapproved = Order.advised_by(current_user)
+		@pending_initial = Order.advised_by(current_user)
 			.where(status: "Unapproved")
 			.order(due: :asc)
 			.includes(:organization)
 			.to_a
+
+		@pending_advisor = Order.advised_by(current_user)
+			.where.not(student_approval: nil)
+			.where(advisor_approval: nil)
+			.order(due: :asc)
+			.includes(:organization)
+			.to_a
+
+		@pending_final = can?(:final_approve, Order) ? Order
+			.where.not(advisor_approval: nil)
+			.where(final_two: nil)
+			.order(due: :asc)
+			.includes(:organization)
+			.to_a
+			: []
 
 		@unclaimed = Order.claimable_by(current_user)
 			.where.not(status: "Complete")
@@ -22,7 +37,9 @@ class OrdersController < ApplicationController
 			.includes(:organization, :creative)
 			.to_a
 
-		seen_ids = @unapproved.map(&:id) |
+		seen_ids = @pending_initial.map(&:id) |
+							 @pending_advisor.map(&:id) |
+ 							 @pending_final.map(&:id) |
 							 @unclaimed.map(&:id)  |
 							 @claimed.map(&:id)
 

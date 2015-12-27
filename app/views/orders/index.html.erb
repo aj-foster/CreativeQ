@@ -8,16 +8,38 @@
 			</div>
 
 			<section>
-<% unless @unapproved.any? || @unclaimed.any? || @claimed.any? || @orders.any? %>
+<% unless @pending_initial.any? || @unclaimed.any? || @claimed.any? || @orders.any? %>
 				<article>
 					There aren't any orders to display, yet.
 				</article>
 <% end %>
 
-<% if @unapproved.any? %>
-				<h2>Orders Awaiting Approval (<%= @unapproved.size %>)</h2>
+<% if @pending_initial.any? %>
+				<h2>Awaiting Initial Approval (<%= @pending_initial.size %>)</h2>
 				<div class="list">
-	<% @unapproved.each do |order| %>
+	<% @pending_initial.each do |order| %>
+
+<%= render 'listing', order: order %>
+
+	<% end %>
+				</div>
+<% end %>
+
+<% if @pending_advisor.any? %>
+				<h2>Awaiting Advisor Approval (<%= @pending_advisor.size %>)</h2>
+				<div class="list">
+	<% @pending_advisor.each do |order| %>
+
+<%= render 'listing', order: order %>
+
+	<% end %>
+				</div>
+<% end %>
+
+<% if @pending_final.any? %>
+				<h2>Awaiting Final Approval (<%= @pending_final.size %>)</h2>
+				<div class="list">
+	<% @pending_final.each do |order| %>
 
 <%= render 'listing', order: order %>
 
