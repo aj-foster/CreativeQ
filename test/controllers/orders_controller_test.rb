@@ -311,6 +311,167 @@ class OrdersControllerTest < ActionController::TestCase
       "Updated order for non-user"
   end
 
+  # orders#approve
+
+  test "give initial approval for an advisor" do
+    user = FactoryGirl.create(:user_advisor)
+    order = FactoryGirl.create(:graphic_order,
+      organization: user.organizations.first)
+    sign_in user
+    put :approve, id: order.id, stage: "initial"
+    assert_equal "Unclaimed", Order.find(order.id).status,
+      "Failed to give order initial approval for an advisor"
+  end
+
+  test "give initial approval for an admin" do
+    user = FactoryGirl.create(:user, role: "Admin")
+    order = FactoryGirl.create(:graphic_order)
+    sign_in user
+    put :approve, id: order.id, stage: "initial"
+    assert_equal "Unclaimed", Order.find(order.id).status,
+      "Failed to given order initial approval for an admin"
+  end
+
+  test "protect initial approval from an unrelated user" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:graphic_order)
+    sign_in user
+    put :approve, id: order.id, stage: "initial"
+    assert_redirected_to order_path(order),
+      "Failed to redirect unrelated user after protecting order initial approval"
+    assert_not_equal "Unclaimed", Order.find(order.id).status,
+      "Failed to protect order initial approval from an unrelated user"
+  end
+
+  test "give student approval for an owner" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:graphic_order, owner: user)
+    sign_in user
+    put :approve, id: order.id, stage: "student"
+    assert_equal user.id, Order.find(order.id).student_approval_id,
+      "Failed to give order student's approval for owner"
+  end
+
+  test "give student approval for an advisor and owner" do
+    user = FactoryGirl.create(:user_advisor)
+    order = FactoryGirl.create(:graphic_order, owner: user,
+      organization: user.organizations.first)
+    sign_in user
+    put :approve, id: order.id, stage: "student"
+    assert_equal user.id, Order.find(order.id).student_approval_id,
+      "Failed to give order student's approval for advisor"
+  end
+
+  # test "give student approval for an admin" do
+  #   user = FactoryGirl.create(:user, role: "Admin")
+  #   order = FactoryGirl.create(:graphic_order)
+  #   sign_in user
+  #   put :approve, id: order.id, stage: "student"
+  #   assert_equal user.id, Order.find(order.id).student_approval_id,
+  #     "Failed to give order student's approval for an admin"
+  # end
+
+  test "protect student approval from an unrelated user" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:graphic_order)
+    sign_in user
+    put :approve, id: order.id, stage: "student"
+    assert_redirected_to order_path(order),
+      "Failed to redirect unrelated user after protecting order student approval"
+    assert_not_equal user.id, Order.find(order.id).student_approval_id,
+      "Failed to protect order student approval from an unrelated user"
+  end
+
+  test "give advisor approval for an advisor" do
+    user = FactoryGirl.create(:user_advisor)
+    order = FactoryGirl.create(:graphic_order,
+      organization: user.organizations.first)
+    sign_in user
+    put :approve, id: order.id, stage: "advisor"
+    assert_equal user.id, Order.find(order.id).advisor_approval_id,
+      "Failed to give order advisor's approval for an advisor"
+  end
+
+  test "give two approvals for an advisor and owner" do
+    user = FactoryGirl.create(:user_advisor)
+    order = FactoryGirl.create(:graphic_order, owner: user,
+      organization: user.organizations.first)
+    sign_in user
+    put :approve, id: order.id, stage: "advisor"
+    assert_equal user.id, Order.find(order.id).student_approval_id,
+      "Failed to give order two approvals for advisor and owner"
+  end
+
+  # test "give advisor approval for an admin" do
+  #   user = FactoryGirl.create(:user, role: "Admin")
+  #   order = FactoryGirl.create(:graphic_order)
+  #   sign_in user
+  #   put :approve, id: order.id, stage: "advisor"
+  #   assert_equal user.id, Order.find(order.id).advisor_approval_id,
+  #     "Failed to give order advisor's approval for an admin"
+  # end
+
+  test "give first final approval for an admin" do
+    user = FactoryGirl.create(:user, role: "Admin")
+    order = FactoryGirl.create(:graphic_order)
+    sign_in user
+    put :approve, id: order.id, stage: "final"
+    assert_equal user.id, Order.find(order.id).final_one_id,
+      "Failed to give order first final approval for an admin"
+  end
+
+  test "give second final approval for an admin" do
+    user1 = FactoryGirl.create(:user, role: "Admin")
+    user2 = FactoryGirl.create(:user, role: "Admin")
+    order = FactoryGirl.create(:graphic_order, final_one: user1)
+    sign_in user2
+    put :approve, id: order.id, stage: "final"
+    assert_equal user2.id, Order.find(order.id).final_two_id,
+      "Failed to give order second final approval for an admin"
+    assert_equal "Complete", Order.find(order.id).status,
+      "Failed to complete order after second final approval"
+  end
+
+  test "give two approvals for an admin and advisor" do
+    user = FactoryGirl.create(:user_advisor, role: "Admin")
+    order = FactoryGirl.create(:graphic_order,
+      organization: user.organizations.first)
+    sign_in user
+    put :approve, id: order.id, stage: "final"
+    assert_equal user.id, Order.find(order.id).advisor_approval_id,
+      "Failed to give order two approvals for admin and advisor"
+  end
+
+  test "give three approvals for an admin, advisor, and owner" do
+    user = FactoryGirl.create(:user_advisor, role: "Admin")
+    order = FactoryGirl.create(:graphic_order, owner: user,
+      organization: user.organizations.first)
+    sign_in user
+    put :approve, id: order.id, stage: "final"
+    assert_equal user.id, Order.find(order.id).student_approval_id,
+      "Failed to give order three approvals for admin, advisor, and owner"
+  end
+
+  test "protect final approval from an unrelated user" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:graphic_order)
+    sign_in user
+    put :approve, id: order.id, stage: "final"
+    assert_redirected_to order_path(order),
+      "Failed to redirect unrelated user after protecting order final approval"
+    assert_not_equal user.id, Order.find(order.id).final_one_id,
+      "Failed to protect order final approval from an unrelated user"
+  end
+
+  test "protect approval from a non-user" do
+    order = FactoryGirl.create(:graphic_order)
+    put :approve, id: order.id
+    assert_redirected_to new_user_session_path,
+      "Failed to redirect non-user after protecting order approval"
+    assert_not_equal "Unclaimed", Order.find(order.id).status,
+      "Failed to protect order approval from an non-user"
+  end
+
   # orders#complete
 
   test "complete order for its creative" do
