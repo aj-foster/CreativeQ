@@ -22,13 +22,19 @@ class Ability
 			can :claim, Order, :status => "Unclaimed", :flavor => user.flavor
 			can [:unclaim, :change_progress, :complete, :comment_on], Order, :creative_id => user.id
 		end
-		
+
 		can [:rud, :comment_on], Order, :owner_id => user.id
 		can [:rud, :comment_on], Order, :organization_id => user.assignments.advised.pluck(:organization_id)
 
 		can :create, Order unless user.role == "Unapproved"
 
-		can :approve, Order, :organization_id => user.assignments.advised.pluck(:organization_id)
+		can :initial_approve, Order, :organization_id => user.assignments.advised.pluck(:organization_id)
+
+		cannot :student_approve, Order if user.role == "Admin"
+		can :student_approve, Order, :owner_id => user.id, :student_approval => nil
+
+		cannot :advisor_approve, Order if user.role == "Admin"
+		can :advisor_approve, Order, :organization_id => user.assignments.advised.pluck(:organization_id)
 
 		can [:read, :update], User, :id => user.id
 
