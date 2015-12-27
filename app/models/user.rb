@@ -32,11 +32,6 @@ class User < ActiveRecord::Base
 	end
 
 
-	def can_receive_emails?
-		!!(/@ucf.edu$/.match email)
-	end
-
-
 	def name
 		first_name + " " + last_name
 	end
@@ -48,7 +43,7 @@ class User < ActiveRecord::Base
 
 
 	def send_emails?
-		can_receive_emails? && read_attribute(:send_emails) && role != "Retired"
+		read_attribute(:send_emails) && role != "Retired"
 	end
 
 
