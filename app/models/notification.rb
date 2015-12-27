@@ -43,7 +43,7 @@ class Notification < ActiveRecord::Base
       user.notifications.create(notable: order, title: title, message: message)
     end
 
-    OrdersMailer.order_awaiting_approval(order, emails).deliver
+    OrdersMailer.order_awaiting_initial_approval(order, emails).deliver
   end
 
   def self.notify_user_created (user)

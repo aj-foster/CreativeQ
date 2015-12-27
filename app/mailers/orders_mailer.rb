@@ -1,11 +1,19 @@
 class OrdersMailer < ActionMailer::Base
 	default from: "CreativeQ <osiweb@ucf.edu>"
 
-	def order_awaiting_approval (order, emails)
+	def order_awaiting_initial_approval (order, emails)
 		@order = order
 
 		if emails.any?
-			mail(to: emails, subject: "[CreativeQ] Order Awaiting Approval: #{@order.name}")
+			mail(to: emails, subject: "[CreativeQ] Awaiting Initial Approval: #{@order.name}")
+		end
+	end
+
+	def order_awaiting_advisor_approval (order, emails)
+		@order = order
+
+		if emails.any?
+			mail(to: emails, subject: "[CreativeQ] Awaiting Advisor Approval: #{@order.name}")
 		end
 	end
 

@@ -1,9 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<title>[CreativeQ] Order Awaiting Approval: <%= @order.name %></title>
+	<title>[CreativeQ] Awaiting Advisor Approval: <%= @order.name %></title>
 	<!-- I'm so sorry to whomever tries to edit this.  HTML e-mail is terrible. -->
 </head>
 <body style="width:100% !important; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; margin:0; padding:0; background-color: #EEE; font-family: Helvetica, sans-serif; font-weight: 300; font-size:16px">
@@ -13,14 +13,14 @@
 				<tr>
 					<td valign="top" style="text-align: center; border-collapse: collapse; padding: 1em; border: 1px solid #DDD;">
 						<h1 style="line-height: 1.25em;">An Order Awaits Your Approval</h1>
-						<p style="font-size:0.75em; line-height: 1.25em !important;">You have an order awaiting approval on <a href="http://osi.ucf.edu/creativeq" style="color: #4B9FC0;">CreativeQ</a>.</p>
+						<p style="font-size:0.75em; line-height: 1.25em !important;">You have an order awaiting an advisor's approval on <a href="http://osi.ucf.edu/creativeq" style="color: #4B9FC0;">CreativeQ</a>.</p>
 					</td>
 				</tr>
 				<tr>
 					<td style="border-collapse: collapse; padding: 1em; border: 1px solid #DDD;">
 						<p style="line-height: 1.25em !important; margin: 1em 0;">Hello there!</p>
-						<p style="line-height: 1.25em !important; margin: 1em 0;">A member of one of the agencies you advise, <%= @order.owner.name unless @order.owner.nil? %>, has created an order on CreativeQ. Before a Designer can pick up the order and get to work, you'll have to approve it.</p>
-						<p style="line-height: 1.25em !important; margin: 1em 0;">Please take time to <a href="http://osi.ucf.edu/creativeq/orders" style="color: #4B9FC0;">login and approve the order</a> as soon as possible so the designers can get started. If an order remains unapproved two weeks before the deadline, it might not be completed on time.</p>
+						<p style="line-height: 1.25em !important; margin: 1em 0;">An order for one the agencies you advise is ready for your approval. Before an order can be printed, launched, or published, it will need your final approval.</p>
+						<p style="line-height: 1.25em !important; margin: 1em 0;">Please take time to <a href="http://osi.ucf.edu/creativeq/orders" style="color: #4B9FC0;">login and approve the order</a> as soon as possible.</p>
 						<p style="margin: 1em 0;">If you have any questions, feel free to contact the web folks at OSI Design Group.</p>
 					</td>
 				</tr>
