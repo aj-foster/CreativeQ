@@ -13,6 +13,6 @@ module ApplicationHelper
 	end
 
 	def tooltip(title)
-		"data-toggle='tooltip' data-placement='bottom' tabindex='0' title='#{title}'".html_safe
+		"data-toggle='tooltip' data-placement='bottom' tabindex='0' title='#{h title}'".html_safe
 	end
 end
