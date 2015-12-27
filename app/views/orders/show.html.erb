@@ -242,7 +242,7 @@
 			</article>
 <% end %>
 
-<% if @order.status == "Claimed" && can?(:change_progress, @order) %>
+<% if can?(:manage, @order) %>
 			<article>
 				<p><%= link_to "Complete", complete_order_path(@order), method: :put, :class => "button button-okay" %></p>
 			</article>
