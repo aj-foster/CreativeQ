@@ -8,7 +8,7 @@
 			</div>
 
 			<section>
-<% unless @pending_initial.any? || @unclaimed.any? || @claimed.any? || @orders.any? %>
+<% unless @pending_initial.any? || @pending_advisor.any? || @pending_final.any? || @unclaimed.any? || @claimed.any? || @orders.any? %>
 				<article>
 					There aren't any orders to display, yet.
 				</article>

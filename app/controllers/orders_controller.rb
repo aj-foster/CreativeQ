@@ -181,6 +181,7 @@ class OrdersController < ApplicationController
 			update_order = Proc.new { |order| order.student_approval = current_user }
 			success_notice = "Order approved. It is now ready for your advisor's approval."
 			success_comment = "#{current_user.name} approved this order."
+			# success_block = Proc.new { |order| Notification.notify_order_pending(order, current_user) }
 
 		when "advisor"
 			task = :advisor_approve
@@ -235,6 +236,11 @@ class OrdersController < ApplicationController
 			end
 
 			@order.comments.create(message: success_comment)
+
+			# Should be worked into a "success_block" determined by the case
+			if @stage == "student"
+				Notification.notify_order_pending(@order, current_user)
+			end
 
 		else
 			return redirect_to @order, alert: "Error: Could not approve order."
