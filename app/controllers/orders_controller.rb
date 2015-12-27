@@ -156,17 +156,71 @@ class OrdersController < ApplicationController
 
 	def approve
 		@order = Order.find(params[:id])
+		@stage = params[:stage] || "initial"
 
-		unless can? :approve, @order
+		case @stage
+		when "student"
+			task = :student_approve
+			update_order = Proc.new { |order| order.student_approval = current_user }
+			success_notice = "Order approved. It is now ready for your advisor's approval."
+			success_comment = "#{current_user.name} approved this order."
+
+		when "advisor"
+			task = :advisor_approve
+			update_order = Proc.new do |order|
+				order.advisor_approval = current_user
+
+				if @order.student_approval.nil? && @order.owner == current_user
+					@order.student_approval = current_user
+				end
+			end
+			success_notice = "Order successfully given your approval."
+			success_comment = "#{current_user.name} approved this order."
+
+		when "final"
+			task = :final_approve
+			update_order = Proc.new do |order|
+				if @order.final_one.nil?
+					@order.final_one = current_user
+				elsif
+					@order.final_two = current_user
+					@order.status = "Complete"
+				end
+
+				if @order.student_approval.nil? && @order.owner == current_user
+					@order.student_approval = current_user
+				end
+
+				if @order.advisor_approval.nil? && (can? :advisor_approve, @order)
+					@order.advisor_approval = current_user
+				end
+			end
+			success_notice = "Order successfully given your approval."
+			success_comment = "#{current_user.name} approved this order."
+
+		else
+			task = :initial_approve
+			update_order = Proc.new { |order| order.status = "Unclaimed" if order.status == "Unapproved" }
+			success_notice = "Order successfully given initial approval."
+			success_comment = "#{current_user.name} gave initial approval."
+		end
+
+		unless can? task, @order
 			return redirect_to order_path(@order), alert: "You aren't allowed to approve this order."
 		end
 
-		@order.status = "Unclaimed" if @order.status == "Unapproved"
-		@order.save
-		@order.comments.create(message: "#{current_user.name} approved this order.")
+		update_order.call(@order)
 
-		respond_to do |format|
-			format.js
+		if @order.save
+			respond_to do |format|
+				format.html { redirect_to @order, notice: success_notice }
+				format.js
+			end
+
+			@order.comments.create(message: success_comment)
+
+		else
+			return redirect_to @order, alert: "Error: Could not approve order."
 		end
 	end
 

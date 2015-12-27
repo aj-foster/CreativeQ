@@ -23,6 +23,44 @@
 					<em>Requested by:</em> <%= @order.organization.name unless @order.organization.nil? %> - <%= @order.owner.name unless @order.owner.nil? %>
 				</p>
 
+<% if @order.final_one != current_user && @order.final_two.nil? && can?(:final_approve, @order) %>
+				<h3>Order Actions</h3>
+				<p>
+					If you are satisfied with the current proof of the order, you can give it final approval.
+	<% if @order.student_approval.nil? && @order.owner == current_user %>
+  				Since you are the order's owner, your approval will count as the owner's approval.
+	<% end %>
+	<% if @order.advisor_approval.nil? %>
+					This order has not yet been approved by an advisor.
+		<% if can? :advisor_approve, @order %>
+  				Since you are also an advisor<%= " for #{@order.organization.name}" unless @order.organization.nil? %>, your approval will count as an advisor's approval.
+		<% end %>
+	<% end %>
+				</p>
+				<p>
+					<%= link_to "Approve Order", approve_order_path(@order, stage: "final"), method: :put, class: "button button-okay" %>
+				</p>
+<% elsif @order.advisor_approval.nil? && can?(:advisor_approve, @order) %>
+				<h3>Order Actions</h3>
+				<p>
+					If you are satisfied with the current proof of the order, you can give it an advisor's approval.
+	<% if @order.student_approval.nil? && @order.owner == current_user %>
+  				Since you are also the order's owner, your approval will count as the owner's approval.
+	<% end %>
+				</p>
+				<p>
+					<%= link_to "Approve Order", approve_order_path(@order, stage: "advisor"), method: :put, class: "button button-okay" %>
+				</p>
+<% elsif @order.student_approval.nil? && can?(:student_approve, @order) %>
+				<h3>Order Actions</h3>
+				<p>
+					If you are satisfied with the current proof of the order, you can give it your approval. Afterwards, it will need to be approved by your advisor.
+				</p>
+				<p>
+					<%= link_to "Approve Order", approve_order_path(@order, stage: "student"), method: :put, class: "button button-okay" %>
+				</p>
+<% end %>
+
 				<h3>Description</h3>
 				<%= simple_format(@order.description) %>
 
@@ -31,6 +69,7 @@
 						<div class="progress-tile is-complete" <%= tooltip "Created on #{@order.created_at.strftime('%-m/%-d/%Y')}" %>>
 							<div class="progress-dot"></div>
 						</div>
+
 <% unless @order.status == "Unapproved" %>
   					<div class="progress-tile is-complete" <%= tooltip "Obtained initial approval" %>>
 <% else %>
@@ -38,6 +77,7 @@
 <% end %>
 							<div class="progress-dot"></div>
 						</div>
+
 <% if @order.creative %>
   					<div class="progress-tile is-complete" <%= tooltip "Claimed by #{@order.creative.name}" %>>
 <% else %>
@@ -45,10 +85,35 @@
 <% end %>
 							<div class="progress-dot"></div>
 						</div>
-<% if @order.status == "Complete"  %>
-  					<div class="progress-tile is-complete" <%= tooltip "Order is complete" %>>
+
+<% if @order.student_approval.nil? %>
+						<div class="progress-tile" <%= tooltip "Waiting for owner's approval" %>>
 <% else %>
-						<div class="progress-tile" <%= tooltip "Waiting for order completion" %>>
+						<div class="progress-tile is-complete" <%= tooltip "Approved by #{@order.student_approval.name}" %>>
+<% end %>
+							<div class="progress-dot"></div>
+						</div>
+
+<% if @order.advisor_approval.nil? %>
+						<div class="progress-tile" <%= tooltip "Waiting for advisor's approval" %>>
+<% else %>
+						<div class="progress-tile is-complete" <%= tooltip "Approved by #{@order.advisor_approval.name}" %>>
+<% end %>
+							<div class="progress-dot"></div>
+						</div>
+
+<% if @order.final_one.nil?  %>
+  					<div class="progress-tile" <%= tooltip "Waiting for first final approval" %>>
+<% else %>
+						<div class="progress-tile is-complete" <%= tooltip "Approved by #{@order.final_one.name}" %>>
+<% end %>
+							<div class="progress-dot"></div>
+						</div>
+
+<% if @order.final_two.nil?  %>
+  					<div class="progress-tile" <%= tooltip "Waiting for second final approval" %>>
+<% else %>
+						<div class="progress-tile is-complete" <%= tooltip "Approved by #{@order.final_two.name}" %>>
 <% end %>
 							<div class="progress-dot"></div>
 						</div>
