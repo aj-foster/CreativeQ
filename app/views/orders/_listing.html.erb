@@ -17,7 +17,7 @@
 							</div>
 						<% end %>
 <% if order.status == "Unapproved" && can?(:approve, order) %>
-						<%= link_to approve_order_path(order), remote: true, method: :put, id: "approve-#{order.id}", class: "icon", title: "Approve Order" do %>
+						<%= link_to approve_order_path(order, stage: :initial), remote: true, method: :put, id: "approve-#{order.id}", class: "icon", title: "Approve Order" do %>
 							<svg>
 								<use xlink:href="#icon-approve"></use>
 								<foreignObject display="none">
