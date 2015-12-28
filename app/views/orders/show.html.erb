@@ -178,13 +178,16 @@
 
 			<article class="needs">
 				<h3>Needs</h3>
-				<ul>
 <% @needs.each do |need| %>
 	<% need_param = need.parameterize.underscore %>
-	<% unless @order.needs[need_param].nil? %>
-					<li>
-						<em><%= need %></em> <%= @order.needs[need_param] %>
-					</li>
+	<% if @order.needs[need_param] == "" %>
+				<div class="tag">
+					<div><%= need %></div>
+				</div>
+	<% elsif !@order.needs[need_param].nil? %>
+				<div class="tag">
+					<div><%= need %></div><div><%= @order.needs[need_param] %></div>
+				</div>
 	<% end %>
 <% end %>
 				</ul>
