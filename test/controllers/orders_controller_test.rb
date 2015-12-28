@@ -40,17 +40,46 @@ class OrdersControllerTest < ActionController::TestCase
       "Failed to populate claimed orders listing for creative"
   end
 
-  test "render unapproved orders listing for advisor" do
+  test "render pending initial orders listing for advisor" do
     user = FactoryGirl.create(:user_advisor)
     order = FactoryGirl.create(:graphic_order, status: "Unapproved",
       organization: user.organizations.first)
     sign_in user
     get :index
-    assert_response :success, "Failed to list unapproved orders for advisor"
-    assert_not_nil assigns(:unapproved),
-      "Failed to assign unapproved orders listing for advisor"
-    assert_not_equal [], assigns(:unapproved),
-      "Failed to populate unapproved orders listing for advisor"
+    assert_response :success, "Failed to list pending initial orders for advisor"
+    assert_not_nil assigns(:pending_initial),
+      "Failed to assign pending initial orders listing for advisor"
+    assert_not_equal [], assigns(:pending_initial),
+      "Failed to populate pending initial orders listing for advisor"
+  end
+
+  test "render pending advisor orders listing for advisor" do
+    user = FactoryGirl.create(:user_advisor)
+    owner = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:graphic_order, owner: owner,
+      organization: user.organizations.first, student_approval: owner)
+    sign_in user
+    get :index
+    assert_response :success, "Failed to list pending advisor orders for advisor"
+    assert_not_nil assigns(:pending_advisor),
+      "Failed to assign pending advisor orders listing for advisor"
+    assert_not_equal [], assigns(:pending_advisor),
+      "Failed to populate pending advisor orders listing for advisor"
+  end
+
+  test "render pending final orders listing for admin" do
+    user = FactoryGirl.create(:user, role: "Admin")
+    owner = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:graphic_order, owner: owner,
+      organization: user.organizations.first, student_approval: owner,
+      advisor_approval: owner)
+    sign_in user
+    get :index
+    assert_response :success, "Failed to list pending final orders for admin"
+    assert_not_nil assigns(:pending_initial),
+      "Failed to assign pending final orders listing for admin"
+    assert_not_equal [], assigns(:pending_initial),
+      "Failed to populate pending final orders listing for admin"
   end
 
   test "render unrelated orders listing for admins" do
