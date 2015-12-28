@@ -62,7 +62,9 @@
 <% end %>
 
 				<h3>Description</h3>
-				<%= simple_format(@order.description) %>
+				<div class="js-truncate" data-truncate-height="150">
+					<%= simple_format(@order.description) %>
+				</div>
 
 				<p class="mal">
 					<div class="progress">
