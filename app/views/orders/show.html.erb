@@ -20,7 +20,7 @@
 				for <%= @order.organization.try(:name) || "Unknown Organization" %>.
 			</div>
 			<div class="card-section">
-				<div class="js-truncate" data-truncate-height="200">
+				<div class="js-truncate mbm" data-truncate-height="200">
 					<%= simple_format(@order.description) %>
 				</div>
 			</div>
@@ -251,18 +251,20 @@
 		<div class="card card--s">
 			<h3 class="card-title card-title--s">What's included</h3>
 			<div class="card-section">
+				<ul class="list list--inline mbm">
 <% @needs.each do |need| %>
 	<% need_param = need.parameterize.underscore %>
 	<% if @order.needs[need_param] == "" %>
-				<div class="tag">
-					<div><%= need %></div>
-				</div>
+					<li class="list-item tag">
+						<div><%= need %></div>
+					</li>
 	<% elsif !@order.needs[need_param].nil? %>
-				<div class="tag">
-					<div><%= need %></div><div><%= @order.needs[need_param] %></div>
-				</div>
+					<li class="list-item tag">
+						<div><%= need %></div><div><%= @order.needs[need_param] %></div>
+					</li>
 	<% end %>
 <% end %>
+				</ul>
 			</div>
 		</div>
 
@@ -270,18 +272,20 @@
 		<div class="card card--s">
 			<h3 class="card-title card-title--s">Event Information</h3>
 			<div class="card-section">
+				<p>
 	<% if @order.event['time'].present? %>
-				<em>When:</em> <%= @order.event['time'] %><br>
+					<em>When:</em> <%= @order.event['time'] %><br>
 	<% end %>
 	<% if @order.event['location'].present? %>
-				<em>Where:</em> <%= @order.event['location'] %><br>
+					<em>Where:</em> <%= @order.event['location'] %><br>
 	<% end %>
 	<% if @order.event['contact'].present? %>
-				<em>Contact:</em> <%= @order.event['contact'] %><br>
+					<em>Contact:</em> <%= @order.event['contact'] %><br>
 	<% end %>
 	<% if @order.event['accomodations'].present? %>
-				<em>Accomodations:</em> <%= @order.event['accomodations'] %>
+					<em>Accomodations:</em> <%= @order.event['accomodations'] %>
 	<% end %>
+				</p>
 			</div>
 		</div>
 <% end %>
