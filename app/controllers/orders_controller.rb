@@ -296,8 +296,12 @@ class OrdersController < ApplicationController
 			return redirect_to order_path(@order), alert: "You aren't allowed to change this order's progress."
 		end
 
-		@order.update_attribute(:progress, params[:order][:progress])
-		@order.comments.create(message: "#{current_user.name} set the order progress to #{params[:order][:progress]}.")
+		if @order.update_attribute(:progress, params[:order][:progress])
+			@saved = true
+			@order.comments.create(message: "#{current_user.name} set the order progress to #{params[:order][:progress]}.")
+		else
+			@saved = false
+		end
 
 		respond_to do |format|
 			format.js
