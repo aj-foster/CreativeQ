@@ -32,6 +32,15 @@ class User < ActiveRecord::Base
 	end
 
 
+	def initials
+		if first_name[0].nil? || last_name[0].nil?
+			"//"
+		else
+			first_name[0] + last_name[0]
+		end
+	end
+
+
 	def name
 		first_name + " " + last_name
 	end
