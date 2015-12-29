@@ -1,0 +1,49 @@
+.card
+  background-color: $c-foreground
+  margin-bottom: 1em
+  padding: 1em
+
+.card--s
+  box-shadow: $b-boxShadow
+
+.card-title
+  font-size: 1.5em
+  margin: 0.5rem 0 0.5em
+
+.card-title--s
+  font-size: 1.25em
+
+.card-subtitle
+  color: $c-text-secondary
+  font-size: 0.875em
+  margin-bottom: 1rem
+
+.card-section
+  margin-bottom: 1em
+
+.card-section--d
+  border-bottom: 1px solid $c-text-divider
+
+  &:last-child
+    border-bottom: 0px none
+
+.card-avatar
+  background-color: $c-text-divider
+  border-radius: 50%
+  color: $c-text-invert-primary
+  font-size: 2em
+  height: 1.25em
+  left: 0
+  position: absolute
+  text-align: center
+  top: 0
+  width: 1.25em
+
+.with-avatar
+  padding-left: 3.5em
+  position: relative
+
+  & > .card-title
+    font-size: 1em
+    font-weight: $b-fontWeight-bold
+    margin: 0
