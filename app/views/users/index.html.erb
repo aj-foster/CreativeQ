@@ -1,17 +1,25 @@
-			<section>
+			<div class="row row--s">
+				<div class="cell cell--s">
 <% if @unapproved.any? %>
-				<h2>Unapproved Users</h2>
-				<div class="list">
+					<div class="card card--s">
+						<h2 class="card-title">Unapproved Users</h2>
+						<div class="card-subtitle">Awaiting role and organization assignment</div>
+						<div class="list list--a">
 	<% @unapproved.each do |user| %>
 <%= render 'listing', user: user %>
 	<% end %>
-				</div>
+						</div>
+					</div>
 <% end %>
 
-				<h2>Users</h2>
-				<div class="list">
+					<div class="card card--s">
+						<h2 class="card-title">Users</h2>
+						<div class="card-subtitle">All non-retired users</div>
+						<div class="list list--a">
 <% @users.each do |user| %>
 <%= render 'listing', user: user %>
 <% end %>
+						</div>
+					</div>
 				</div>
-			</section>
+			</div>
