@@ -166,49 +166,51 @@
 
 <% if @order.comments.any? %>
 	<% @order.comments.order(created_at: :asc).each do |comment| %>
-				<div class="card-section card-section--d with-avatar">
+			<div class="card-section card-section--d with-avatar">
 		<% if comment.attachment.exists? %>
-		  		<%= link_to asset_path(comment.attachment.url), class: "icon fr tsl", title: "View Attachment" do %>
-						<svg>
-							<use xlink:href="#icon-attachment"></use>
-							<foreignObject display="none">
-								Attachment
-							</foreignObject>
-						</svg>
-					<% end %>
+	  		<%= link_to asset_path(comment.attachment.url), class: "icon fr tsl", title: "View Attachment" do %>
+					<svg>
+						<use xlink:href="#icon-attachment"></use>
+						<foreignObject display="none">
+							Attachment
+						</foreignObject>
+					</svg>
+				<% end %>
 		<% end %>
-					<div class="card-avatar"><%= comment.user.initials %></div>
-					<div class="card-title"><%= comment.user.name %></div>
-					<div class="card-subtitle">
-						<%= comment.created_at.strftime("%-m/%-d/%Y at %-I:%M%P") %>
+				<div class="card-avatar"><%= comment.user.initials %></div>
+				<div class="card-title"><%= comment.user.name %></div>
+				<div class="card-subtitle">
+					<%= comment.created_at.strftime("%-m/%-d/%Y at %-I:%M%P") %>
 		<% if can? :destroy, comment %>
-						&mdash; <%= link_to "Remove", comment, method: :delete, data: {confirm: "Are you sure you want to remove this comment?"} %>
+					&mdash; <%= link_to "Remove", comment, method: :delete, data: {confirm: "Are you sure you want to remove this comment?"} %>
 		<% end %>
-					</div>
-					<p>
-						<%= comment.message.gsub(/\n/, '<br>').html_safe %>
-					</p>
 				</div>
+				<p>
+					<%= comment.message.gsub(/\n/, '<br>').html_safe %>
+				</p>
+			</div>
 	<% end %>
 <% else %>
-				<p>There are no comments on this order.</p>
+			<div class="card-section card-section--d">There are no comments on this order.</div>
 <% end %>
 
 <% if can? :comment_on, @order %>
-				<p><em>Add Comment:</em></p>
+			<div class="card-section">
+				<p><em>Add Comment</em></p>
 				<%= form_for Comment.new, html: {multipart: true} do |c| %>
 					<p>
 						<%= c.hidden_field :order_id, value: @order.id %>
 						<%= c.text_area :message %><br>
 					</p>
 					<p>
-						<%= c.label :attachment, "Attach File (optional):" %><br>
+						<%= c.label :attachment, "Include Attachment" %><br>
 						<%= c.file_field :attachment %>
 					</p>
 					<p>
 						<%= c.submit "Add Comment", :class => "button button-neutral" %>
 					</p>
 				<% end %>
+			</div>
 <% end %>
 		</div>
 	</div>
@@ -267,7 +269,7 @@
 <% unless @order.event.nil? || @order.event.empty? %>
 		<div class="card card--s">
 			<h3 class="card-title card-title--s">Event Information</h3>
-			<p>
+			<div class="card-section">
 	<% if @order.event['time'].present? %>
 				<em>When:</em> <%= @order.event['time'] %><br>
 	<% end %>
@@ -280,7 +282,7 @@
 	<% if @order.event['accomodations'].present? %>
 				<em>Accomodations:</em> <%= @order.event['accomodations'] %>
 	<% end %>
-			</p>
+			</div>
 		</div>
 <% end %>
 	</div>
