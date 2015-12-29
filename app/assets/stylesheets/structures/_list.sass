@@ -1,13 +1,25 @@
 .list
-	background-color: $foreground
-	margin-bottom: 2em
-	border: 1px solid $border
-	border-bottom: 0px none
+	list-style-type: none
+	margin: 0
+	padding: 0
+
+.list--a
+	border-top: 1px solid $border
+
+.list--inline > .list-item
+	display: inline-block
+	margin: 0 0.5em 0.5em 0
+
+.list-item:last-child
+	margin-bottom: 0
 
 .tile
 	border-bottom: 1px solid $border
 	display: flex
 	padding: 0.5em 1em
+
+	&:last-child
+		border-bottom: 0px none
 
 .tile--oneline
 	height: 4em
