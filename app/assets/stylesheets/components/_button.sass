@@ -1,38 +1,27 @@
 @mixin button-color($color)
+  background-color: $color
+  color: $c-text-invert-primary
 
-    background-attachment: scroll
-    background-color: $color
-    background-image: linear-gradient(to bottom, lighten($color, 10%), darken($color, 10%))
-    background-repeat: repeat
-    border: 1px solid darken($color, 10%)
-    text-shadow: 0 -1px 0 darken($color, 20%)
-    text-decoration: none
-
-    &:active, &:focus, &:hover
-
-        background-color: darken($color, 5%)
-        background-image: none
-        color: $c-text-invert-primary
-
+  &:active, &:focus, &:hover
+    background-color: darken($color, 5%)
+    color: $c-text-invert-primary
 
 .button
+  border: 0px none
+  border-radius: 0.25em
+  color: $c-text-primary
+  display: inline-block
+  margin: 0 0.5em 0.5em 0
+  padding: 0.25em 0.5em
+  text-decoration: none
+  transition: background-color 0.2s
+  @include button-color($c-accent)
 
-    border-radius: 0.25em
-    color: $c-text-invert-primary
-    cursor: pointer
-    display: inline-block
-    padding: 0.25em 0.75em
-    margin: 0.25em 0
+  &.button-alert
+    @include button-color($c-danger-btn)
 
-    @include button-color($c-accent)
+  &.button-okay
+    @include button-color($c-okay-btn)
 
-    &.button-alert
-        @include button-color($c-danger-btn)
-
-    &.button-okay
-        @include button-color($c-okay-btn)
-
-    &.right
-        float: right
-        margin-left: 0.5em
-        margin-top: -3px
+  &:last-child
+    margin: 0
