@@ -1,19 +1,19 @@
-			<section>
-				<table>
-					<caption>Organizations</caption>
-					<tr>
-						<th>Name</th>
-						<th>Unapproved</th>
-						<th>Last 4 Months</th>
-					</tr>
+			<div class="row row--s">
+				<div class="cell cell--s">
+					<div class="card card--s">
+						<h2 class="card-title">Organizations</h2>
+						<div class="list list--a mbf">
 <% if @organizations.any? %>
 	<% @organizations.each do |org| %>
 <%= render "listing", org: org %>
 	<% end %>
 <% end %>
-					<tr class="create">
-						<td colspan="4">
-							<h3>Create new:</h3>
+						</div>
+					</div>
+
+					<div class="card card--s">
+						<h3 class="card-title card-title--s">Create new</h3>
+						<div class="card-section">
 							<%= form_for Organization.new, remote: true do |f| %>
 								<p>
 									<%= f.text_field :name, required: true %>
@@ -22,7 +22,7 @@
 								<p>
 								</p>
 							<% end %>
-						</td>
-					</tr>
-				</table>
-			</section>
+						</div>
+					</div>
+				</div>
+			</div>
