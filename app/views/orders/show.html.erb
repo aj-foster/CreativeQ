@@ -10,21 +10,88 @@
 			</p>
 		</div>
 
-		<section>
-			<h2>Order: <%= @order.name %></h2>
-			<article>
-				<p>
-					<em>Status:</em> <%= @order.status %><br>
-<% if @order.creative %>
-					<em>Claimed by:</em> <%= @order.creative.name %><br>
-					<em>Progress:</em> <%= @order.progress %><br>
-<% end %>
-					<em>Due date:</em> <%= due_date(@order) %><br>
-					<em>Requested by:</em> <%= @order.organization.name unless @order.organization.nil? %> - <%= @order.owner.name unless @order.owner.nil? %>
-				</p>
+<div class="row row--s">
+<div class="g">
+	<div class="g-b g-b--s--1of2 g-b--m--2of3">
+		<div class="card card--s">
+			<h2 class="card-title">Order: <%= @order.name %></h2>
+			<div class="card-subtitle">
+				Due <%= due_date(@order, short: (@order.status == "Complete")) %>
+				for <%= @order.organization.try(:name) || "Unknown Organization" %>.
+			</div>
+			<div class="card-section">
+				<div class="js-truncate" data-truncate-height="200">
+					<%= simple_format(@order.description) %>
+				</div>
+			</div>
+		</div>
 
+		<div class="card card--s">
+			<h3 class="card-title card-title--s">Progress</h3>
+			<div class="card-subtitle">
+				<%= @order.status %>
+<% if @order.creative  %>
+  			&amp; <%= @order.progress %>
+<% end %>
+				<!-- | Updated <%= @order.updated_at.strftime("%-m/%-d/%Y") %> -->
+			</div>
+			<div class="card-section">
+				<div class="progress">
+					<div class="progress-tile is-complete" <%= tooltip "Created on #{@order.created_at.strftime('%-m/%-d/%Y')}" %>>
+						<div class="progress-dot"></div>
+					</div>
+
+<% unless @order.status == "Unapproved" %>
+					<div class="progress-tile is-complete" <%= tooltip "Obtained initial approval" %>>
+<% else %>
+					<div class="progress-tile" <%= tooltip "Waiting for initial approval" %>>
+<% end %>
+						<div class="progress-dot"></div>
+					</div>
+
+<% if @order.creative %>
+					<div class="progress-tile is-complete" <%= tooltip "Claimed by #{@order.creative.name}" %>>
+<% else %>
+					<div class="progress-tile" <%= tooltip "Waiting to be claimed" %>>
+<% end %>
+						<div class="progress-dot"></div>
+					</div>
+
+<% if @order.student_approval.nil? %>
+					<div class="progress-tile" <%= tooltip "Waiting for owner's approval" %>>
+<% else %>
+					<div class="progress-tile is-complete" <%= tooltip "Approved by #{@order.student_approval.name}" %>>
+<% end %>
+						<div class="progress-dot"></div>
+					</div>
+
+<% if @order.advisor_approval.nil? %>
+					<div class="progress-tile" <%= tooltip "Waiting for advisor's approval" %>>
+<% else %>
+					<div class="progress-tile is-complete" <%= tooltip "Approved by #{@order.advisor_approval.name}" %>>
+<% end %>
+						<div class="progress-dot"></div>
+					</div>
+
+<% if @order.final_one.nil?  %>
+					<div class="progress-tile" <%= tooltip "Waiting for first final approval" %>>
+<% else %>
+					<div class="progress-tile is-complete" <%= tooltip "Approved by #{@order.final_one.name}" %>>
+<% end %>
+						<div class="progress-dot"></div>
+					</div>
+
+<% if @order.final_two.nil?  %>
+					<div class="progress-tile" <%= tooltip "Waiting for second final approval" %>>
+<% else %>
+					<div class="progress-tile is-complete" <%= tooltip "Approved by #{@order.final_two.name}" %>>
+<% end %>
+						<div class="progress-dot"></div>
+					</div>
+				</div>
+			</div>
+			<div class="card-section">
 <% if @order.final_one != current_user && @order.final_two.nil? && can?(:final_approve, @order) %>
-				<h3>Order Actions</h3>
 				<p>
 					If you are satisfied with the current proof of the order, you can give it final approval.
 	<% if @order.student_approval.nil? && @order.owner == current_user %>
@@ -41,7 +108,6 @@
 					<%= link_to "Approve Order", approve_order_path(@order, stage: "final"), method: :put, class: "button button-okay" %>
 				</p>
 <% elsif @order.advisor_approval.nil? && can?(:advisor_approve, @order) %>
-				<h3>Order Actions</h3>
 				<p>
 					If you are satisfied with the current proof of the order, you can give it an advisor's approval.
 	<% if @order.student_approval.nil? && @order.owner == current_user %>
@@ -52,101 +118,67 @@
 					<%= link_to "Approve Order", approve_order_path(@order, stage: "advisor"), method: :put, class: "button button-okay" %>
 				</p>
 <% elsif @order.student_approval.nil? && can?(:student_approve, @order) %>
-				<h3>Order Actions</h3>
 				<p>
 					If you are satisfied with the current proof of the order, you can give it your approval. Afterwards, it will need to be approved by your advisor.
 				</p>
+				<p><%= link_to "Approve Order", approve_order_path(@order, stage: "student"), method: :put, class: "button button-okay" %></p>
+<% end %>
+
+<% if @creative == current_user %>
+				<%= form_for @order.becomes(Order), url: change_progress_order_path(@order), method: :put, remote: true do |f| %>
+					<% f.object = @order.becomes(@order.class) %>
+					<%= f.select :progress, Order::PROGRESSES, include_blank: "Select Progress" %>
+					<%= f.submit "Update", :class => "button button-neutral", :id => "progress-#{@order.id}" %>
+				<% end %>
+	<% if can? :unclaim, @order %>
+				<p><%= link_to "Unclaim", unclaim_order_path(@order), method: :put, :class => "button button-alert" %></p>
+	<% end %>
+<% end %>
+
+<% if @order.status == "Unclaimed" && can?(:claim, @order) %>
+				<p><%= link_to "Claim Order", claim_order_path(@order), method: :put, :id => "claim-#{@order.id}", :class => "button button-okay" %></p>
+<% end %>
+
+<% if can?(:manage, @order) %>
 				<p>
-					<%= link_to "Approve Order", approve_order_path(@order, stage: "student"), method: :put, class: "button button-okay" %>
+					You can manually set this order to complete, bypassing the approval process.
 				</p>
+				<p><%= link_to "Complete", complete_order_path(@order), method: :put, :class => "button button-okay" %></p>
 <% end %>
+			</div>
+		</div>
 
-				<h3>Description</h3>
-				<div class="js-truncate" data-truncate-height="150">
-					<%= simple_format(@order.description) %>
-				</div>
-
-				<p class="mal">
-					<div class="progress">
-						<div class="progress-tile is-complete" <%= tooltip "Created on #{@order.created_at.strftime('%-m/%-d/%Y')}" %>>
-							<div class="progress-dot"></div>
-						</div>
-
-<% unless @order.status == "Unapproved" %>
-  					<div class="progress-tile is-complete" <%= tooltip "Obtained initial approval" %>>
-<% else %>
-						<div class="progress-tile" <%= tooltip "Waiting for initial approval" %>>
-<% end %>
-							<div class="progress-dot"></div>
-						</div>
-
-<% if @order.creative %>
-  					<div class="progress-tile is-complete" <%= tooltip "Claimed by #{@order.creative.name}" %>>
-<% else %>
-						<div class="progress-tile" <%= tooltip "Waiting to be claimed" %>>
-<% end %>
-							<div class="progress-dot"></div>
-						</div>
-
-<% if @order.student_approval.nil? %>
-						<div class="progress-tile" <%= tooltip "Waiting for owner's approval" %>>
-<% else %>
-						<div class="progress-tile is-complete" <%= tooltip "Approved by #{@order.student_approval.name}" %>>
-<% end %>
-							<div class="progress-dot"></div>
-						</div>
-
-<% if @order.advisor_approval.nil? %>
-						<div class="progress-tile" <%= tooltip "Waiting for advisor's approval" %>>
-<% else %>
-						<div class="progress-tile is-complete" <%= tooltip "Approved by #{@order.advisor_approval.name}" %>>
-<% end %>
-							<div class="progress-dot"></div>
-						</div>
-
-<% if @order.final_one.nil?  %>
-  					<div class="progress-tile" <%= tooltip "Waiting for first final approval" %>>
-<% else %>
-						<div class="progress-tile is-complete" <%= tooltip "Approved by #{@order.final_one.name}" %>>
-<% end %>
-							<div class="progress-dot"></div>
-						</div>
-
-<% if @order.final_two.nil?  %>
-  					<div class="progress-tile" <%= tooltip "Waiting for second final approval" %>>
-<% else %>
-						<div class="progress-tile is-complete" <%= tooltip "Approved by #{@order.final_two.name}" %>>
-<% end %>
-							<div class="progress-dot"></div>
-						</div>
-					</div>
-				</p>
-			</article>
-
-			<article>
+		<div class="card card--s">
+			<h3 class="card-title card-title--s">Comments (<%= @order.comments.count %>)</h3>
+			<div class="card-subtitle">
 <% if @order.subscriptions.include? current_user.id %>
-				<h3>Comments (<%= @order.comments.count %>) <%= link_to "Unsubscribe", unsubscribe_order_path(@order), method: :put, :id => "unsub-#{@order.id}" %></h3>
+				<%= link_to "Unsubscribe", unsubscribe_order_path(@order), method: :put, :id => "unsub-#{@order.id}" %>
 <% else %>
-				<h3>Comments (<%= @order.comments.count %>) <%= link_to "Subscribe", subscribe_order_path(@order), method: :put, :id => "sub-#{@order.id}" %></h3>
+				<%= link_to "Subscribe", subscribe_order_path(@order), method: :put, :id => "sub-#{@order.id}" %>
 <% end %>
+			</div>
+
 <% if @order.comments.any? %>
 	<% @order.comments.order(created_at: :asc).each do |comment| %>
-				<div class="comment">
-					<p>
-						<em><%= comment.user.name %></em><br>
-						<span class="subtitle">
-							<%= comment.created_at.strftime("%-m/%-d/%Y at %-I:%M%P") %>
-		<% if can? :destroy, comment %>
-							&mdash;
-							<%= link_to "Remove", comment, method: :delete, data: {confirm: "Are you sure you want to remove this comment?"} %>
-		<% end %>
-						</span><br>
-						<span class="subtitle">
+				<div class="card-section card-section--d with-avatar">
 		<% if comment.attachment.exists? %>
-						<%= link_to "View Attachment", asset_path(comment.attachment.url) %>
+		  		<%= link_to asset_path(comment.attachment.url), class: "icon fr tsl", title: "View Attachment" do %>
+						<svg>
+							<use xlink:href="#icon-attachment"></use>
+							<foreignObject display="none">
+								Attachment
+							</foreignObject>
+						</svg>
+					<% end %>
 		<% end %>
-						</span>
-					</p>
+					<div class="card-avatar"><%= comment.user.initials %></div>
+					<div class="card-title"><%= comment.user.name %></div>
+					<div class="card-subtitle">
+						<%= comment.created_at.strftime("%-m/%-d/%Y at %-I:%M%P") %>
+		<% if can? :destroy, comment %>
+						&mdash; <%= link_to "Remove", comment, method: :delete, data: {confirm: "Are you sure you want to remove this comment?"} %>
+		<% end %>
+					</div>
 					<p>
 						<%= comment.message.gsub(/\n/, '<br>').html_safe %>
 					</p>
@@ -172,14 +204,45 @@
 					</p>
 				<% end %>
 <% end %>
-			</article>
-		</section>
+		</div>
+	</div>
 
-		<aside>
-			<h2>More Info</h2>
 
-			<article class="needs">
-				<h3>Needs</h3>
+
+	<div class="g-b g-b--s--1of2 g-b--m--1of3">
+		<div class="card card--s ptm">
+<% if @owner.nil? %>
+			<div class="card-section">
+				<div class="card-avatar">??</div>
+				<div class="card-title with-avatar">Unknown User</div>
+				<div class="card-subtitle with-avatar">Order creator</div>
+			</div>
+<% else %>
+			<div class="card-section with-avatar">
+				<div class="card-avatar"><%= @owner.initials %></div>
+				<div class="card-title"><%= @owner.name %></div>
+				<div class="card-subtitle">Order creator</div>
+				<p>
+					Member of <%= @organization.name %><br>
+					<a href="mailto:<%= @owner.email %>"><%= @owner.email %></a>
+	<% if @owner.phone.present? %>
+	  			| <%= @owner.phone %>
+	<% end %>
+				</p>
+			</div>
+<% end %>
+<% unless @order.creative.nil? %>
+			<div class="card-section with-avatar">
+				<div class="card-avatar"><%= @order.creative.initials %></div>
+				<div class="card-title"><%= @order.creative.name %></div>
+				<div class="card-subtitle">Claimed order</div>
+			</div>
+<% end %>
+		</div>
+
+		<div class="card card--s">
+			<h3 class="card-title card-title--s">What's included</h3>
+			<div class="card-section">
 <% @needs.each do |need| %>
 	<% need_param = need.parameterize.underscore %>
 	<% if @order.needs[need_param] == "" %>
@@ -192,71 +255,28 @@
 				</div>
 	<% end %>
 <% end %>
-				</ul>
-			</article>
+			</div>
+		</div>
+
 <% unless @order.event.nil? || @order.event.empty? %>
-			<article>
-				<h3>Event Information</h3>
-				<p>
+		<div class="card card--s">
+			<h3 class="card-title card-title--s">Event Information</h3>
+			<p>
 	<% if @order.event['time'].present? %>
-					<em>When:</em> <%= @order.event['time'] %><br>
+				<em>When:</em> <%= @order.event['time'] %><br>
 	<% end %>
 	<% if @order.event['location'].present? %>
-					<em>Where:</em> <%= @order.event['location'] %><br>
+				<em>Where:</em> <%= @order.event['location'] %><br>
 	<% end %>
 	<% if @order.event['contact'].present? %>
-					<em>Contact:</em> <%= @order.event['contact'] %><br>
+				<em>Contact:</em> <%= @order.event['contact'] %><br>
 	<% end %>
 	<% if @order.event['accomodations'].present? %>
-					<em>Accomodations:</em> <%= @order.event['accomodations'] %>
+				<em>Accomodations:</em> <%= @order.event['accomodations'] %>
 	<% end %>
-				</p>
-			</article>
+			</p>
+		</div>
 <% end %>
-			<article>
-<% unless @owner.nil? %>
-				<h3>About the Requester</h3>
-				<p>
-					<%= @owner.name %><br>
-					Member of <%= @organization.name %><br>
-					<a href="mailto:<%= @owner.email %>"><%= @owner.email %></a><br>
-					<%= @owner.phone %>
-				</p>
-<% else %>
-				<p>The order's owner has been removed.</p>
-<% end %>
-			</article>
-
-<% if @creative == current_user %>
-			<article>
-				<h3>Change Progress</h3>
-				<%= form_for @order.becomes(Order), url: change_progress_order_path(@order), method: :put, remote: true do |f| %>
-					<% f.object = @order.becomes(@order.class) %>
-					<%= f.select :progress, Order::PROGRESSES, include_blank: "Select Progress" %>
-					<%= f.submit "Update", :class => "button button-neutral", :id => "progress-#{@order.id}" %>
-				<% end %>
-	<% if can? :unclaim, @order %>
-				<p><%= link_to "Unclaim", unclaim_order_path(@order), method: :put, :class => "button button-alert" %></p>
-	<% end %>
-			</article>
-<% end %>
-
-<% if @order.status == "Unclaimed" && can?(:claim, @order) %>
-			<article class="claim">
-				<p><%= link_to "Claim", claim_order_path(@order), method: :put, :id => "claim-#{@order.id}", :class => "button button-okay" %></p>
-			</article>
-<% end %>
-
-<% if can?(:manage, @order) %>
-			<article>
-				<p><%= link_to "Complete", complete_order_path(@order), method: :put, :class => "button button-okay" %></p>
-			</article>
-<% end %>
-
-			<article>
-				<p>Last activity: <%= @order.updated_at.strftime("%-m/%-d/%Y") %>.</p>
-<% if can? :manage, Order %>
-				<p>Order Created: <%= @order.created_at.strftime("%-m/%-d/%Y") %>.</p>
-<% end %>
-			</article>
-		</aside>
+	</div>
+</div>
+</div>
