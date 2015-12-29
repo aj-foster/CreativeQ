@@ -1,4 +1,4 @@
-		<div class="actions">
+		<div class="row">
 			<p>
 				<%= link_to "Back to Orders", orders_path, :class => "button button-okay" %>
 <% if can? :edit, @order %>
@@ -36,7 +36,7 @@
 				<!-- | Updated <%= @order.updated_at.strftime("%-m/%-d/%Y") %> -->
 			</div>
 			<div class="card-section">
-				<div class="progress">
+				<div class="progress mtl mbl">
 					<div class="progress-tile is-complete" <%= tooltip "Created on #{@order.created_at.strftime('%-m/%-d/%Y')}" %>>
 						<div class="progress-dot"></div>
 					</div>
@@ -91,60 +91,66 @@
 				</div>
 			</div>
 			<div class="card-section">
-<% if @order.final_one != current_user && @order.final_two.nil? && can?(:final_approve, @order) %>
+<% if @creative == current_user %>
 				<p>
+					<%= form_for @order.becomes(Order), url: change_progress_order_path(@order), method: :put, remote: true do |f| %>
+						<% f.object = @order.becomes(@order.class) %>
+						<%= f.select :progress, Order::PROGRESSES, include_blank: "Select Progress" %>
+						<noscript>
+							<%= f.submit "Update", :class => "button button-neutral", :id => "progress-#{@order.id}" %>
+						</noscript>
+						<script type="text/javascript">
+							$('#edit_order_<%= @order.id %> select').change(function () {
+								$('#edit_order_<%= @order.id %> .temp').remove();
+								$('#edit_order_<%= @order.id %>').submit();
+							});
+						</script>
+					<% end %>
+				</p>
+<% end %>
+
+<% approval_button = "" %>
+				<p>
+<% if @order.final_one != current_user && @order.final_two.nil? && can?(:final_approve, @order) %>
 					If you are satisfied with the current proof of the order, you can give it final approval.
 	<% if @order.student_approval.nil? && @order.owner == current_user %>
   				Since you are the order's owner, your approval will count as the owner's approval.
 	<% end %>
 	<% if @order.advisor_approval.nil? %>
-					This order has not yet been approved by an advisor.
+					This order does not yet have an advisor's approval.
 		<% if can? :advisor_approve, @order %>
   				Since you are also an advisor<%= " for #{@order.organization.name}" unless @order.organization.nil? %>, your approval will count as an advisor's approval.
 		<% end %>
 	<% end %>
-				</p>
-				<p>
-					<%= link_to "Approve Order", approve_order_path(@order, stage: "final"), method: :put, class: "button button-okay" %>
-				</p>
+	<% approval_button = link_to "Approve Proof", approve_order_path(@order, stage: "final"), method: :put, class: "button button-okay" %>
 <% elsif @order.advisor_approval.nil? && can?(:advisor_approve, @order) %>
-				<p>
 					If you are satisfied with the current proof of the order, you can give it an advisor's approval.
 	<% if @order.student_approval.nil? && @order.owner == current_user %>
   				Since you are also the order's owner, your approval will count as the owner's approval.
 	<% end %>
-				</p>
-				<p>
-					<%= link_to "Approve Order", approve_order_path(@order, stage: "advisor"), method: :put, class: "button button-okay" %>
-				</p>
+	<% approval_button = link_to "Approve Proof", approve_order_path(@order, stage: "advisor"), method: :put, class: "button button-okay" %>
+
 <% elsif @order.student_approval.nil? && can?(:student_approve, @order) %>
-				<p>
 					If you are satisfied with the current proof of the order, you can give it your approval. Afterwards, it will need to be approved by your advisor.
-				</p>
-				<p><%= link_to "Approve Order", approve_order_path(@order, stage: "student"), method: :put, class: "button button-okay" %></p>
+	<% approval_button = link_to "Approve Proof", approve_order_path(@order, stage: "student"), method: :put, class: "button button-okay" %></p>
 <% end %>
-
-<% if @creative == current_user %>
-				<%= form_for @order.becomes(Order), url: change_progress_order_path(@order), method: :put, remote: true do |f| %>
-					<% f.object = @order.becomes(@order.class) %>
-					<%= f.select :progress, Order::PROGRESSES, include_blank: "Select Progress" %>
-					<%= f.submit "Update", :class => "button button-neutral", :id => "progress-#{@order.id}" %>
-				<% end %>
-	<% if can? :unclaim, @order %>
-				<p><%= link_to "Unclaim", unclaim_order_path(@order), method: :put, :class => "button button-alert" %></p>
-	<% end %>
-<% end %>
-
-<% if @order.status == "Unclaimed" && can?(:claim, @order) %>
-				<p><%= link_to "Claim Order", claim_order_path(@order), method: :put, :id => "claim-#{@order.id}", :class => "button button-okay" %></p>
-<% end %>
-
 <% if can?(:manage, @order) %>
-				<p>
-					You can manually set this order to complete, bypassing the approval process.
-				</p>
-				<p><%= link_to "Complete", complete_order_path(@order), method: :put, :class => "button button-okay" %></p>
+  				You can manually set this order to complete, bypassing the approval process.
 <% end %>
+				</p>
+
+				<p>
+<% if @order.status == "Unclaimed" && can?(:claim, @order) %>
+					<%= link_to "Claim Order", claim_order_path(@order), method: :put, :id => "claim-#{@order.id}", :class => "button button-okay" %>
+<% end %>
+					<%= approval_button %>
+<% if can?(:manage, @order) %>
+					<%= link_to "Mark Complete", complete_order_path(@order), method: :put, :class => "button", data: { confirm: "Are you sure you want to mark this order as complete?" } %>
+<% end %>
+<% if @order.status == "Claimed" && can?(:unclaim, @order) %>
+					<%= link_to "Unclaim Order", unclaim_order_path(@order), method: :put, :class => "button button-alert" %>
+<% end %>
+				</p>
 			</div>
 		</div>
 
