@@ -1,0 +1,227 @@
+.row.mbm
+	= link_to "Back to Orders", orders_path, class: "button button-okay"
+	- if can?(:edit, @order)
+		= link_to "Edit Order", edit_order_path(@order), class: "button button-neutral"
+	- if can?(:destroy, @order)
+		= link_to "Remove Order", order_path(@order), method: :delete, class: "button button-alert", data: {confirm: "Are you sure you want to remove the order #{@order.name}?"}
+
+.row.row--s
+	.g
+		.g-b.g-b--s--1of2.g-b--m--2of3
+			.card.card--s
+				.card-section
+					%h2.card-title
+						Order:
+						= @order.name
+					.card-subtitle
+						Due
+						= due_date(@order, short: (@order.status == "Complete"))
+						for
+						= @order.organization.try(:name) || "Unknown Organization"
+				.card-section
+					.js-truncate.mbm{"data-truncate-height" => "200"}
+						= simple_format(@order.description)
+
+			.card.card--s
+				.card-section
+					%h3.card-title.card-title--s Progress
+					.card-subtitle
+						= @order.status
+						- if @order.creative
+							&amp;
+							= @order.progress
+
+				.card-section
+					.progress.mtl.mbl
+						.progress-tile.is-complete{tooltip("Created on #{@order.created_at.strftime('%-m/%-d/%Y')}")}
+							.progress-dot
+						- unless @order.status == "Unapproved"
+							.progress-tile.is-complete{tooltip("Obtained initial approval")}
+								.progress-dot
+						- else
+							.progress-tile{tooltip("Waiting for initial approval")}
+								.progress-dot
+
+						- unless @order.creative.nil?
+							.progress-tile.is-complete{tooltip("Claimed by #{@order.creative.name}")}
+								.progress-dot
+						- else
+							.progress-tile{tooltip("Waiting to be claimed")}
+								.progress-dot
+
+						- unless @order.student_approval.nil?
+							.progress-tile.is-complete{tooltip("Approved by #{@order.student_approval.name}")}
+								.progress-dot
+						- else
+							.progress-tile{tooltip("Waiting for owner's approval")}
+								.progress-dot
+
+						- unless @order.advisor_approval.nil?
+							.progress-tile.is-complete{tooltip("Approved by #{@order.advisor_approval.name}")}
+								.progress-dot
+						- else
+							.progress-tile{tooltip("Waiting for advisor's approval")}
+								.progress-dot
+
+						- unless @order.final_one.nil?
+							.progress-tile.is-complete{tooltip("Approved by #{@order.final_one.name}")}
+								.progress-dot
+						- else
+							.progress-tile{tooltip("Waiting for first final approval")}
+								.progress-dot
+
+						- unless @order.final_two.nil?
+							.progress-tile.is-complete{tooltip("Approved by #{@order.final_two.name}")}
+								.progress-dot
+						- else
+							.progress-tile{tooltip("Waiting for second final approval")}
+								.progress-dot
+
+				.card-section
+					- if @creative == current_user
+						%p
+							= form_for @order.becomes(Order), url: change_progress_order_path(@order), method: :put, remote: true do |f|
+								- f.object = @order.becomes(@order.class)
+								= f.select :progress, Order::PROGRESSES, include_blank: "Select Progress"
+								%noscript
+									= f.submit "Update", :class => "button button-neutral", :id => "progress-#{@order.id}"
+								:javascript
+									$('#edit_order_#{@order.id} select').change(function () {
+										$('#edit_order_#{@order.id} .temp').remove();
+										$('#edit_order_#{@order.id}').submit();
+									});
+					- approval_button = ""
+					%p
+						- if @order.final_one != current_user && @order.final_two.nil? && can?(:final_approve, @order)
+							If you are satisfied with the current proof of the order, you can give it final approval.
+							- if @order.student_approval.nil? && @order.owner == current_user
+								Since you are the order's owner, your approval will count as the owner's approval.
+							- if @order.advisor_approval.nil?
+								This order does not yet have an advisor's approval.
+								- if can? :advisor_approve, @order
+									Since you are also an advisor#{" for " + @order.organization.name unless @order.organization.nil?}, your approval will count as an advisor's approval.
+							- approval_button = link_to "Approve Proof", approve_order_path(@order, stage: "final"), method: :put, class: "button button-okay"
+
+						- elsif @order.advisor_approval.nil? && can?(:advisor_approve, @order)
+							If you are satisfied with the current proof of the order, you can give it an advisor's approval.
+							- if @order.student_approval.nil? && @order.owner == current_user
+								Since you are also the order's owner, your approval will count as the owner's approval.
+							- approval_button = link_to "Approve Proof", approve_order_path(@order, stage: "advisor"), method: :put, class: "button button-okay"
+
+						- elsif @order.student_approval.nil? && can?(:student_approve, @order)
+							If you are satisfied with the current proof of the order, you can give it your approval. Afterwards, it will need to be approved by your advisor.
+							- approval_button = link_to "Approve Proof", approve_order_path(@order, stage: "student"), method: :put, class: "button button-okay"
+
+						- if can?(:manage, @order)
+							You can manually set this order to complete, bypassing the approval process.
+
+					%p
+						- if @order.status == "Unclaimed" && can?(:claim, @order)
+							= link_to "Claim Order", claim_order_path(@order), method: :put, id: "claim-#{@order.id}", class: "button button-okay"
+						= approval_button
+						- if can?(:manage, @order)
+							= link_to "Mark Complete", complete_order_path(@order), method: :put, class: "button", data: { confirm: "Are you sure you want to mark this order as complete?" }
+						- if @order.status == "Claimed" && can?(:unclaim, @order)
+							= link_to "Unclaim Order", unclaim_order_path(@order), method: :put, class: "button button-alert"
+
+			.card.card--s
+				.card-section
+					%h3.card-title.card-title--s
+						Comments
+						= surround "(", ")" do
+							= @order.comments.count
+					.card-subtitle
+						- if @order.subscriptions.include? current_user.id
+							= link_to "Unsubscribe", unsubscribe_order_path(@order), method: :put, :id => "unsub-#{@order.id}"
+						- else
+							= link_to "Subscribe", subscribe_order_path(@order), method: :put, :id => "sub-#{@order.id}"
+
+				- if @order.comments.any?
+					- @order.comments.order(created_at: :asc).each do |comment|
+						.card-section.card-section--d.with-avatar
+							- if comment.attachment.exists?
+								= link_to asset_path(comment.attachment.url), class: "icon fr tsl", title: "View Attachment" do
+									<svg><use xlink:href="#icon-attachment"></use><foreignObject display="none">Attachment</foreignObject></svg>
+							.card-avatar= comment.user.initials
+							.card-title= comment.user.name
+							.card-subtitle
+								= comment.created_at.strftime("%-m/%-d/%Y at %-I:%M%P")
+								- if can? :destroy, comment
+									&mdash;
+									= link_to "Remove", comment, method: :delete, data: {confirm: "Are you sure you want to remove this comment?"}
+							%p= comment.message.gsub(/\n/, '<br>').html_safe
+				- else
+					.card-section.card-section--d There are no comments on this order.
+
+				- if can?(:comment_on, @order)
+					.card-section
+						%p.twb Add Comment
+						= form_for Comment.new, html: {multipart: true} do |c|
+							.field
+								= c.hidden_field :order_id, value: @order.id
+								= c.text_area :message
+							.field
+								= c.label :attachment, "Include Attachment"
+								= c.file_field :attachment
+							%p= c.submit "Add Comment", class: "button"
+
+		.g-b.g-b--s--1of2.g-b--m--1of3
+			.card.card--s.ptm
+				- if @owner.nil?
+					.card-section
+						.card-section.with-avatar
+							.card-avatar ??
+							.card-title Unknown User
+							.card-subtitle Order Creator
+				- else
+					.card-section.with-avatar
+						.card-avatar= @owner.initials
+						.card-title= @owner.name
+						.card-subtitle Order creator
+						%p
+							Member of
+							= @organization.name
+							<br>
+							%a{href: "mailto:" + @owner.email}= @owner.email
+							- if @owner.phone.present?
+								|
+								= @owner.phone
+				- unless @order.creative.nil?
+					.card-section.with-avatar
+						.card-avatar= @order.creative.initials
+						.card-title= @order.creative.name
+						.card-subtitle Claimed order
+
+			.card.card--s
+				.card-section
+					%h3.card-title.card-title--s What's included
+				.card-section
+					%ul.list.list--inline.mbm
+						- @needs.each do |need|
+							- need_param = need.parameterize.underscore
+							- if @order.needs[need_param] == ""
+								%li.list-item.tag
+									%div= need
+							- elsif !@order.needs[need_param].nil?
+								%li.list-item.tag
+									%div= need
+									%div= @order.needs[need_param]
+
+			- unless @order.event.nil? || @order.event.empty?
+				.card.card--s
+					.card-section
+						%h3.card-title.card-title--s Event Information
+					.card-section
+						%p
+							- if @order.event['time'].present?
+								%em When:
+								= @order.event['time']
+							- if @order.event['location'].present?
+								%em Where:
+								= @order.event['location']
+							- if @order.event['contact'].present?
+								%em Contact:
+								= @order.event['contact']
+							- if @order.event['accomodations'].present?
+								%em Accomodations:
+								= @order.event['accomodations']
