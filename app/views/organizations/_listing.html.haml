@@ -1,0 +1,11 @@
+.tile.tile--twoline{id: "organization_#{org.id}"}
+	.tile-focus
+		.tile-title= org.name
+		.tile-subtitle
+			= Order.where(organization: org, status: "Unapproved").count
+			Unapproved,
+			= Order.where(organization: org).where("created_at > ?", Date.today - 120).count
+			in the past 4 months
+	- if can?(:destroy, org)
+		= link_to org, method: :delete, remote: true, data: { confirm: "Are you sure you want to remove #{org.name}?" }, class: "icon", title: "Remove Organization" do
+			<svg><use xlink:href="#icon-cross"></use><foreignObject display="none">Remove</foreignObject></svg>
