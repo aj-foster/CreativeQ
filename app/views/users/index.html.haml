@@ -1,0 +1,18 @@
+.row.row--s
+	.cell.cell--s
+		- if @unapproved.any?
+			.card.card--s
+				.card-section
+					%h2.card-title Unapproved Users
+					.card-subtitle Awaiting role and organization assignment
+				.list
+					- @unapproved.each do |user|
+						= render 'listing', user: user
+
+		.card.card--s
+			.card-section
+				%h2.card-title Users
+				.card-subtitle All non-retired users
+			.list
+				- @users.each do |user|
+					= render 'listing', user: user
