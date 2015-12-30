@@ -1,6 +1,4 @@
-orgID = <%= @org.id %>
-button = $("#destroy-" + orgID)
-
-button.html("&#10003;").on 'click', (evt) ->
-	evt.preventDefault()
-	false
+<% if @destroyed %>
+  $('#organization_<%= @org.id %>').fadeOut 500, ->
+    $('#organization_<%= @org.id %>').remove()
+<% end %>

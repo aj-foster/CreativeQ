@@ -1,4 +1,4 @@
 <% unless @org.new_record? %>
-	$('.organizations.index .create').before "<%= escape_javascript(render 'listing', org: @org) %>"
-	$('.create input[type="text"]').val("")
+	$('.js-create-org').prepend "<%= escape_javascript(render 'listing', org: @org) %>"
+	$('#new_organization')[0].reset()
 <% end %>

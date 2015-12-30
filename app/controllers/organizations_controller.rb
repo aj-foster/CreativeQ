@@ -30,8 +30,12 @@ class OrganizationsController < ApplicationController
 		unless can? :destroy, Organization
 			return redirect_to organizations_path, alert: "You aren't allowed to delete organizations."
 		end
-		
-		@org.destroy
+
+		if @org.destroy
+			@destroyed = true
+		else
+			return redirect_to organizations_path, alert: "Error: Unable to delete organization."
+		end
 
 		respond_to do |format|
 			format.js
