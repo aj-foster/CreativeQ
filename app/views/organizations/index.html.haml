@@ -1,0 +1,21 @@
+.row.row--s
+	.cell.cell--s
+		.card.card--s
+			.card-section
+				%h2.card-title Organizations
+			.card-section
+				= form_for Organization.new, remote: true do |f|
+					.field.field--text
+						= f.label :name, "New Organization Name"
+						= f.text_field :name, placeholder: "Knights", required: true
+
+					%p
+						= f.submit "Create", class: "button button-okay"
+
+		.card.card--s
+			.list.js-create-org
+				- if @organizations.any?
+					- @organizations.each do |org|
+						= render "listing", org: org
+				- else
+					%p There aren't any organizations, yet.
