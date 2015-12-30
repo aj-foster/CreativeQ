@@ -1,0 +1,253 @@
+.row.mbm
+	- if can?(:manage, User)
+		= link_to "Back to Users", users_path, class: "button button-okay"
+	- else
+		= link_to "Back to Home", root_url, class: "button button-okay"
+	- if can?(:destroy, @user)
+		= link_to "Remove User", @user, :method => :delete, :class => "button button-alert", data: { confirm: "Are you sure you want to delete #{@user.name}? You can also set this user's role to 'Retired'." }
+
+.row.row--s
+	.g
+		.g-b
+			.card.card--s
+				.card-section
+					%h2.card-title
+						Profile:
+						= @user.name
+					.card-subtitle
+						User since
+						= @user.created_at.strftime("%-m/%-d/%Y")
+
+.row.row--s
+	.g
+		.g-b.g-b--s--1of2.g-b--m--2of3
+			= form_for @user, html: {novalidate: true} do |f|
+				.card.card--s
+					.card-section
+						.g
+							.g-b.g-b--m--1of2
+								%h3.card-title.card-title--s Personal Information
+								.field.field--text{class: (@user.errors.include? :first_name) ? 'has-error' : ''}
+									= f.label :first_name, "First Name", class: "is-required"
+									= f.text_field :first_name, placeholder: "Bill", required: true
+									- if @user.errors.include? :first_name
+										.field--text-error
+											= @user.errors.full_messages_for(:first_name).first
+
+								.field.field--text{class: (@user.errors.include? :last_name) ? 'has-error' : ''}
+									= f.label :last_name, "Last Name", class: "is-required"
+									= f.text_field :last_name, placeholder: "Columbia", required: true
+									- if @user.errors.include? :last_name
+										.field--text-error
+											= @user.errors.full_messages_for(:last_name).first
+
+								.field.field--text{class: (@user.errors.include? :email) ? 'has-error' : ''}
+									= f.label :email, "E-Mail", class: "is-required"
+									= f.email_field :email, placeholder: "bill@columbia.me", required: true
+									- if @user.errors.include? :email
+										.field--text-error
+											= @user.errors.full_messages_for(:email).first
+
+								.field.field--text{class: (@user.errors.include? :phone) ? 'has-error' : ''}
+									= f.label :phone, "Phone Number"
+									= f.telephone_field :phone, placeholder: "407-882-1010"
+									- if @user.errors.include? :phone
+										.field--text-error
+											= @user.errors.full_messages_for(:phone).first
+
+								.field{class: (@user.errors.include? :role) ? 'has-error' : ''}
+									= f.label :role, "Role"
+									= f.collection_select :role, User::ROLES, :to_s, :humanize
+									- if @user.errors.include? :role
+										.field--alert
+											= @user.errors.full_messages_for(:role).first
+
+								.field{class: (@user.errors.include? :flavor) ? 'has-error' : '', style: (@user.role != "Creative") ? 'display: none' : ''}
+									= f.label :flavor, "Type of Creative"
+									= f.collection_select :flavor, Order::TYPES, :to_s, :humanize
+									- if @user.errors.include? :flavor
+										.field--alert
+											= @user.errors.full_messages_for(:flavor).first
+
+
+							.g-b.g-b--m--1of2
+								%h3.card-title.card-title--s Change Password
+								.field.field--text{class: (@user.errors.include? :password) ? 'has-error' : ''}
+									= f.label :password, "New Password"
+									= f.password_field :password, autocomplete: "off"
+									- if @user.errors.include? :password
+										.field--text-error
+											= @user.errors.full_messages_for(:password).first
+
+								.field.field--text{class: (@user.errors.include? :password_confirmation) ? 'has-error' : ''}
+									= f.label :password_confirmation, "New Password"
+									= f.password_field :password_confirmation, autocomplete: "off"
+									- if @user.errors.include? :password_confirmation
+										.field--text-error
+											= @user.errors.full_messages_for(:password_confirmation).first
+
+								.field.field--text
+									= f.label :send_emails, "E-Mail Subscriptions"
+									= f.check_box :send_emails
+									Send e-mails
+
+						%p
+							= f.submit "Update", class: "button button-okay"
+
+
+		.g-b.g-b--s--1of2.g-b--m--1of3
+			.card.card--s
+				.card-section
+					%h3.card-title.card-title--s Organizations
+				.list.list--a
+					- @assignments.each do |a|
+						= render "assignments/listing", assignment: a
+
+					- if can?(:manage, @user)
+						.tile.create
+							= form_for Assignment.new, remote: true do |a|
+								= a.hidden_field :user_id, value: @user.id
+								= a.select :organization_id, @otherOrgs.collect {|o| [o.name, o.id]}, include_blank: "Add Organization"
+								= a.submit "Add", class: "button button-okay"
+
+
+-# Go get rid of the padding around fields... get rid of most field things, actually. Then go fix the order form.
+
+-# 			<div class="row">
+-# 				<p>
+-# <% if can? :manage, User %>
+-# 					<%= link_to "Back to Users", users_path, :class => "button button-okay" %>
+-# <% else %>
+-# 					<%= link_to "Back to Home", root_url, :class => "button button-okay" %>
+-# <% end %>
+-# <% if can? :destroy, @user %>
+-# 					<%= link_to "Remove User", @user, :method => :delete, :class => "button button-alert", data: { confirm: "Are you sure you want to delete #{@user.name}? You can also set this user's role to 'Retired'." } %>
+-# <% end %>
+-# 				</p>
+-# 			</div>
+-#
+-# 			<div class="row row--s">
+-# 			<div class="g">
+-# 				<div class="g-b">
+-# 				<div class="card card--s pbxs">
+-# 					<h2 class="card-title">Profile: <%= @user.name %></h2>
+-# 					<div class="card-subtitle">User since <%= @user.created_at.strftime("%-m/%-d/%Y") %></div>
+-# 				</div>
+-# 				</div>
+-#
+-# 				<div class="g-b g-b--s--1of2 g-b--m--1of3">
+-# 				<div class="card card--s">
+-# 					<div class="card-title card-title--s">Personal Information</div>
+-# 					<%= form_for @user, html: {novalidate: true} do |f| %>
+-# 						<div class="fieldSet">
+-# 							<div class="fieldSet-column">
+-#
+-# 								<div class="field field--text <%= "has-error" if @user.errors.include? :first_name %>">
+-# 									<%= f.label :first_name, "First Name", class: "is-required" %>
+-# 									<%= f.text_field :first_name, placeholder: "Bill", required: true %>
+-# <% if @user.errors.include? :first_name %>
+-# 									<div class="field--text-error"><%= @user.errors.full_messages_for(:first_name).first %></div>
+-# <% end %>
+-# 								</div>
+-#
+-# 								<div class="field field--text <%= "has-error" if @user.errors.include? :last_name %>">
+-# 									<%= f.label :last_name, "Last Name", class: "is-required" %>
+-# 									<%= f.text_field :last_name, placeholder: "Columbia", required: true %>
+-# <% if @user.errors.include? :last_name %>
+-# 									<div class="field--text-error"><%= @user.errors.full_messages_for(:last_name).first %></div>
+-# <% end %>
+-# 								</div>
+-#
+-# 								<div class="field field--text <%= "has-error" if @user.errors.include? :email %>">
+-# 									<%= f.label :email, "E-Mail", class: "is-required" %>
+-# 									<%= f.email_field :email, placeholder: "bill@columbia.me", required: true %>
+-# <% if @user.errors.include? :email %>
+-# 									<div class="field--text-error"><%= @user.errors.full_messages_for(:email).first %></div>
+-# <% end %>
+-# 								</div>
+-#
+-# 								<div class="field field--text <%= "has-error" if @user.errors.include? :phone %>">
+-# 									<%= f.label :phone, "Phone Number" %>
+-# 									<%= f.telephone_field :phone, placeholder: "407-882-1010" %>
+-# <% if @user.errors.include? :phone %>
+-# 									<div class="field--text-error"><%= @user.errors.full_messages_for(:phone).first %></div>
+-# <% end %>
+-# 								</div>
+-#
+-# <% if can? :manage, @user %>
+-# 								<div class="field <%= "has-error" if @user.errors.include? :role %>">
+-# 									<%= f.label :role, "Role" %>
+-# 									<%= f.collection_select :role, User::ROLES, :to_s, :humanize %>
+-# 	<% if @user.errors.include? :role %>
+-# 									<div class="field--alert"><%= @user.errors.full_messages_for(:role).first %></div>
+-# 	<% end %>
+-# 								</div>
+-#
+-# 								<div class="field <%= "has-error" if @user.errors.include? :flavor %>" <% unless @user.role == "Creative" %>style="display:none"<% end %>>
+-# 									<%= f.label :flavor, "Type of Creative" %>
+-# 									<%= f.collection_select :flavor, Order::TYPES, :to_s, :humanize %>
+-# 	<% if @user.errors.include? :flavor %>
+-# 									<div class="field--alert"><%= @user.errors.full_messages_for(:flavor).first %></div>
+-# 	<% end %>
+-# 								</div>
+-# <% end %>
+-# 							</div>
+-# 							</div>
+-# 							</div>
+-# 							</div>
+-#
+-# 							<div class="g-b g-b--s--1of2 g-b--m--1of3">
+-# 							<div class="card card--s">
+-# 							<div class="fieldSet-column">
+-# 								<p class="subheader">Change Password</p>
+-#
+-# 								<div class="field field--text <%= "has-error" if @user.errors.include? :password %>">
+-# 									<%= f.label :password, "New Password" %>
+-# 									<%= f.password_field :password, autocomplete: "off" %>
+-# <% if @user.errors.include? :password %>
+-# 									<div class="field--text-error"><%= @user.errors.full_messages_for(:password).first %></div>
+-# <% end %>
+-# 								</div>
+-#
+-# 								<div class="field field--text <%= "has-error" if @user.errors.include? :password_confirmation %>">
+-# 									<%= f.label :password_confirmation, "Confirm Password" %>
+-# 									<%= f.password_field :password_confirmation, autocomplete: "off" %>
+-# <% if @user.errors.include? :password_confirmation %>
+-# 									<div class="field--text-error"><%= @user.errors.full_messages_for(:password_confirmation).first %></div>
+-# <% end %>
+-# 								</div>
+-#
+-# 								<div class="field field--text">
+-# 									<%= f.label :send_emails, "E-Mail Subscriptions" %>
+-# 									<%= f.check_box :send_emails %> Send e-mails
+-# 								</div>
+-# 							</div>
+-#
+-# 						<p class="submit"><%= f.submit "Update", :class => "button button-okay" %></p>
+-# 					<% end %>
+-# 				</div>
+-# 				</div>
+-# 				</div>
+-# 			</div>
+-# 			</div>
+-# 			</div>
+-#
+-# 			<aside>
+-# 				<h2>Organizations</h2>
+-# 				<div class="list">
+-# <% @assignments.each do |assignment| %>
+-# <%= render "assignments/listing", assignment: assignment %>
+-# <% end %>
+-# <% if can? :manage, @user %>
+-# 						<div class="tile create">
+-# 							<%= form_for Assignment.new, remote: true do |f| %>
+-# 								<p>
+-# 									<%= f.hidden_field :user_id, value: @user.id %>
+-# 									<%= f.select :organization_id, @otherOrgs.collect {|o| [o.name, o.id]}, include_blank: "Add Organization" %>
+-# 									<%= f.submit "Add", :class => "button button-okay" %>
+-# 								</p>
+-# 							<% end %>
+-# 						</div>
+-# <% end %>
+-# 					</div>
+-# 			</aside>
