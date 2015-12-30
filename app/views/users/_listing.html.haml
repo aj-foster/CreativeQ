@@ -3,9 +3,8 @@
 		.tile-title
 			= user.name
 			%span.twn
-				(
-				%a{href: "mailto:" + user.email}= user.email
-				)
+				= surround '(', ')' do
+					%a{href: "mailto:" + user.email}= user.email
 		.tile-subtitle
 			- if user.role == "Unapproved"
 				Registered on

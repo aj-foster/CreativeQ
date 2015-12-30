@@ -1,0 +1,17 @@
+.row.mbm
+	.cell.cell--s
+		= link_to "See Active", users_path, class: "button"
+
+.row.row--s
+	.cell.cell--s
+		.card.card--s
+			.card-section
+				%h2.card-title Retired Users
+				.card-subtitle Remembered, but unable to log in
+			- if @users.any?
+				.list
+					- @users.each do |user|
+						= render 'listing', user: user
+			- else
+				.card-section
+					%p.tac There aren't any retired users, yet.
