@@ -1,0 +1,49 @@
+.row.row--s
+	.cell.cell--s
+		.card.card--s
+			.card-section
+				%h2.card-title Welcome to CreativeQ
+				.card-subtitle OSI Creative Services
+			- if user_signed_in?
+				- if current_user.role == "Unapproved"
+					.card-section
+						%p Thanks for stopping by. An administrator will approve your account soon.
+				- else
+					.card-section.ptm
+						.g
+							.g-b.g-b--s--1of3
+								= link_to new_order_path, class: "card card--d has-action ldb" do
+									.card-section.tac
+										.icon
+											<svg><use xlink:href="#icon-add"></use><foreignObject display="none">New Order</foreignObject></svg>
+										.card-title.card-title--s Create New Order
+										.card-subtitle Begin a work order for Graphics, Web, or Video.
+							.g-b.g-b--s--1of3
+								= link_to orders_path, class: "card card--d has-action ldb" do
+									.card-section.tac
+										.icon
+											<svg><use xlink:href="#icon-view"></use><foreignObject display="none">View Orders</foreignObject></svg>
+										.card-title.card-title--s View Your Orders
+										.card-subtitle See orders that you've created, claim, or advise.
+							.g-b.g-b--s--1of3
+								= link_to notifications_path, class: "card card--d has-action ldb" do
+									.card-section.tac
+										.icon
+											<svg><use xlink:href="#icon-inbox"></use><foreignObject display="none">See Notifications</foreignObject></svg>
+										.card-title.card-title--s See Notifications
+										.card-subtitle See recent updates and activity with your orders.
+			- else
+				.card-section
+					%p
+						CreativeQ is the work order management system OSI's Creative Services. Members of OSI Agencies can submit requests for Graphics, Web, and Video work here. If you are a member of an agency and do not yet have an account, you can
+						= succeed "." do
+							= link_to "apply for one here", new_registration_path(resource_name)
+						Once an administrator approves your account, you'll be able to create and manage orders.
+					%p Most user accounts are tied to an @ucf.edu e-mail. If you have inherited a student position with such an e-mail, there's probably already an account waiting for you. Ask your Graduate Assistant or Advisor for more information.
+
+		- unless user_signed_in?
+			.card.card--s
+				.card-section
+					%h3.card-title.card-title--s Sign In
+				.card-section
+					= render "devise/sessions/form"
