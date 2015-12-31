@@ -15,8 +15,13 @@
 						Profile:
 						= @user.name
 					.card-subtitle
-						User since
-						= @user.created_at.strftime("%-m/%-d/%Y")
+						- if @user.created_at.nil?
+							Last Updated
+							= @user.updated_at.strftime("%-m/%-d/%Y")
+						- else
+							User since
+							= @user.created_at.strftime("%-m/%-d/%Y")
+
 
 .row.row--s
 	.g
@@ -55,19 +60,20 @@
 										.field--text-error
 											= @user.errors.full_messages_for(:phone).first
 
-								.field{class: (@user.errors.include? :role) ? 'has-error' : ''}
-									= f.label :role, "Role"
-									= f.collection_select :role, User::ROLES, :to_s, :humanize
-									- if @user.errors.include? :role
-										.field--alert
-											= @user.errors.full_messages_for(:role).first
+								- if can?(:manage, @user)
+									.field{class: (@user.errors.include? :role) ? 'has-error' : ''}
+										= f.label :role, "Role"
+										= f.collection_select :role, User::ROLES, :to_s, :humanize
+										- if @user.errors.include? :role
+											.field--alert
+												= @user.errors.full_messages_for(:role).first
 
-								.field{class: (@user.errors.include? :flavor) ? 'has-error' : '', style: (@user.role != "Creative") ? 'display: none' : ''}
-									= f.label :flavor, "Type of Creative"
-									= f.collection_select :flavor, Order::TYPES, :to_s, :humanize
-									- if @user.errors.include? :flavor
-										.field--alert
-											= @user.errors.full_messages_for(:flavor).first
+									.field.js-user-flavor{class: (@user.errors.include? :flavor) ? 'has-error' : '', style: (@user.role != "Creative") ? 'display: none' : ''}
+										= f.label :flavor, "Type of Creative"
+										= f.collection_select :flavor, Order::TYPES, :to_s, :humanize
+										- if @user.errors.include? :flavor
+											.field--alert
+												= @user.errors.full_messages_for(:flavor).first
 
 
 							.g-b.g-b--m--1of2

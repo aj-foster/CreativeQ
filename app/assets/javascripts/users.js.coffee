@@ -1,7 +1,7 @@
 $(document).on 'ready page:load', ->
 
-	$('.role select').on 'change', ->
+	$('#user_role').on 'change', ->
 		if $(@).val() == 'Creative'
-			$('.flavor').slideDown()
+			$('.js-user-flavor').slideDown()
 		else
-			$('.flavor').slideUp()
+			$('.js-user-flavor').slideUp()
