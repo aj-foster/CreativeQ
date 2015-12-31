@@ -1,14 +1,17 @@
 = form_for resource, as: resource_name, url: session_path(resource_name) do |f|
-  .field.field--text{class: (resource.errors.include? :first_name) ? 'has-error' : ''}
+  .field.field--text{class: (resource.errors.include? :email) ? 'has-error' : ''}
     = f.label :email, "E-mail"
     = f.email_field :email, autofocus: true
     - if resource.errors.include? :email
       .field--text-error
-        resource.errors.full_messages_for(:first_name).first
+        resource.errors.full_messages_for(:email).first
 
   .field.field--text{class: (resource.errors.include? :password) ? 'has-error' : ''}
     = f.label :password
     = f.password_field :password, autocomplete: "off"
+    - if resource.errors.include? :password
+      .field--text-error
+        resource.errors.full_messages_for(:password).first
 
   - if devise_mapping.rememberable?
     .field
