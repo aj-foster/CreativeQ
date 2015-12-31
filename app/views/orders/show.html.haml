@@ -184,7 +184,7 @@
 							<br>
 							%a{href: "mailto:" + @owner.email}= @owner.email
 							- if @owner.phone.present?
-								|
+								%br
 								= @owner.phone
 				- unless @order.creative.nil?
 					.card-section.with-avatar
@@ -216,12 +216,15 @@
 							- if @order.event['time'].present?
 								%em When:
 								= @order.event['time']
+								%br
 							- if @order.event['location'].present?
 								%em Where:
 								= @order.event['location']
+								%br
 							- if @order.event['contact'].present?
 								%em Contact:
 								= @order.event['contact']
+								%br
 							- if @order.event['accomodations'].present?
 								%em Accomodations:
 								= @order.event['accomodations']

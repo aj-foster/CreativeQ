@@ -131,6 +131,7 @@ class OrdersController < ApplicationController
 	def update
 		@order = Order.find(params[:id])
 		@can_edit_organization = current_user.organizations.pluck(:id).include?(@order.organization_id)
+		params[:order].delete(:flavor)
 
 		unless can? :update, @order
 			return redirect_to order_path(@order), alert: "You aren't allowed to edit this order."
