@@ -1,0 +1,9 @@
+.row.mbm
+  = link_to "Back to Orders", orders_path, class: "button button-okay"
+
+.row.row--s
+  .card.card--s
+    .card-section
+      %h3.card-title Create an Order
+    .card-section
+      = render 'form'

@@ -1,0 +1,10 @@
+.row.mbm
+  = link_to "Back to Order", order_path(@order), class: "button button-okay"
+
+.row.row--s
+  .card.card--s
+    .card-section
+      %h2.card-title Edit Order
+      .card-subtitle= @order.name
+    .card-section
+      = render 'form'
