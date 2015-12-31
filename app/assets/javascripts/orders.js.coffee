@@ -43,7 +43,7 @@ $(document).on 'ready page:load', ->
 
 
 	# Offer more information about the various "needs" in a modal
-	$(".needs .fancybox").fancybox({maxWidth: 500})
+	$(".need .fancybox").fancybox({maxWidth: 500})
 
 
 	# Use the label of each order need to enable / disable the field

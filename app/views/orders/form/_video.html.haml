@@ -1,0 +1,16 @@
+.field
+  %p Please choose one of the following types of production for your order. If you need multiple, please create separate orders for each.
+  .list.list--inline.mbm
+    = f.fields_for :needs do |n|
+      - VideoOrder.needs.each do |need|
+        - need_param = need.parameterize.underscore
+        %label.need.list-item.tag.tsm{for: "order_needs_#{need_param}_check"}<
+
+          %input{type: "radio", name: "order_video_check", id: "order_needs_#{need_param}_check", class: "need-check", checked: !@order.needs.nil? && !@order.needs[need_param].nil?}
+          %div.has-action
+            .need-icon <svg><use xlink:href="#icon-check"></use><foreignObject display="none">Checked</foreignObject></svg>
+            = need
+            %a{href: "##{need_param}_modal", class: "fancybox"} (?)
+          = n.hidden_field need_param.to_sym,
+          disabled: @order.needs.nil? || @order.needs[need_param].nil?
+  %p Note: OSI Productions requires a minimum of <strong>three</strong> weeks for order completion. Please ensure that you are scheduling your due date accordingly.
