@@ -1,0 +1,23 @@
+= form_for resource, as: resource_name, url: session_path(resource_name) do |f|
+  .field.field--text{class: (resource.errors.include? :first_name) ? 'has-error' : ''}
+    = f.label :email, "E-mail"
+    = f.email_field :email, autofocus: true
+    - if resource.errors.include? :email
+      .field--text-error
+        resource.errors.full_messages_for(:first_name).first
+
+  .field.field--text{class: (resource.errors.include? :password) ? 'has-error' : ''}
+    = f.label :password
+    = f.password_field :password, autocomplete: "off"
+
+  - if devise_mapping.rememberable?
+    .field
+      = f.check_box :remember_me
+      .dib= f.label :remember_me
+
+  %p= f.submit "Sign In", class: "button button-okay"
+
+%p Alternatively, you might want to
+%p
+  = link_to "Apply for an account", new_registration_path(resource_name), class: "button"
+  = link_to "Forgot Password?", new_password_path(resource_name), class: "button"
