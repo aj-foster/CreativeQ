@@ -1,0 +1,103 @@
+= form_for @order.becomes(Order), html: {novalidate: true} do |f|
+  - f.object = @order.becomes(@order.class)
+  - if @order.flavor.blank?
+    .cell.cell--s.mbm
+      .g
+        .g-b.g-b--s--1of3
+          = f.radio_button :flavor, "Graphics", checked: true, data: {flavor: "graphics"}
+          = f.label :flavor_graphics, class: "card card--d has-action ldb" do
+            .card-section.tac
+              .icon <svg><use xlink:href="#icon-graphics"></use><foreignObject display="none">Graphics</foreignObject></svg>
+              .card-title.card-title--s Graphics
+              .card-subtitle Posters, handbills, social media and more.
+        .g-b.g-b--s--1of3
+          = f.radio_button :flavor, "Web", data: {flavor: "web"}
+          = f.label :flavor_web, class: "card card--d has-action ldb" do
+            .card-section.tac
+              .icon <svg><use xlink:href="#icon-web"></use><foreignObject display="none">Web</foreignObject></svg>
+              .card-title.card-title--s Web
+              .card-subtitle Web sites for your agency, event, or otherwise.
+        .g-b.g-b--s--1of3
+          = f.radio_button :flavor, "Video", data: {flavor: "video"}
+          = f.label :flavor_video, class: "card card--d has-action ldb" do
+            .card-section.tac
+              .icon <svg><use xlink:href="#icon-video"></use><foreignObject display="none">Video</foreignObject></svg>
+              .card-title.card-title--s Production
+              .card-subtitle Promote, record, or relive your event with video.
+  - else
+    = f.hidden_field :flavor
+
+  .g
+    .g-b.g-b--m--1of2
+      %h3.card-title.card-title--s General Information
+
+      .field.field--text{class: (@order.errors.include? :name) ? 'has-error' : ''}
+        = f.label :name, "Order Name", class: "is-required"
+        = f.text_field :name, placeholder: "Brief Name", required: true, autofocus: true
+        - if @order.errors.include? :name
+          .field--text-error= @order.errors.full_messages_for(:name).first
+
+      .field.field--text{class: (@order.errors.include? :due) ? 'has-error' : ''}
+        = f.label :due, "Due Date", class: "is-required"
+        = f.text_field :due, placeholder: "mm/dd/yyyy", required: true, value: @order.due.present? ? @order.due.strftime("%m/%d/%Y") : "", class: "datepicker"
+        - if @order.errors.include? :due
+          .field--text-error= @order.errors.full_messages_for(:due).first
+
+      - if current_user.organizations.count > 1 && @can_edit_organization
+        .field
+          = f.label :organization_id, class: "is-required"
+          = f.select :organization_id, current_user.organizations.collect {|o| [o.name, o.id]}
+      - else
+        = f.hidden_field :organization_id, :value => (@order.organization_id || current_user.organizations.first.id)
+
+    .g-b.g-b--m--1of2
+      %h3.card-title.card-title--s Event Information
+      = f.fields_for :event do |e|
+
+        .field.field--text
+          = e.label :time, "Event Date / Time"
+          = e.text_field :time, placeholder: "(if applicable)", value: @order.event.nil? ? '' : @order.event["time"]
+
+        .field.field--text
+          = e.label :location, "Event Location"
+          = e.text_field :location, placeholder: "(if applicable)", value: @order.event.nil? ? '' : @order.event["location"]
+
+        .field.field--text
+          = e.label :contact, "Event Contact"
+          = e.text_field :contact, placeholder: "For interested students", value: @order.event.nil? ? '' : @order.event["contact"]
+
+        .field.field--text
+          = e.label :accomodations, "Accomodations Contact"
+          = e.text_field :accomodations, placeholder: "(if applicable)", value: @order.event.nil? ? '' : @order.event["accomodations"]
+
+  .mbm
+    %h3.card-title.card-title--s
+      Needs
+      %span.field--alert *
+    - if @order.errors.include? :needs
+      .card-subtitle.field--alert Needs are required
+    - if @order.flavor.blank?
+      = render partial: "orders/form/graphics", locals: {f: f, display: "block"}
+      = render partial: "orders/form/web", locals: {f: f, display: "none"}
+      = render partial: "orders/form/video", locals: {f: f, display: "none"}
+    - else
+      - case @order.flavor
+      - when "Graphics"
+        = render partial: "orders/form/graphics", locals: {f: f, display: "block"}
+      - when "Web"
+        = render partial: "orders/form/web", locals: {f: f, display: "block"}
+      - when "Video"
+        = render partial: "orders/form/video", locals: {f: f, display: "block"}
+
+  .mbm
+    %h3.card-title.card-title--s
+      Description
+      %span.field--alert *
+    - if @order.errors.include? :description
+      .card-subtitle.field--alert= @order.errors.full_messages_for(:description).first
+    .field.field--textarea
+      = f.text_area :description, required: true
+
+    %p= f.submit "Submit", :class => "button button-okay"
+
+= render "modals"

@@ -1,0 +1,40 @@
+.need
+  cursor: pointer
+
+.need-icon
+  @extend .icon
+  font-size: 1em
+  left: 0
+  opacity: 0
+  position: absolute
+  top: 50%
+  transform: translateY(-50%)
+  transition: opacity 0.2s
+
+.need-label > div
+  transition: padding-left 0.2s ease 0.2s
+
+.need-input
+  border: 0px none
+  // border-bottom: 2px solid $c-text-divider
+  padding: 0
+  text-align: center
+  transition: width 0.2s ease 0.4s
+  width: 0
+
+  &:enabled
+    width: 8em
+
+  &:disabled
+    background-color: $c-foreground
+
+.need-check
+  display: none
+
+  &:checked + div
+    padding-left: 2em
+    transition: padding-left 0.2s
+
+  &:checked + div > .need-icon
+    opacity: 1
+    transition: opacity 0.2s ease 0.2s

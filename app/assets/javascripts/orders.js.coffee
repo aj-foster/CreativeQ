@@ -17,25 +17,25 @@ $(document).on 'ready page:load', ->
 	$(".datepicker").datepicker({ dateFormat: "mm/dd/yy", minDate: "+14d" })
 
 
-	showNeeds = (target) ->
-
-		targetClass = $(target).attr('data-flavor')
-
-		$('.need-wrap').each ->
-
-			if $(this).hasClass targetClass
-				$(this).slideDown()
-				$(this).find("input").each ->
-					unless $(this).prop('data-disabled')
-						$(this).attr('disabled', 'true')
-
-
-			else
-				$(this).slideUp()
-				$(this).find("input").each ->
-					if $(this).prop('disabled')
-						$(this).attr('data-disabled', 'true')
-					$(this).attr('disabled', 'true')
+	# showNeeds = (target) ->
+	#
+	# 	targetClass = $(target).attr('data-flavor')
+	#
+	# 	$('.need-wrap').each ->
+	#
+	# 		if $(this).hasClass targetClass
+	# 			$(this).slideDown()
+	# 			$(this).find("input").each ->
+	# 				unless $(this).prop('data-disabled')
+	# 					$(this).attr('disabled', 'true')
+	#
+	#
+	# 		else
+	# 			$(this).slideUp()
+	# 			$(this).find("input").each ->
+	# 				if $(this).prop('disabled')
+	# 					$(this).attr('data-disabled', 'true')
+	# 				$(this).attr('disabled', 'true')
 
 
 	# Show the relevant form for each flavor of order
@@ -47,15 +47,20 @@ $(document).on 'ready page:load', ->
 
 
 	# Use the label of each order need to enable / disable the field
-	$(".need-label").on 'click', (evt) ->
+	# $(".need-label").on 'click', (evt) ->
+	#
+	# 	evt.preventDefault()
+	#
+	# 	$(".video.need-wrap .need input").each ->
+	# 		this.disabled = true
+	#
+	# 	$(@).siblings("input").each ->
+	# 		this.disabled = !this.disabled
 
-		evt.preventDefault()
-
-		$(".video.need-wrap .need input").each ->
-			this.disabled = true
-
-		$(@).siblings("input").each ->
-			this.disabled = !this.disabled
+	$(".need-check").on 'change', ->
+		new_value = !$(@).prop("checked")
+		$(@).siblings(".need-input").each ->
+			$(this).prop("disabled", new_value)
 
 
 	# Activate tooltips

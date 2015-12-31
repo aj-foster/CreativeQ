@@ -200,10 +200,10 @@
 						- @needs.each do |need|
 							- need_param = need.parameterize.underscore
 							- if @order.needs[need_param] == ""
-								%li.list-item.tag
+								%li.list-item.tag.tss
 									%div= need
 							- elsif !@order.needs[need_param].nil?
-								%li.list-item.tag
+								%li.list-item.tag.tss
 									%div= need
 									%div= @order.needs[need_param]
 
