@@ -1,0 +1,15 @@
+.field
+  %p Please check the fields that most accurately describe the order, and provide details in the Description section below.
+  .list.list--inline.mbm
+    = f.fields_for :needs do |n|
+      - WebOrder.needs.each do |need|
+        - need_param = need.parameterize.underscore
+        %label.need.list-item.tag.tsm{for: "order_needs_#{need_param}_check"}<
+
+          %input{type: "checkbox", id: "order_needs_#{need_param}_check", class: "need-check", checked: !@order.needs.nil? && !@order.needs[need_param].nil?}
+          %div.has-action
+            .need-icon <svg><use xlink:href="#icon-check"></use><foreignObject display="none">Checked</foreignObject></svg>
+            = need
+            %a{href: "##{need_param}_modal", class: "fancybox"} (?)
+          = n.hidden_field need_param.to_sym,
+          disabled: @order.needs.nil? || @order.needs[need_param].nil?
