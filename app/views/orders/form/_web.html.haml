@@ -1,4 +1,4 @@
-.field
+.field.js-needs.js-needs--web{style: "display: #{display}"}
   %p Please check the fields that most accurately describe the order, and provide details in the Description section below.
   .list.list--inline.mbm
     = f.fields_for :needs do |n|
@@ -12,4 +12,4 @@
             = need
             %a{href: "##{need_param}_modal", class: "fancybox"} (?)
           = n.hidden_field need_param.to_sym,
-          disabled: @order.needs.nil? || @order.needs[need_param].nil?
+          disabled: @order.needs.nil? || @order.needs[need_param].nil?, class: "need-input"

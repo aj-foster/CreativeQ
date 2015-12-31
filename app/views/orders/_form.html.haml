@@ -4,21 +4,21 @@
     .cell.cell--s.mbm
       .g
         .g-b.g-b--s--1of3
-          = f.radio_button :flavor, "Graphics", checked: true, data: {flavor: "graphics"}
+          = f.radio_button :flavor, "Graphics", checked: true, data: {flavor: "graphics"}, class: "js-flavor"
           = f.label :flavor_graphics, class: "card card--d has-action ldb" do
             .card-section.tac
               .icon <svg><use xlink:href="#icon-graphics"></use><foreignObject display="none">Graphics</foreignObject></svg>
               .card-title.card-title--s Graphics
               .card-subtitle Posters, handbills, social media and more.
         .g-b.g-b--s--1of3
-          = f.radio_button :flavor, "Web", data: {flavor: "web"}
+          = f.radio_button :flavor, "Web", data: {flavor: "web"}, class: "js-flavor"
           = f.label :flavor_web, class: "card card--d has-action ldb" do
             .card-section.tac
               .icon <svg><use xlink:href="#icon-web"></use><foreignObject display="none">Web</foreignObject></svg>
               .card-title.card-title--s Web
               .card-subtitle Web sites for your agency, event, or otherwise.
         .g-b.g-b--s--1of3
-          = f.radio_button :flavor, "Video", data: {flavor: "video"}
+          = f.radio_button :flavor, "Video", data: {flavor: "video"}, class: "js-flavor"
           = f.label :flavor_video, class: "card card--d has-action ldb" do
             .card-section.tac
               .icon <svg><use xlink:href="#icon-video"></use><foreignObject display="none">Video</foreignObject></svg>

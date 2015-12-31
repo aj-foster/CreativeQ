@@ -17,29 +17,28 @@ $(document).on 'ready page:load', ->
 	$(".datepicker").datepicker({ dateFormat: "mm/dd/yy", minDate: "+14d" })
 
 
-	# showNeeds = (target) ->
-	#
-	# 	targetClass = $(target).attr('data-flavor')
-	#
-	# 	$('.need-wrap').each ->
-	#
-	# 		if $(this).hasClass targetClass
-	# 			$(this).slideDown()
-	# 			$(this).find("input").each ->
-	# 				unless $(this).prop('data-disabled')
-	# 					$(this).attr('disabled', 'true')
-	#
-	#
-	# 		else
-	# 			$(this).slideUp()
-	# 			$(this).find("input").each ->
-	# 				if $(this).prop('disabled')
-	# 					$(this).attr('data-disabled', 'true')
-	# 				$(this).attr('disabled', 'true')
+	showNeeds = (target) ->
+
+		targetClass = $(target).attr('data-flavor')
+
+		$('.js-needs').each ->
+
+			if $(this).hasClass "js-needs--" + targetClass
+				$(this).slideDown()
+				$(this).find(".need-input").each ->
+					unless $(this).attr('data-disabled') == "true"
+						$(this).prop('disabled', false)
+
+
+			else
+				$(this).slideUp()
+				$(this).find(".need-input").each ->
+					$(this).attr('data-disabled', $(this).prop('disabled'))
+					$(this).prop('disabled', true)
 
 
 	# Show the relevant form for each flavor of order
-	$(".flavor input[type='radio']").on 'change', -> showNeeds(@)
+	$(".js-flavor").on 'change', -> showNeeds(@)
 
 
 	# Offer more information about the various "needs" in a modal
