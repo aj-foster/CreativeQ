@@ -1,0 +1,25 @@
+.row.row--s
+  .card.card--s
+    .card-section
+      %h3.card-title Notifications
+      - if @notifications.any?
+        .card-subtitle
+          = link_to "Remove All", "#", id: "js-notification-delete-all"
+          :javascript
+            $('#js-notification-delete-all').click(function (evt) {
+              evt.preventDefault();
+              $('.js-notification-delete').each(function () {
+                $(this)[0].click();
+              });
+            });
+    .list#js-notifications
+      - if @notifications.any?
+        - @notifications.each do |notification|
+          .tile.tile--twoline{id: "notification_#{notification.id}"}
+            = link_to view_and_destroy_notification_path(notification), method: :delete, class: "tile-focus", title: "View Order" do
+              .tile-title= notification.title
+              .tile-subtitle= notification.message
+            = link_to notification_path(notification), remote: true, method: :delete, class: "icon js-notification-delete", title: "Remove" do
+              <svg><use xlink:href="#icon-cross"></use><foreignObject display="none">Remove</foreignObject></svg>
+      - else
+        .tile.tile--placeholder You do not have any notifications.
