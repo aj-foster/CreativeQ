@@ -1,0 +1,21 @@
+!!!
+%html
+  %head
+    %title CreativeQ
+    = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
+    <!--[if lt IE 10]>
+    = stylesheet_link_tag "ie", media: "all", "data-turbolinks-track" => true
+    <![endif]-->
+
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = csrf_meta_tags
+
+  %body{class: "#{controller_name} #{action_name}"}
+    = render 'layouts/icons'
+    = render 'layouts/header'
+    = render 'layouts/messages'
+
+    .main
+      = yield
+
+    = render 'layouts/footer'
