@@ -2,7 +2,10 @@
 	height: auto
 	overflow: hidden
 
-	@extend .group
+	&::after
+		clear: both
+		content: ''
+		display: table
 
 .tile-icon--a
 	display: none
@@ -10,7 +13,10 @@
 .tile-focus
 	display: inline-block
 
-	@extend %clearfix
+	&::after
+		clear: both
+		content: ''
+		display: table
 
 	div
 		clear: left
@@ -19,7 +25,3 @@
 .tile .icon
 	height: 1.5em
 	float: right
-
-.fieldSet-column
-	float: left
-	width: 50%
