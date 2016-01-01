@@ -1,0 +1,32 @@
+%header.header
+  .mwn.por
+    %h1.header-title= link_to "CreativeQ", root_url, class: "header-link"
+
+    %input.nav-check{type: "checkbox", id: "nav-check"}
+    %label.nav-toggle{for: "nav-check"}
+      .icon <svg><use xlink:href="#icon-menu"></use><foreignObject display="none">Menu</foreignObject></svg>
+
+    %nav.nav
+      - if user_signed_in?
+        = link_to "Orders", orders_path, class: "nav-link", title: "Orders"
+        - if can?(:manage, User)
+          = link_to "Users", users_path, class: "nav-link", title: "Users"
+        - if can?(:index, Organization)
+          = link_to "Organizations", organizations_path, class: "nav-link", title: "Organizations"
+        = link_to user_path(current_user), class: "nav-link has-icon", title: "Profile" do
+          .nav-icon
+            .icon <svg><use xlink:href="#icon-user"></use><foreignObject display="none">Profile</foreignObject></svg>
+          .nav-caption Profile
+        = link_to notifications_path, class: "nav-link has-icon", title: "Notifications" do
+          .nav-icon.nav-icon--up
+            .icon{class: current_user.notifications.any? ? "has-badge" : "", data: {badge: current_user.notifications.count}}
+              <svg><use xlink:href="#icon-inbox"></use><foreignObject display="none">Notifications</foreignObject></svg>
+          .nav-caption Notifications
+        = link_to destroy_user_session_path, method: :delete, class: "nav-link has-icon", title: "Log Out" do
+          .nav-icon
+            .icon <svg><use xlink:href="#icon-logout"></use><foreignObject display="none">Log Out</foreignObject></svg>
+          .nav-caption Log Out
+
+      - else
+        = link_to "Sign Up", new_user_registration_path, class: "nav-link", title: "Sign Up"
+        = link_to "Sign In", root_url, class: "nav-link", title: "Sign In"

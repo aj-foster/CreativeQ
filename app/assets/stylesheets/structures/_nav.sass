@@ -1,24 +1,67 @@
 .nav
-	float: right
-	font-size: $b-fontSize-xl
+	background-color: $c-accent
+	height: 0
+	position: absolute
+	overflow: hidden
+	top: 100%
+	width: 100%
+	z-index: 1
+
+	+respond-to($g-s)
+		float: right
+		margin-top: 0.4em
+		overflow: visible
+		position: static
+		width: auto
 
 .nav-link
 	border-radius: 4px
-	color: $foreground
-	display: inline-block
+	color: $c-text-invert-primary
+	display: block
 	padding: 0.25em 0.5em
+	position: relative
 	text-decoration: none
 	transition: background-color 0.2s
 
+	+respond-to($g-s)
+		display: inline-block
+
 	&:active, &:focus, &:hover
 		background-color: darken($main, 10%)
-		color: $foreground
+		color: $c-text-invert-primary
+
+.nav-toggle
+	cursor: pointer
+	float: right
+
+	+respond-to($g-s)
+		display: none
+
+.nav-toggle > .icon
+	color: $c-text-invert-primary
+	padding: 0.25em
 
 .nav-icon
-	@extend .icon
+	position: absolute
+
+	+respond-to($g-s)
+		position: static
+
+.nav-icon > .icon
+	color: $c-text-invert-primary
 	font-size: 1em
 	height: 1.25em
+	padding: 0
 	vertical-align: bottom
+
+	&:active, &:focus, &:hover
+		color: $c-text-invert-primary
+
+.nav-caption
+	padding-left: 1.5em
+
+	+respond-to($g-s)
+		display: none
 
 .has-badge
 	position: relative
@@ -32,9 +75,18 @@
 		margin: auto
 		padding: 0 0.375em
 		position: absolute
-		right: 0
-		top: 0
+		right: -0.75em
+		top: -0.5em
 
-.nav-icon--up > svg
+.nav-icon--up svg
 	position: relative
 	top: -2px
+
+.nav-check
+	display: none
+
+.nav-check:checked + .nav-toggle > .icon
+	color: $c-text-invert-secondary
+
+.nav-check:checked ~ .nav
+	height: auto
