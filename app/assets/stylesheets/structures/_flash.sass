@@ -1,0 +1,25 @@
+.flash
+  border-radius: $b-borderRadius
+  color: $c-text-invert-primary
+  padding: 0.5em
+  max-width: em(288px)
+  opacity: 0
+  position: fixed
+  right: em(-288px)
+  transition: opacity 0.2s, right 0.2s
+  width: 100%
+
+.flash-noscript
+  border-radius: $b-borderRadius
+  color: $c-text-invert-primary
+  padding: 0.5em
+
+.flash--notice
+  background-color: $c-okay
+
+.flash--alert
+  background-color: $c-danger-btn
+
+.is-visible
+  opacity: 1
+  right: 1em

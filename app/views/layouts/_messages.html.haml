@@ -1,0 +1,6 @@
+- if flash.any?
+  .row.constraint
+    - flash.each do |key, value|
+      %p{class: "flash flash--#{key}"}= value
+      %noscript
+        %p{class: "flash-noscript flash--#{key}"}= value
