@@ -1,16 +1,18 @@
 $(document).on 'ready page:load', ->
 
 	# Allow users to see order descriptions by clicking on the orders
-	$(".js-order-preview").on 'click', (evt) ->
+	# $(".js-order-preview").on 'click', (evt) ->
+	#
+	# 	# Grab the ID of the order we want to preview.
+	# 	order_id = $(@).attr("data-order")
+	#
+	# 	# Use fancybox to open the preview immediately after the order
+	# 	$.fancybox.open($(".preview[data-order='" + order_id + "']"), {maxWidth: 1200})
+	#
+	# 	# Prevent the default action
+	# 	evt.preventDefault()
 
-		# Grab the ID of the order we want to preview.
-		order_id = $(@).attr("data-order")
-
-		# Use fancybox to open the preview immediately after the order
-		$.fancybox.open($(".preview[data-order='" + order_id + "']"), {maxWidth: 1200})
-
-		# Prevent the default action
-		evt.preventDefault()
+	$(".js-order-preview-link").fancybox({maxWidth: 1200, title: null})
 
 
 	# Use a datepicker to make entering due dates easier

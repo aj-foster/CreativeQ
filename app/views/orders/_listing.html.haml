@@ -1,0 +1,53 @@
+.tile.tile--twoline.has-action
+  .icon.tile-icon--a{style: "color: #{color(order)}"} <svg><use xlink:href="#icon-#{order.flavor.downcase}"></use></svg>
+  = link_to order_path(order), class: "tile-focus", title: "View Order" do
+    .tile-title= order.name
+    .tile-subtitle
+      Due
+      = due_date(order, short: (order.status == "Complete"))
+      for
+      = order.organization.try(:name) || "Unknown Organization"
+      - if order.creative.present?
+        - if order.status == "Complete"
+          Completed by
+          = order.creative.name
+        - else
+          It is currently
+          = surround "(", ")" do
+            = order.progress
+          by
+          = order.creative.name
+
+  - if order.status == "Unapproved" && can?(:initial_approve, order)
+    = link_to approve_order_path(order, stage: :initial), remote: true, method: :put, id: "approve-#{order.id}", class: "icon", title: "Approve Order" do
+      <svg><use xlink:href="#icon-approve"></use><foreignObject display="none">Approve</foreignObject></svg>
+
+  - if order.status == "Unclaimed" && can?(:claim, order)
+    = link_to claim_order_path(order), method: :put, :id => "claim-#{order.id}", class: "icon", title: "Claim Order" do
+      <svg><use xlink:href="#icon-check"></use><foreignObject display="none">Claim</foreignObject></svg>
+
+  %a{href: "#js-preview-#{order.id}", class: "icon js-order-preview-link", "data-order" => "#{order.id}", title: "Preview Order"}
+    <svg><use xlink:href="#icon-view"></use><foreignObject display="none">Preview</foreignObject></svg>
+
+%div{id: "js-preview-#{order.id}", class: "js-order-preview"}
+  .card-section
+    %h3.card-title= order.name
+    .card-subtitle
+      Due
+      = due_date(order, short: (order.status == "Complete"))
+      for
+      = order.organization.try(:name) || "Unknown Organization"
+  .card-section
+    %ul.list.list--inline.mbm
+      - order.class.needs.each do |need|
+        - need_param = need.parameterize.underscore
+        - if order.needs[need_param] == ""
+          %li.list-item.tag.tss
+            %div= need
+        - elsif !order.needs[need_param].nil?
+          %li.list-item.tag.tss
+            %div= need
+            %div= order.needs[need_param]
+
+    .js-truncate.mbm{"data-truncate-height" => "200"}
+      = simple_format(order.description)
