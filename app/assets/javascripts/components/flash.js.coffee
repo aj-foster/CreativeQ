@@ -4,8 +4,8 @@ $(document).on 'ready page:load', ->
 
     setTimeout ->
       element.addClass('is-visible')
-    , index * 6000
+    , index * 5000
 
     setTimeout ->
       element.removeClass('is-visible')
-    , index * 6000 + 5500
+    , index * 5000 + 5500

@@ -6,14 +6,13 @@
         .card-subtitle Reset it using your e-mail
       .card-section
         = form_for resource, as: resource_name, url: password_path(resource_name), html: { method: :post } do |f|
-          = devise_error_messages!
 
           .field.field--text{class: (resource.errors.include? :email) ? 'has-error' : ''}
             = f.label :email, "E-mail"
             = f.email_field :email, autofocus: true
             - if resource.errors.include? :email
               .field--text-error
-                resource.errors.full_messages_for(:email).first
+                = resource.errors.full_messages_for(:email).first
 
           %p= f.submit "Send Instructions", class: "button button-okay"
 

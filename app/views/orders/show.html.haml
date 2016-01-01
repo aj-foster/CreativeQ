@@ -92,7 +92,10 @@
 									});
 					- approval_button = ""
 					%p
-						- if @order.final_one != current_user && @order.final_two.nil? && can?(:final_approve, @order)
+						- if @order.status == "Unapproved" && can?(:initial_approve, @order)
+							This order must receive initial approval before it can be claimed. A delay in the initial approval may cause a change in the due date.
+							- approval_button = link_to "Approve Order", approve_order_path(@order, stage: "initial"), method: :put, class: "button button-okay"
+						- elsif @order.final_one != current_user && @order.final_two.nil? && can?(:final_approve, @order)
 							If you are satisfied with the current proof of the order, you can give it final approval.
 							- if @order.student_approval.nil? && @order.owner == current_user
 								Since you are the order's owner, your approval will count as the owner's approval.
@@ -112,14 +115,14 @@
 							If you are satisfied with the current proof of the order, you can give it your approval. Afterwards, it will need to be approved by your advisor.
 							- approval_button = link_to "Approve Proof", approve_order_path(@order, stage: "student"), method: :put, class: "button button-okay"
 
-						- if can?(:manage, @order)
+						- if can?(:manage, @order) && @order.status != "Complete"
 							You can manually set this order to complete, bypassing the approval process.
 
 					%p
 						- if @order.status == "Unclaimed" && can?(:claim, @order)
 							= link_to "Claim Order", claim_order_path(@order), method: :put, id: "claim-#{@order.id}", class: "button button-okay"
 						= approval_button
-						- if can?(:manage, @order)
+						- if can?(:manage, @order) && @order.status != "Complete"
 							= link_to "Mark Complete", complete_order_path(@order), method: :put, class: "button", data: { confirm: "Are you sure you want to mark this order as complete?" }
 						- if @order.status == "Claimed" && can?(:unclaim, @order)
 							= link_to "Unclaim Order", unclaim_order_path(@order), method: :put, class: "button button-alert"

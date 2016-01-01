@@ -11,6 +11,7 @@ class OrdersController < ApplicationController
 			.to_a
 
 		@pending_advisor = Order.advised_by(current_user)
+			.where.not(status: "Complete")
 			.where.not(student_approval: nil)
 			.where(advisor_approval: nil)
 			.order(due: :asc)
@@ -18,6 +19,7 @@ class OrdersController < ApplicationController
 			.to_a
 
 		@pending_final = can?(:final_approve, Order) ? Order
+			.where.not(status: "Complete")
 			.where.not(advisor_approval: nil)
 			.where(final_two: nil)
 			.order(due: :asc)

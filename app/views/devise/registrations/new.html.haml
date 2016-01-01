@@ -23,7 +23,7 @@
 
           .field.field--text{class: (resource.errors.include? :email) ? 'has-error' : ''}
             = f.label :email, "E-mail"
-            = f.email_field :email, autofocus: true
+            = f.email_field :email, required: true
             - if resource.errors.include? :email
               .field--text-error
                 resource.errors.full_messages_for(:email).first
