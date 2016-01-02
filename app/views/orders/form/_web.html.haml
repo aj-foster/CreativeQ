@@ -10,6 +10,6 @@
             %input{type: "checkbox", id: "order_needs_#{need_param}_check", class: "need-check", checked: !@order.needs.nil? && !@order.needs[need_param].nil?}
             %label{for: "order_needs_#{need_param}_check"}
               .need-icon <svg><use xlink:href="#icon-check"></use><foreignObject display="none">Checked</foreignObject></svg>
-              = need
+              #{need}&nbsp;
               %a{href: "##{need_param}_modal", class: "fancybox"} (?)
             = n.hidden_field need_param.to_sym, disabled: @order.needs.nil? || @order.needs[need_param].nil?, data: {disabled: @order.needs.nil? || @order.needs[need_param].nil?}, class: "need-input"
