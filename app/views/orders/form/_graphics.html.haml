@@ -4,11 +4,12 @@
     = f.fields_for :needs do |n|
       - GraphicOrder.needs.each do |need|
         - need_param = need.parameterize.underscore
-        %label.need.list-item.tag.tsm{for: "order_needs_#{need_param}_check"}<
+        .list-item
+          .need.tag.tsm<
 
-          %input{type: "checkbox", id: "order_needs_#{need_param}_check", class: "need-check", checked: !@order.needs.nil? && !@order.needs[need_param].nil?}
-          %div.has-action
-            .need-icon <svg><use xlink:href="#icon-check"></use><foreignObject display="none">Checked</foreignObject></svg>
-            = need
-            %a{href: "##{need_param}_modal", class: "fancybox"} (?)
-          = n.text_field need_param.to_sym, value: @order.needs.nil? ? '' : @order.needs[need_param], placeholder: "Size / Info", disabled: @order.needs.nil? || @order.needs[need_param].nil?, class: "need-input"
+            %input{type: "checkbox", id: "order_needs_#{need_param}_check", class: "need-check", checked: !@order.needs.nil? && !@order.needs[need_param].nil?}
+            %label{for: "order_needs_#{need_param}_check"}
+              .need-icon <svg><use xlink:href="#icon-check"></use><foreignObject display="none">Checked</foreignObject></svg>
+              = need
+              %a{href: "##{need_param}_modal", class: "fancybox"} (?)
+            = n.text_field need_param.to_sym, value: @order.needs.nil? ? '' : @order.needs[need_param], placeholder: "Size / Info", disabled: @order.needs.nil? || @order.needs[need_param].nil?, data: {disabled: @order.needs.nil? || @order.needs[need_param].nil?}, class: "need-input"

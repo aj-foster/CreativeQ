@@ -1,5 +1,5 @@
 .need
-  cursor: pointer
+  display: flex
 
 .need-icon
   @extend .icon
@@ -27,13 +27,14 @@ input[type="text"].need-input
 .need-check
   display: none
 
-  &:checked + div
+  &:checked + label
     padding-left: 2em
     transition: padding-left 0.2s
 
-  &:checked + div > .need-icon
+  &:checked + label > .need-icon
     opacity: 1
     transition: opacity 0.2s ease 0.2s
 
-.need > div
+.need > label
+  cursor: pointer
   transition: padding-left 0.2s ease 0.2s
