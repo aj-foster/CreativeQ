@@ -104,13 +104,18 @@ class OrdersController < ApplicationController
 		end
 
 		@order.owner = current_user
-		@order.validate_due_date unless can?(:manage, @order)
 
-		@order.subscribe @order.owner
-		@order.subscribe @order.advisors
+		# Warning: This is extremely flaky. There's something weird going on with
+		# the validation. valid = @order.valid? && @order.validate_due_date
+		# Does not add the due date errors to the errors object. Different orders
+		# of evaluation, assignment, and &&'ing them cause different results.
+		valid = @order.valid?
+		due_date_valid = (can?(:manage, @order) ? true : @order.validate_due_date)
 
-		if @order.save
+		if valid && due_date_valid && @order.save
 			redirect_to order_path(@order), notice: "Your order has been submitted to your advisor for approval."
+			@order.subscribe @order.owner
+			@order.subscribe @order.advisors
 			Notification.notify_order_created(@order, current_user)
 		else
 			@can_edit_organization = true

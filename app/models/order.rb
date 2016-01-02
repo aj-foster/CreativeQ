@@ -126,19 +126,18 @@ class Order < ActiveRecord::Base
 	# changes made by administrators.
 	#
 	def validate_due_date
-		return_value = true
 
 		unless due.present? && due >= Date.today + 2.weeks
-			errors.add :due, "date must be at least two weeks away."
-			return_value = false
+			errors.add :due, "must be at least two weeks away."
+			return false
 		end
 
 		if due.saturday? || due.sunday?
-			errors.add :due, "date shouldn't be on a weekend."
-			return_value = false
+			errors.add :due, "shouldn't be on a weekend."
+			return false
 		end
 
-		return return_value
+		return true
 	end
 
 
