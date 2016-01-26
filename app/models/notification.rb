@@ -51,7 +51,10 @@ class Notification < ActiveRecord::Base
     message = "#{order.owner.name} marked an order for final approval: " +
               "\"#{order.name.truncate(30, separator: ' ')}\""
 
-    recipients = order.advisors.compact || []
+    advisor_recipients = order.advisors.compact || []
+    admin_recipients = User.where(role: "Admin") || []
+    recipients = advisor_recipients + admin_recipients || []
+    recipients.uniq!
     emails = recipients.select(&:send_emails?).map(&:email) || []
 
     recipients.each do |user|

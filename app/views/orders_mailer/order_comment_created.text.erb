@@ -5,9 +5,9 @@ One of your orders, <%= @order.name %>, has a new comment posted by <%= @comment
 "<%= @comment.message %>"
 
 <% if @comment.attachment? %>
-It also has a file attachment. If you have any questions, feel free to contact the web folks at OSI Design Group.
+It also has a file attachment. If you have any questions, feel free to contact the Communications Coordinator at OSI Creative Services.
 <% else %>
-If you have any questions, feel free to contact the web folks at OSI Design Group.
+If you have any questions, feel free to contact the Communications Coordinator at OSI Creative Services.
 <% end %>
 
 You can find the order here: http://osi.ucf.edu/creativeq/orders/<%= @order.id %>
