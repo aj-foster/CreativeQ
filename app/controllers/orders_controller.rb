@@ -31,6 +31,7 @@ class OrdersController < ApplicationController
 			.where(status: "Complete")
 			.where("completed_at >= ?", DateTime.now - 1.week)
 			.order(completed_at: :desc)
+			.includes(:organization, :creative)
 			.to_a
 
 		@unclaimed = Order.claimable_by(current_user)

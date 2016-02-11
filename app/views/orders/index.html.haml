@@ -46,6 +46,18 @@
 				- @pending_final.each do |order|
 					= render 'listing', order: order
 
+	- if @recent_complete.any?
+		.card.card--s
+			.card-section
+				%h2.card-title
+					Recently Completed
+					= surround "(", ")" do
+						= @recent_complete.size
+				.card-subtitle Received final approval within the past week
+			.list
+				- @recent_complete.each do |order|
+					= render 'listing', order: order
+
 	- if @unclaimed.any?
 		.card.card--s
 			.card-section

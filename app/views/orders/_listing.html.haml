@@ -3,17 +3,27 @@
   = link_to order_path(order), class: "tile-focus", title: "View Order" do
     .tile-title= order.name
     .tile-subtitle
-      Due
-      = due_date(order, short: (order.status == "Complete"))
-      for
-      = succeed "." do
-        = order.organization.try(:name) || "Unknown Organization"
-      - if order.creative.present?
-        - if order.status == "Complete"
-          Completed by
-          = succeed "." do
-            = order.creative.name
+      - if order.status == "Complete"
+        - if order.completed_at.present?
+          Completed
+          = order.completed_at.strftime("%B %-d, %Y")
+          - if order.creative.present?
+            by
+            = succeed "." do
+              = order.creative.name
         - else
+          Due
+          = due_date(order, short: (order.status == "Complete"))
+          for
+          = succeed "." do
+            = order.organization.try(:name) || "Unknown Organization"
+      - else
+        Due
+        = due_date(order, short: (order.status == "Complete"))
+        for
+        = succeed "." do
+          = order.organization.try(:name) || "Unknown Organization"
+        - if order.creative.present?
           It is currently
           = surround '"', '"' do
             = order.progress
