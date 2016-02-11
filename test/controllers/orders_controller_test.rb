@@ -82,6 +82,30 @@ class OrdersControllerTest < ActionController::TestCase
       "Failed to populate pending final orders listing for admin"
   end
 
+  test "render recently completed orders listing for owners" do
+    user = FactoryGirl.create(:user)
+    order = FactoryGirl.create(:graphic_order, owner: user,
+      status: "Complete", completed_at: DateTime.now)
+    sign_in user
+    get :index
+    assert_not_nil assigns(:recent_complete),
+      "Failed to assign recently completed orders index listing for owner"
+    assert_not_equal [], assigns(:recent_complete),
+      "Failed to populate recently completed orders listing for owner"
+  end
+
+  test "render recently completed orders listing for creatives" do
+    user = FactoryGirl.create(:user, role: "Creative", flavor: "Graphics")
+    order = FactoryGirl.create(:graphic_order, creative: user,
+      status: "Complete", completed_at: DateTime.now)
+    sign_in user
+    get :index
+    assert_not_nil assigns(:recent_complete),
+      "Failed to assign recently completed orders index listing for creative"
+    assert_not_equal [], assigns(:recent_complete),
+      "Failed to populate recently completed orders listing for creative"
+  end
+
   test "render unrelated orders listing for admins" do
     user = FactoryGirl.create(:user, role: "Admin")
     order = FactoryGirl.create(:graphic_order, status: "Claimed")
@@ -459,6 +483,8 @@ class OrdersControllerTest < ActionController::TestCase
       "Failed to give order second final approval for an admin"
     assert_equal "Complete", Order.find(order.id).status,
       "Failed to complete order after second final approval"
+    assert_not_nil Order.find(order.id).completed_at,
+      "Failed to record order completion date after second final approval"
   end
 
   test "give two approvals for an admin and advisor" do
@@ -512,6 +538,8 @@ class OrdersControllerTest < ActionController::TestCase
       "Failed to redirect creative after completing order"
     assert_equal "Complete", Order.find(order.id).status,
       "Failed to complete order for its creative"
+    assert_not_nil Order.find(order.id).completed_at,
+      "Failed to record order completion date after manual creative completion"
   end
 
   test "complete order for an admin" do
@@ -523,6 +551,8 @@ class OrdersControllerTest < ActionController::TestCase
       "Failed to redirect admin after completing order"
     assert_equal "Complete", Order.find(order.id).status,
       "Failed to complete order for an admin"
+    assert_not_nil Order.find(order.id).completed_at,
+      "Failed to record order completion date after manual admin completion"
   end
 
   test "protect order completion from an unrelated user" do

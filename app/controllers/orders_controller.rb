@@ -27,6 +27,12 @@ class OrdersController < ApplicationController
 			.to_a
 			: []
 
+		@recent_complete = Order.readable(current_user)
+			.where(status: "Complete")
+			.where("completed_at >= ?", DateTime.now - 1.week)
+			.order(completed_at: :desc)
+			.to_a
+
 		@unclaimed = Order.claimable_by(current_user)
 			.where.not(status: "Complete")
 			.order(due: :asc)
@@ -55,9 +61,15 @@ class OrdersController < ApplicationController
 
 	def completed
 		if can? :manage, Order
-			@orders = Order.where(status: "Complete").page(params[:page]).order(due: :desc)
+			@orders = Order.where(status: "Complete")
+				.page(params[:page])
+				.order("completed_at DESC NULLS LAST, due DESC")
+				.includes(:organization, :creative)
 		else
-			@orders = Order.completed(current_user).page(params[:page]).order(due: :desc)
+			@orders = Order.completed(current_user)
+				.page(params[:page])
+				.order("completed_at DESC NULLS LAST, due DESC")
+				.includes(:organization, :creative)
 		end
 	end
 
@@ -211,6 +223,7 @@ class OrdersController < ApplicationController
 				elsif
 					@order.final_two = current_user
 					@order.status = "Complete"
+					@order.completed_at = DateTime.now
 				end
 
 				if @order.student_approval.nil? && @order.owner == current_user
@@ -350,7 +363,10 @@ class OrdersController < ApplicationController
 			return redirect_to orders_path, alert: "You aren't allowed to complete this order."
 		end
 
-		if @order.update_attribute(:status, "Complete")
+		@order.status = "Complete"
+		@order.completed_at = DateTime.now
+
+		if @order.save
 			@order.comments.create(message: "#{current_user.name} set the order as complete.")
 			redirect_to order_path(@order), notice: "Order has been marked as complete."
 		else
