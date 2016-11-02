@@ -59,3 +59,6 @@ end
 
 # Find out where SQL queries come from
 gem 'active_record_query_trace', group: :development
+
+# Use puma as a server
+gem 'puma'
