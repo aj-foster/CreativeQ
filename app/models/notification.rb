@@ -28,7 +28,7 @@ class Notification < ActiveRecord::Base
       user.notifications.create(notable: order, title: title, message: message)
     end
 
-    OrdersMailer.order_comment_created(comment, emails).deliver
+    OrdersMailer.order_comment_created(comment, emails).deliver_now
   end
 
   def self.notify_order_created (order, current_user)
@@ -43,7 +43,7 @@ class Notification < ActiveRecord::Base
       user.notifications.create(notable: order, title: title, message: message)
     end
 
-    OrdersMailer.order_awaiting_initial_approval(order, emails).deliver
+    OrdersMailer.order_awaiting_initial_approval(order, emails).deliver_now
   end
 
   def self.notify_order_pending (order, current_user)
@@ -61,7 +61,7 @@ class Notification < ActiveRecord::Base
       user.notifications.create(notable: order, title: title, message: message)
     end
 
-    OrdersMailer.order_awaiting_advisor_approval(order, emails).deliver
+    OrdersMailer.order_awaiting_advisor_approval(order, emails).deliver_now
   end
 
   def self.notify_user_created (user)
@@ -77,6 +77,6 @@ class Notification < ActiveRecord::Base
         link_controller: "users", link_action: "index")
     end
 
-    UsersMailer.user_awaiting_approval(user, emails).deliver
+    UsersMailer.user_awaiting_approval(user, emails).deliver_now
   end
 end
