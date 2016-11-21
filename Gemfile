@@ -62,3 +62,6 @@ gem 'active_record_query_trace', group: :development
 
 # Use puma as a server
 gem 'puma'
+
+# Use AppSignal for Monitoring
+gem 'appsignal'

@@ -47,6 +47,9 @@ GEM
     airbrussh (1.1.1)
       sshkit (>= 1.6.1, != 1.7.0)
     american_date (1.1.1)
+    appsignal (2.0.3)
+      rack
+      thread_safe
     arel (6.0.3)
     autoprefixer-rails (6.5.1.1)
       execjs
@@ -216,6 +219,7 @@ PLATFORMS
 DEPENDENCIES
   active_record_query_trace
   american_date
+  appsignal
   autoprefixer-rails
   cancan
   capistrano-bundler
