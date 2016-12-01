@@ -1,6 +1,6 @@
 class CreateOrders < ActiveRecord::Migration
   def change
-    execute 'create extension hstore'
+    # execute 'create extension hstore'
     create_table :orders do |t|
       t.string :name
       t.date :due

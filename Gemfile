@@ -50,7 +50,7 @@ gem 'autoprefixer-rails'
 gem 'capistrano-rails', group: :development
 gem 'capistrano-passenger', group: :development
 gem 'capistrano-bundler', group: :development
-gem 'capistrano-rvm', group: :development
+gem 'capistrano-rbenv', group: :development
 
 # Testing-related gems
 group :development, :test do
