@@ -1,5 +1,5 @@
 class OrdersMailer < ActionMailer::Base
-	default from: "CreativeQ <osiweb@ucf.edu>"
+	default from: "CreativeQ <noreply@nqueue.io>"
 
 	def order_awaiting_initial_approval (order, emails)
 		@order = order
