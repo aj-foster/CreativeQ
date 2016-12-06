@@ -36,7 +36,7 @@ gem 'cancan'
 gem 'will_paginate'
 
 # UI Stuff
-gem 'fancybox2-rails', :git => 'git://github.com/mikbe/fancybox2-rails.git'
+gem 'fancybox2-rails', :git => 'https://github.com/aj-foster/fancybox2-rails.git'
 gem 'jquery-ui-rails'
 gem 'american_date'
 

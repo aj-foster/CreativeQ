@@ -1,4 +1,4 @@
-$(document).on 'ready page:load', ->
+$(document).on 'turbolinks:load', ->
 
 	# Allow users to see order descriptions by clicking on the orders
 	# $(".js-order-preview").on 'click', (evt) ->

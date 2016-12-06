@@ -7,7 +7,7 @@ $(document).ready(function () {
   });
 });
 
-$(document).on('ready page:load', function () {
+$(document).on('turbolinks:load', function () {
   $(".js-truncate").each(function () {
     if ($(this).height() > $(this).attr('data-truncate-height')) {
       $(this).css("height", $(this).attr('data-truncate-height') + 'px');
