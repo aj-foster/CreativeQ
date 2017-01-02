@@ -32,6 +32,13 @@ class User < ActiveRecord::Base
 	end
 
 
+	def gravatar_source
+		require 'digest/md5'
+
+		"https://www.gravatar.com/avatar/" + Digest::MD5.hexdigest(self.email.strip.downcase) + "?d=blank"
+	end
+
+
 	def initials
 		if first_name[0].nil? || last_name[0].nil?
 			"//"

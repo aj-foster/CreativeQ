@@ -145,7 +145,9 @@
 							- if comment.attachment.exists?
 								= link_to asset_path(comment.attachment.url), class: "icon fr tsl", title: "View Attachment" do
 									<svg><use xlink:href="#icon-attachment"></use><foreignObject display="none">Attachment</foreignObject></svg>
-							.card-avatar= comment.user.initials
+							.card-avatar
+								= comment.user.initials
+								%img{:src => comment.user.gravatar_source, :alt => comment.user.initials}/
 							.card-title= comment.user.name
 							.card-subtitle
 								= comment.created_at.strftime("%-m/%-d/%Y at %-I:%M%P")
@@ -178,7 +180,9 @@
 							.card-subtitle Order Creator
 				- else
 					.card-section.with-avatar
-						.card-avatar= @owner.initials
+						.card-avatar
+							= @owner.initials
+							%img{:src => @owner.gravatar_source, :alt => @owner.initials}/
 						.card-title= @owner.name
 						.card-subtitle Order creator
 						%p
@@ -191,7 +195,9 @@
 								= @owner.phone
 				- unless @order.creative.nil?
 					.card-section.with-avatar
-						.card-avatar= @order.creative.initials
+						.card-avatar
+							= @order.creative.initials
+							%img{:src => @order.creative.gravatar_source, :alt => @order.creative.initials}/
 						.card-title= @order.creative.name
 						.card-subtitle Claimed order
 
