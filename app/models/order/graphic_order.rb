@@ -4,7 +4,7 @@ class GraphicOrder < Order
      "Logo", "Brochure", "Program", "FB Event Photo", "OSI Banner",
      "OSI Front Desk TV", "FB Cover Photo", "FB Profile Photo", "Twitter Photo",
      "Instagram Photo", "KnightConnect", "Business Card", "Union TV",
-     "Other"]
+     "Photobooth", "Other"]
   end
 
   def flavor
