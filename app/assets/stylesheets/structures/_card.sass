@@ -68,4 +68,29 @@
     margin: 0
 
   & > .card-subtitle
+    font-size: 0.875rem
     margin: 0 0 (1em / 0.875)
+
+.with-avatar--l
+  font-size: 1.5em
+  margin: 0 (1em / 1.5) (1em / 1.5)
+
+  & > .card-title
+    font-size: 1.375em
+
+  & > .card-avatar--edit
+
+    text-decoration: none
+
+    &:active, &:focus, &:hover
+      color: $c-text-invert-primary
+
+    &:after
+      background: linear-gradient(to bottom, transparent, $c-text-primary)
+      bottom: 0
+      content: "Edit"
+      font-size: 0.375em
+      left: 0
+      padding-top: 0.125em
+      position: absolute
+      right: 0

@@ -10,9 +10,16 @@
 	.g
 		.g-b
 			.card.card--s
-				.card-section
+				.card-section.with-avatar.with-avatar--l
+					- if @current_user == @user
+						%a.card-avatar.card-avatar--edit{:href => "https://en.gravatar.com"}
+							= @user.initials
+							%img{:src => @user.gravatar_source, :alt => @user.initials}/
+					- else
+						.card-avatar
+							= @user.initials
+							%img{:src => @user.gravatar_source, :alt => @user.initials}/
 					%h2.card-title
-						Profile:
 						= @user.name
 					.card-subtitle
 						- if @user.created_at.nil?
