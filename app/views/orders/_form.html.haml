@@ -38,7 +38,7 @@
           .field--text-error= @order.errors.full_messages_for(:name).first
 
       .field.field--text{class: (@order.errors.include? :due) ? 'has-error' : ''}
-        = f.label :due, "Due Date", class: "is-required"
+        = f.label :due, "Initial Proof Due Date", class: "is-required"
         = f.text_field :due, placeholder: "mm/dd/yyyy", required: true, value: @order.due.present? ? @order.due.strftime("%m/%d/%Y") : "", class: "datepicker"
         - if @order.errors.include? :due
           .field--text-error= @order.errors.full_messages_for(:due).first
@@ -95,6 +95,10 @@
       %span.field--alert *
     - if @order.errors.include? :description
       .card-subtitle.field--alert= @order.errors.full_messages_for(:description).first
+    
+    %p.js-needs.js-needs--graphics{style: "display: #{(@order.flavor.blank? || @order.flavor == "Graphics") ? "block" : "none"}"}
+      Please include the <strong>exact</strong> content / text for your poster or graphics, as well as which logos need to be added.
+    
     .field.field--textarea
       = f.text_area :description, required: true
 
