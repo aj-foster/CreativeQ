@@ -32,3 +32,4 @@ Capfile
 .capistrano
 config/deploy
 config/deploy.rb
+config/appsignal.yml
