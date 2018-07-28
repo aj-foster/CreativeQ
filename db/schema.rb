@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211022720) do
+ActiveRecord::Schema.define(version: 20180728012328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
 
-  create_table "assignments", force: true do |t|
+  create_table "assignments", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "organization_id"
     t.string   "role",            default: "Member"
@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 20160211022720) do
   add_index "assignments", ["organization_id"], name: "index_assignments_on_organization_id", using: :btree
   add_index "assignments", ["user_id"], name: "index_assignments_on_user_id", using: :btree
 
-  create_table "comments", force: true do |t|
+  create_table "comments", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "order_id"
     t.text     "message",                 default: ""
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 20160211022720) do
   add_index "comments", ["order_id"], name: "index_comments_on_order_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
-  create_table "notifications", force: true do |t|
+  create_table "notifications", force: :cascade do |t|
     t.string   "title",           default: "",    null: false
     t.text     "message",         default: "",    null: false
     t.boolean  "read",            default: false, null: false
@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 20160211022720) do
   add_index "notifications", ["notable_id"], name: "index_notifications_on_notable_id", using: :btree
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
 
-  create_table "orders", force: true do |t|
+  create_table "orders", force: :cascade do |t|
     t.string   "name",                default: ""
     t.date     "due"
     t.text     "description",         default: ""
@@ -89,13 +89,13 @@ ActiveRecord::Schema.define(version: 20160211022720) do
   add_index "orders", ["owner_id"], name: "index_orders_on_owner_id", using: :btree
   add_index "orders", ["student_approval_id"], name: "index_orders_on_student_approval_id", using: :btree
 
-  create_table "organizations", force: true do |t|
+  create_table "organizations", force: :cascade do |t|
     t.string   "name",       default: ""
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "users", force: true do |t|
+  create_table "users", force: :cascade do |t|
     t.string   "first_name",             default: ""
     t.string   "last_name",              default: ""
     t.string   "role",                   default: "Unapproved"
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(version: 20160211022720) do
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.boolean  "send_emails",            default: true,         null: false
+    t.text     "description"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

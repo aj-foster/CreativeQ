@@ -42,6 +42,13 @@
               .field--text-error
                 resource.errors.full_messages_for(:password_confirmation).first
 
+          .field.field--text{class: (resource.errors.include? :description) ? 'has-error' : ''}
+            = f.label :description, "Which organization do you represent, and what is your role?"
+            = f.text_field :description, required: true
+            - if resource.errors.include? :description
+              .field--text-error
+                resource.errors.full_messages_for(:description).first
+
           %p= f.submit "Apply for account", :class => "button button-okay"
 
         %p Alternatively, you might want to

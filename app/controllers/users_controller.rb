@@ -109,7 +109,7 @@ class UsersController < ApplicationController
 			else
 				params.require(:user).permit(:first_name,
 					:last_name, :email, :phone,
-					:password, :password_confirmation)
+					:password, :password_confirmation, :description)
 			end
 		end
 end

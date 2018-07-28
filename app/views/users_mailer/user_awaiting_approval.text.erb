@@ -2,6 +2,14 @@ A User Awaits Your Approval
 
 A new user, <%= @user.name %> (<%= @user.email %>), has registered for an account on CreativeQ. Before this user can access the application, you'll have to give your approval.
 
+<% if @user.description.blank? %>
+The user did not include a description with their registration.
+<% else %>
+The user included the following description with their registration:
+
+> <%= @user.description %>
+<% end %>
+
 You may set the user's role and enroll him/her into organizations. You may also change a user's name and email address if necessary. If you do not wish for the user to have access, you may remove or retire the account.
 
 If you have any questions, feel free to contact the web folks at OSI Creative Services.
