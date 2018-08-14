@@ -221,6 +221,17 @@ class OrdersControllerTest < ActionController::TestCase
     assert_redirected_to orders_path, "Showed new order form to unapproved user"
   end
 
+  test "protect new order form from unassigned users" do
+    user = FactoryGirl.create(:user, role: "Basic")
+    user.assignments.each do |assignment|
+      assignment.destroy!
+    end
+
+    sign_in user
+    get :new
+    assert_redirected_to orders_path, "Showed new order form to unassigned user"
+  end
+
   test "protect new order form from non-users" do
     get :new
     assert_redirected_to new_user_session_path,

@@ -94,6 +94,10 @@ class OrdersController < ApplicationController
 			return redirect_to orders_path, alert: "You aren't allowed to create orders."
 		end
 
+		unless current_user.organizations.count > 0
+			return redirect_to orders_path, alert: "Please ask the administrator to assign you to a group"
+		end
+
 		@order = Order.new
 		@can_edit_organization = true
 	end
