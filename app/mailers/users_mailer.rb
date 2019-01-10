@@ -1,5 +1,5 @@
 class UsersMailer < ActionMailer::Base
-  default from: "CreativeQ <noreply@nqueue.io>"
+  default from: "CreativeQ <no-reply@nqueue.io>"
 
   def user_awaiting_approval (user, emails)
     @user = user
