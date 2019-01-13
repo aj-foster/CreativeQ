@@ -3,27 +3,27 @@
   - if @order.flavor.blank?
     .cell.cell--s.mbm
       .g
-        .g-b.g-b--s--1of3
+        .g-b.g-b--s--1of2
           = f.radio_button :flavor, "Graphics", checked: true, data: {flavor: "graphics"}, class: "js-flavor"
           = f.label :flavor_graphics, class: "card card--d has-action ldb" do
             .card-section.tac
               .icon <svg><use xlink:href="#icon-graphics"></use><foreignObject display="none">Graphics</foreignObject></svg>
               .card-title.card-title--s Graphics
               .card-subtitle Posters, handbills, social media and more.
-        .g-b.g-b--s--1of3
+        .g-b.g-b--s--1of2
           = f.radio_button :flavor, "Web", data: {flavor: "web"}, class: "js-flavor"
           = f.label :flavor_web, class: "card card--d has-action ldb" do
             .card-section.tac
               .icon <svg><use xlink:href="#icon-web"></use><foreignObject display="none">Web</foreignObject></svg>
               .card-title.card-title--s Web
-              .card-subtitle Web sites for your agency, event, or otherwise.
-        .g-b.g-b--s--1of3
-          = f.radio_button :flavor, "Video", data: {flavor: "video"}, class: "js-flavor"
-          = f.label :flavor_video, class: "card card--d has-action ldb" do
-            .card-section.tac
-              .icon <svg><use xlink:href="#icon-video"></use><foreignObject display="none">Video</foreignObject></svg>
-              .card-title.card-title--s Production
-              .card-subtitle Promote, record, or relive your event with video.
+              .card-subtitle Sites for your agency, event, or otherwise.
+        -# .g-b.g-b--s--1of3
+        -#   = f.radio_button :flavor, "Video", data: {flavor: "video"}, class: "js-flavor"
+        -#   = f.label :flavor_video, class: "card card--d has-action ldb" do
+        -#     .card-section.tac
+        -#       .icon <svg><use xlink:href="#icon-video"></use><foreignObject display="none">Video</foreignObject></svg>
+        -#       .card-title.card-title--s Production
+        -#       .card-subtitle Promote, record, or relive your event with video.
   - else
     = f.hidden_field :flavor
 
@@ -52,27 +52,29 @@
 
     .g-b.g-b--m--1of2
       %h3.card-title.card-title--s Event Information
+      %p Write all information as it should be displayed.
       = f.fields_for :event do |e|
 
         .field.field--text
-          = e.label :time, "Event Date / Time"
-          = e.text_field :time, placeholder: "(if applicable)", value: @order.event.nil? ? '' : @order.event["time"]
+          = e.label :time, "Event Date and Time"
+          - target_date = (Date.today() + 2.months).strftime('%B %d, %Y')
+          = e.text_field :time, placeholder: "#{target_date}, 5–7pm", value: @order.event.nil? ? '' : @order.event["time"]
 
         .field.field--text
           = e.label :location, "Event Location"
-          = e.text_field :location, placeholder: "(if applicable)", value: @order.event.nil? ? '' : @order.event["location"]
+          = e.text_field :location, placeholder: "Building an Room Number, if applicable", value: @order.event.nil? ? '' : @order.event["location"]
 
         .field.field--text
           = e.label :contact, "Event Contact"
-          = e.text_field :contact, placeholder: "For interested students", value: @order.event.nil? ? '' : @order.event["contact"]
+          = e.text_field :contact, placeholder: "Questions? Email ...@ucf.edu.", value: @order.event.nil? ? '' : @order.event["contact"]
 
         .field.field--text
           = e.label :accomodations, "Accomodations Contact"
-          = e.text_field :accomodations, placeholder: "(if applicable)", value: @order.event.nil? ? '' : @order.event["accomodations"]
+          = e.text_field :accomodations, placeholder: "Email ...@ucf.edu", value: @order.event.nil? ? '' : @order.event["accomodations"]
 
   .mbm
     %h3.card-title.card-title--s
-      Needs
+      Formats
       %span.field--alert *
     - if @order.errors.include? :needs
       .card-subtitle.field--alert Needs are required
@@ -97,7 +99,8 @@
       .card-subtitle.field--alert= @order.errors.full_messages_for(:description).first
     
     %p.js-needs.js-needs--graphics{style: "display: #{(@order.flavor.blank? || @order.flavor == "Graphics") ? "block" : "none"}"}
-      Please include the <strong>exact</strong> content / text for your poster or graphics, as well as which logos need to be added.
+      Describe how you envision the design. If you have specific text content to include, please
+      include the exact wording here. Also note any logos that should be included in the design.
     
     .field.field--textarea
       = f.text_area :description, required: true
