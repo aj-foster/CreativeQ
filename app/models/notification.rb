@@ -64,6 +64,18 @@ class Notification < ActiveRecord::Base
     OrdersMailer.order_awaiting_advisor_approval(order, emails).deliver_now
   end
 
+  def self.notify_order_removed (order, current_user)
+    title = "Order Removed"
+    message = "One of your assigned orders was removed: " +
+              "\"#{order.name.truncate(30, separator: ' ')}\""
+
+    recipient = order.creative
+
+    unless recipient.blank?
+      recipient.notifications.create(notable: order, title: title, message: message)
+    end
+  end
+
   def self.notify_user_created (user)
     title = "New User Awaiting Approval"
     message = "#{user.name} (#{user.email}) registered for an account and " +

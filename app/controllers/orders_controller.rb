@@ -186,6 +186,8 @@ class OrdersController < ApplicationController
 				}
 				format.js
 			end
+
+			Notification.notify_order_removed(@order, current_user)
 		else
 			respond_to do |format|
 				format.html {
