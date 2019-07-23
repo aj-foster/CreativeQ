@@ -65,6 +65,7 @@ class OrdersController < ApplicationController
 			.joins(:creative)
 			.where.not(status: "Complete", creative_id: nil)
 			.order("users.last_name")
+			.order(due: :asc)
 			.includes(:organization, :creative)
 			.to_a
 			.group_by { |order| order.creative.name }
