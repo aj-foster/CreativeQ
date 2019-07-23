@@ -1,0 +1,21 @@
+.row.mbm
+	- if can?(:create, Order)
+		= link_to "Create Order", new_order_path, class: "button button-okay"
+	= link_to "See Current", orders_path, class: "button"
+	= link_to "See Completed", completed_orders_path, class: "button"
+
+.row.row--s
+	.cell
+		.card.card--s
+			.card-section
+				%h2.card-title Assigned Orders
+			- if @orders.any?
+				- @orders.each do |creative, order_list|
+					.card-section
+						%h3= creative
+					.list.list--a
+						- order_list.each do |order|
+							= render 'listing', order: order
+			- else
+				.card-section
+					%p There aren't any orders to display, yet.

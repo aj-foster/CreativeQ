@@ -1,6 +1,8 @@
 .row.mbm
 	- if can?(:create, Order)
 		= link_to "Create Order", new_order_path, class: "button button-okay"
+	- if can?(:manage, Order)
+		= link_to "See Assignments", assignments_orders_path, class: "button"
 	= link_to "See Completed", completed_orders_path, class: "button"
 
 .row.row--s

@@ -60,6 +60,17 @@ class OrdersController < ApplicationController
 	end
 
 
+	def assignments
+		@orders = Order.readable(current_user)
+			.joins(:creative)
+			.where.not(status: "Complete", creative_id: nil)
+			.order("users.last_name")
+			.includes(:organization, :creative)
+			.to_a
+			.group_by { |order| order.creative.name }
+	end
+
+
 	def completed
 		if can? :manage, Order
 			@orders = Order.where(status: "Complete")
