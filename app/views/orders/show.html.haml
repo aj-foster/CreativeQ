@@ -186,9 +186,10 @@
 						.card-title= @owner.name
 						.card-subtitle Order creator
 						%p
-							Member of
-							= @organization.name
-							<br>
+							- if @organization.present?
+								Member of
+								= @organization.name
+								<br>
 							%a{href: "mailto:" + @owner.email}= @owner.email
 							- if @owner.phone.present?
 								%br
