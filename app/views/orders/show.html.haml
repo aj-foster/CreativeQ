@@ -143,7 +143,7 @@
 					- @order.comments.order(created_at: :asc).each do |comment|
 						.card-section.card-section--d.with-avatar
 							- if comment.attachment.exists?
-								= link_to asset_path(comment.attachment.url), class: "icon fr tsl", title: "View Attachment" do
+								= link_to asset_path(comment.attachment.url), class: "icon fr tsl", title: comment.attachment_file_name, data: {toggle: "tooltip", placement: "bottom"} do
 									<svg><use xlink:href="#icon-attachment"></use><foreignObject display="none">Attachment</foreignObject></svg>
 							.card-avatar
 								= comment.user.initials
