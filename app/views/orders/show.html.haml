@@ -94,7 +94,7 @@
 					%p
 						- if @order.status == "Unapproved" && can?(:initial_approve, @order)
 							This order must receive initial approval before it can be claimed. A delay in the initial approval may cause a change in the due date.
-							- approval_button = link_to "Approve Order", approve_order_path(@order, stage: "initial"), method: :put, class: "button button-okay"
+							- approval_button = link_to "Approve Order", approve_order_path(@order, stage: "initial"), method: :put, class: "button button-okay", data: {confirm: "Are you sure you want to approve #{@order.name}?"}
 						- elsif @order.final_one != current_user && @order.final_two.nil? && can?(:final_approve, @order)
 							If you are satisfied with the current proof of the order, you can give it final approval.
 							- if @order.student_approval.nil? && @order.owner == current_user
@@ -103,17 +103,17 @@
 								This order does not yet have an advisor's approval.
 								- if can? :advisor_approve, @order
 									Since you are also an advisor#{" for " + @order.organization.name unless @order.organization.nil?}, your approval will count as an advisor's approval.
-							- approval_button = link_to "Approve Proof", approve_order_path(@order, stage: "final"), method: :put, class: "button button-okay"
+							- approval_button = link_to "Approve Proof", approve_order_path(@order, stage: "final"), method: :put, class: "button button-okay", data: {confirm: "Are you sure you want to approve #{@order.name}?"}
 
 						- elsif @order.advisor_approval.nil? && can?(:advisor_approve, @order)
 							If you are satisfied with the current proof of the order, you can give it an advisor's approval.
 							- if @order.student_approval.nil? && @order.owner == current_user
 								Since you are also the order's owner, your approval will count as the owner's approval.
-							- approval_button = link_to "Approve Proof", approve_order_path(@order, stage: "advisor"), method: :put, class: "button button-okay"
+							- approval_button = link_to "Approve Proof", approve_order_path(@order, stage: "advisor"), method: :put, class: "button button-okay", data: {confirm: "Are you sure you want to approve #{@order.name}?"}
 
 						- elsif @order.student_approval.nil? && can?(:student_approve, @order)
 							If you are satisfied with the current proof of the order, you can give it your approval. Afterwards, it will need to be approved by your advisor.
-							- approval_button = link_to "Approve Proof", approve_order_path(@order, stage: "student"), method: :put, class: "button button-okay"
+							- approval_button = link_to "Approve Proof", approve_order_path(@order, stage: "student"), method: :put, class: "button button-okay", data: {confirm: "Are you sure you want to approve #{@order.name}?"}
 
 						- if can?(:manage, @order) && @order.status != "Complete"
 							You can manually set this order to complete, bypassing the approval process.

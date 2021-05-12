@@ -32,7 +32,7 @@
             = order.creative.name
 
   - if order.status == "Unapproved" && can?(:initial_approve, order)
-    = link_to approve_order_path(order, stage: :initial), remote: true, method: :put, id: "approve-#{order.id}", class: "icon", title: "Approve Order" do
+    = link_to approve_order_path(order, stage: :initial), remote: true, method: :put, id: "approve-#{order.id}", class: "icon", title: "Approve Order", data: {confirm: "Are you sure you want to approve #{order.name}?"} do
       <svg><use xlink:href="#icon-approve"></use><foreignObject display="none">Approve</foreignObject></svg>
 
   - if order.status == "Unclaimed" && can?(:claim, order)
