@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 			put 'subscribe'
 			put 'unsubscribe'
 			put 'complete'
+			put 'uncomplete'
 		end
 		collection do
 			get 'completed'

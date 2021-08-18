@@ -394,6 +394,30 @@ class OrdersController < ApplicationController
 	end
 
 
+	def uncomplete
+		@order = Order.find(params[:id])
+
+		unless can? :manage, @order
+			return redirect_to orders_path, alert: "You aren't allowed to revert this order."
+		end
+
+		if @order.creative_id != nil
+			@order.status = "Claimed"
+		else
+			@order.status = "Unclaimed"
+		end
+
+		@order.completed_at = nil
+
+		if @order.save
+			@order.comments.create(message: "#{current_user.name} set the order as incomplete.")
+			redirect_to order_path(@order), notice: "Order has been marked as incomplete."
+		else
+			redirect_to order_path(@order), alert: "Error: Could not mark order as incomplete."
+		end
+	end
+
+
 	private
 		def order_params
 			params.require(:order).permit(:name, :due, :description, :flavor, :organization_id).tap do |whitelisted|
